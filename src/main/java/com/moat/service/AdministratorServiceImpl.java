@@ -27,9 +27,9 @@ public class AdministratorServiceImpl implements AdministratorService {
      *
      * @return Returns null when no Administrator is found.
      */
-     @Transactional(readOnly=true)
+    @Transactional(readOnly=true)
     public Administrator findById(int id) {
-        logger.info("Finding Administrator by ID: " + id + ".");
+        logger.info("Finding Administrator with ID=" + id);
 
         Administrator administrator = null;
 
@@ -50,7 +50,7 @@ public class AdministratorServiceImpl implements AdministratorService {
      * @return Returns null when no Administrator is found.
      */
     public Administrator findByUsername(String username) {
-        logger.info("Finding Administrator by Username: " + username);
+        logger.info("Finding Administrator with username=" + username);
 
         Administrator administrator = null;
 
@@ -63,9 +63,9 @@ public class AdministratorServiceImpl implements AdministratorService {
             administrator = administratorList.get(0);
 
         if (administrator == null)
-            logger.info("Administrator with username: " + username + " not found!");
+            logger.info("Administrator with username=" + username + " not found!");
         else
-            logger.info("Administrator with username: " + username +  "  found!");
+            logger.info("Administrator with username=" + username +  " found!");
 
         return administrator;
     }

@@ -59,17 +59,17 @@ public class ProfanityFilterServiceImpl implements ProfanityFilterService {
         try {
             BufferedReader br = new BufferedReader(new FileReader(filterFile));
 
+            int i = 0;
             for (String line; (line = br.readLine()) != null;) {
                 line = line.trim();
 
-                int i = 0;
                 if (!line.isEmpty()) {
                     profFilter.add(line);
                     i++;
                 }
-
-                logger.info("Added " + i + " words to Profanity Filter.");
             }
+
+            logger.info("Added " + i + " words to Profanity Filter.");
         } catch (Exception e) {
             logger.error("Failed to load Profanity Filter file!");
             e.printStackTrace();
