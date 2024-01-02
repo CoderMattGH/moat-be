@@ -12,7 +12,8 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 
 public class HighScoresTest {
     private final static Logger logger = LoggerFactory.getLogger(HighScoresTest.class);
@@ -56,10 +57,55 @@ public class HighScoresTest {
     }
 
     @Test
-    public void testCheckAndSaveIfTopTenScore() {
+    public void testCheckAndSaveIfTopTenScore_IfValidNickname() {
         ScoreService scoreService = Mockito.mock(ScoreService.class);
         ProfanityFilterService profanityFilterService = Mockito.mock(ProfanityFilterService.class);
 
+        Mockito.when(scoreService.findTopTenScoresSorted()).thenReturn(leaderboard);
 
+        Mockito.when(profanityFilterService.isEnabled()).thenReturn(true);
+        Mockito.when(profanityFilterService.isValid(Mockito.anyString())).thenReturn(true);
+
+        HighScores highScores = new HighScoresImpl(scoreService, profanityFilterService);
+
+        Score score = new Score(20000, "mattd");
+
+        assertTrue(highScores.checkAndSaveIfTopTenScore(score));
     }
+
+    @Test
+    public void testCheckAndSaveIfTopTenScore_IfInvalidNickname() {
+        ScoreService scoreService = Mockito.mock(ScoreService.class);
+        ProfanityFilterService profanityFilterService = Mockito.mock(ProfanityFilterService.class);
+
+        Mockito.when(scoreService.findTopTenScoresSorted()).thenReturn(leaderboard);
+
+        Mockito.when(profanityFilterService.isEnabled()).thenReturn(true);
+        Mockito.when(profanityFilterService.isValid(Mockito.anyString())).thenReturn(false);
+
+        HighScores highScores = new HighScoresImpl(scoreService, profanityFilterService);
+
+        Score score = new Score(20000, "invalid");
+
+        assertFalse(highScores.checkAndSaveIfTopTenScore(score));
+    }
+
+    @Test
+    public void testCheckAndSaveIfTopTenScore_IfProfFilterDisabled() {
+        ScoreService scoreService = Mockito.mock(ScoreService.class);
+        ProfanityFilterService profanityFilterService = Mockito.mock(ProfanityFilterService.class);
+
+        Mockito.when(scoreService.findTopTenScoresSorted()).thenReturn(leaderboard);
+
+        Mockito.when(profanityFilterService.isEnabled()).thenReturn(false);
+        Mockito.when(profanityFilterService.isValid(any())).thenReturn(false);
+
+        HighScores highScores = new HighScoresImpl(scoreService, profanityFilterService);
+
+        Score score = new Score(20000, "invalid");
+
+        assertTrue(highScores.checkAndSaveIfTopTenScore(score));
+    }
+
+
 }
