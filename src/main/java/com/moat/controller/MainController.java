@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin
 @RestController
 public class MainController {
-    Logger logger = LoggerFactory.getLogger(MainController.class);
+    private final static Logger logger = LoggerFactory.getLogger(MainController.class);
 
-    HighScores highScores;
+    private HighScores highScores;
 
     public MainController(HighScores highScores) {
         logger.info("Constructing MainController.");
