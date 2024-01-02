@@ -1,7 +1,6 @@
 package com.moat.highscores;
 
 import com.moat.entity.Score;
-import com.moat.exceptions.FilterNotEnabledException;
 import com.moat.profanityfilter.ProfanityFilterService;
 import com.moat.service.ScoreService;
 import org.slf4j.Logger;
@@ -14,7 +13,7 @@ import java.util.List;
 
 @Component("highScores")
 public class HighScoresImpl implements HighScores {
-    Logger logger = LoggerFactory.getLogger(HighScoresImpl.class);
+    private final static Logger logger = LoggerFactory.getLogger(HighScoresImpl.class);
 
     private ScoreService scoreService;
     private ProfanityFilterService profanityFilterService;

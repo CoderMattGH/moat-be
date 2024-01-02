@@ -40,6 +40,10 @@ public class AdminController {
         highScores.removeAllScores();
     }
 
+    /**
+     * This method is left intentionally blank as the method is intercepted and the logic is injected
+     * by Spring Security.
+     */
     @PostMapping("/check-login/")
     public void checkLogin() {
         logger.info("Checking administrator login credentials.");
