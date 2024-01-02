@@ -14,6 +14,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 
 public class HighScoresTest {
     private final static Logger logger = LoggerFactory.getLogger(HighScoresTest.class);
@@ -174,7 +175,55 @@ public class HighScoresTest {
     }
 
     @Test
-    public void testRemoveScoresWithNickname() {
+    public void testRemoveScoresWithNickname_valid2Entries() {
+        ScoreService scoreService = Mockito.mock(ScoreService.class);
+        ProfanityFilterService profanityFilterService = Mockito.mock(ProfanityFilterService.class);
 
+        String nickname = "mattd";
+
+        List<Score> scores = new ArrayList<>();
+
+        Score score1 = new Score(10000, nickname);
+        scores.add(score1);
+
+        Score score2 = new Score(120000, nickname);
+        scores.add(score2);
+
+        Mockito.when(scoreService.findScoresByNickname(eq(nickname))).thenReturn(scores);
+
+        HighScores highScores = new HighScoresImpl(scoreService, profanityFilterService);
+
+        boolean result = highScores.removeScoresWithNickname(nickname);
+
+        assertTrue(result);
+    }
+
+    @Test
+    public void testRemoveScoresWithNickname_validNoEntries() {
+        ScoreService scoreService = Mockito.mock(ScoreService.class);
+        ProfanityFilterService profanityFilterService = Mockito.mock(ProfanityFilterService.class);
+
+        String nickname = "mattd";
+
+        List<Score> scores = new ArrayList<>();
+
+        Mockito.when(scoreService.findScoresByNickname(eq(nickname))).thenReturn(scores);
+
+        HighScores highScores = new HighScoresImpl(scoreService, profanityFilterService);
+
+        boolean result = highScores.removeScoresWithNickname(nickname);
+
+        assertFalse(result);
+    }
+
+    @Test
+    public void testRemoveScoresWithNickname_invalidNickname() {
+        ScoreService scoreService = Mockito.mock(ScoreService.class);
+        ProfanityFilterService profanityFilterService = Mockito.mock(ProfanityFilterService.class);
+
+        HighScores highScores = new HighScoresImpl(scoreService, profanityFilterService);
+
+        assertFalse(highScores.removeScoresWithNickname(""));
+        assertFalse(highScores.removeScoresWithNickname(null));
     }
 }
