@@ -23,6 +23,8 @@ public class Administrator {
     }
 
     public Administrator(String username, String password) {
+        setUsername(username);
+        setPassword(password);
     }
 
     public void setId(int id) {

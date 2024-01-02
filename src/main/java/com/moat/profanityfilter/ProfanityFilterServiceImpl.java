@@ -65,6 +65,8 @@ public class ProfanityFilterServiceImpl implements ProfanityFilterService {
         } catch (Exception e) {
             logger.error("Failed to load Profanity Filter file!");
             e.printStackTrace();
+
+            return false;
         }
 
         return true;
