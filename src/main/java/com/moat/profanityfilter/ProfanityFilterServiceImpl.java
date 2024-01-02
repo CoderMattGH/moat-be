@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -58,24 +59,33 @@ public class ProfanityFilterServiceImpl implements ProfanityFilterService {
 
         try {
             BufferedReader br = new BufferedReader(new FileReader(filterFile));
+            List<String> profaneWords = readFile(br);
 
-            int i = 0;
-            for (String line; (line = br.readLine()) != null;) {
-                line = line.trim();
-
-                if (!line.isEmpty()) {
-                    profFilter.add(line);
-                    i++;
-                }
-            }
-
-            logger.info("Added " + i + " words to Profanity Filter.");
+            profFilter.addAll(profaneWords);
         } catch (Exception e) {
             logger.error("Failed to load Profanity Filter file!");
             e.printStackTrace();
         }
 
         return true;
+    }
+
+    private List<String> readFile(BufferedReader br) throws IOException {
+        List<String> list = new ArrayList<>();
+
+        int i = 0;
+        for (String line; (line = br.readLine()) != null;) {
+            line = line.trim();
+
+            if (!line.isEmpty()) {
+                list.add(line);
+                i++;
+            }
+        }
+
+        logger.info("Added " + i + " words to Profanity Filter.");
+
+        return list;
     }
 
     @Override
