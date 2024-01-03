@@ -35,7 +35,21 @@ public class ScoreServiceImpl implements ScoreService {
             logger.error("Cannot delete Score object with no id.");
         } else {
             logger.info("Removing score {}:{} from DB", score.getNickname(), score.getScore());
-            em.remove(score);
+
+            if (!em.contains(score)) {
+                Score result = em.find(Score.class, score.getId());
+
+                if (result == null) {
+                    logger.info("Cannot remove score with id={} because it cannot be found.",
+                            score.getId());
+
+                    return;
+                }
+
+                em.remove(result);
+            } else {
+                em.remove(score);
+            }
         }
     }
 

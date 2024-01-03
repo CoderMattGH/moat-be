@@ -27,10 +27,10 @@ public class AdministratorServiceTest {
     private static final Logger logger = LoggerFactory.getLogger(AdministratorServiceTest.class);
 
     @PersistenceContext
-    EntityManager em;
+    private EntityManager em;
 
     @Autowired
-    AdministratorService administratorService;
+    private AdministratorService administratorService;
 
     public AdministratorServiceTest() {
         logger.info("Constructing AdministratorServiceTest.");
