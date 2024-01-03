@@ -25,7 +25,7 @@ public class Score implements Serializable {
 
     @Id
     @GeneratedValue(strategy=GenerationType.SEQUENCE)
-    @Column(name = "ID", unique = true, nullable = false)
+    @Column(name = "ID")
     private Long id;
 
     @Column(name = "SCORE")
