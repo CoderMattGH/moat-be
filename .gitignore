@@ -1,3 +1,4 @@
 target/
 SECRET_FOLDER/
 dbfile/
+/filters/
