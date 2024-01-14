@@ -85,7 +85,6 @@ public class HighScoresImpl implements HighScores {
         }
     }
 
-    // Returns false if no records are found.
     @Transactional
     public boolean removeScoresWithNickname(String nickname) {
         if (nickname == null || nickname.isEmpty() || nickname == "") {
