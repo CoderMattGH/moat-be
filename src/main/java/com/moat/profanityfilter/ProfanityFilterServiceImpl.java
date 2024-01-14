@@ -54,6 +54,10 @@ public class ProfanityFilterServiceImpl implements ProfanityFilterService {
         }
     }
 
+    /**
+     * Loads the Profanity Filter file.
+     * @return A boolean representing whether the operation was successful or not.
+     */
     private boolean loadProfanityFilter() {
         logger.info("Loading Profanity Filter from file: " + filterFile.getAbsolutePath());
 
@@ -72,6 +76,12 @@ public class ProfanityFilterServiceImpl implements ProfanityFilterService {
         return true;
     }
 
+    /**
+     * Reads from the supplied BufferedReader object and returns a list of all words found on a
+     * new line.
+     * @param br BufferedReader object containing the data to read.
+     * @return A List<String> object containing the words read.
+     */
     private List<String> readFile(BufferedReader br) throws IOException {
         List<String> list = new ArrayList<>();
 

@@ -13,5 +13,8 @@ public interface ProfanityFilterService {
      */
     boolean isValid(String text) throws FilterNotEnabledException;
 
+    /**
+     * Returns true if the ProfanityFilter is enabled, or false if it is disabled.
+     */
     boolean isEnabled();
 }

@@ -22,11 +22,6 @@ public class AdministratorServiceImpl implements AdministratorService {
         logger.info("Constructing AdministratorServiceImpl.");
     }
 
-    /**
-     * Returns the Administrator assigned to the id.
-     *
-     * @return Returns null when no Administrator is found.
-     */
     @Transactional(readOnly=true)
     public Administrator findById(int id) {
         logger.info("Finding Administrator with ID=" + id);
@@ -44,11 +39,6 @@ public class AdministratorServiceImpl implements AdministratorService {
         return administrator;
     }
 
-    /**
-     * Returns the Administrator assigned to the username.
-     *
-     * @return Returns null when no Administrator is found.
-     */
     public Administrator findByUsername(String username) {
         logger.info("Finding Administrator with username=" + username);
 
@@ -80,9 +70,6 @@ public class AdministratorServiceImpl implements AdministratorService {
         return administrators;
     }
 
-    /**
-     * Persists or merges the Administrator to the database.
-     */
     public void saveOrUpdate(Administrator administrator) {
         logger.info("Saving administrator.");
 
@@ -92,9 +79,6 @@ public class AdministratorServiceImpl implements AdministratorService {
             em.merge(administrator);
     }
 
-    /**
-     * Removes the selected Administrator from the database.
-     */
     public void delete(Administrator administrator) {
         logger.info("Deleting administrator.");
 

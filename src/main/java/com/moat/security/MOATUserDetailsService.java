@@ -10,9 +10,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 public class MOATUserDetailsService implements UserDetailsService {
-    private Logger logger = LoggerFactory.getLogger(MOATUserDetailsService.class);
+    private final Logger logger = LoggerFactory.getLogger(MOATUserDetailsService.class);
 
-    private AdministratorService administratorService;
+    private final AdministratorService administratorService;
 
     public MOATUserDetailsService(AdministratorService administratorService) {
         logger.info("Constructing MOATUserDetailsService.");

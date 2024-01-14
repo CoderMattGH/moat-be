@@ -15,8 +15,8 @@ import java.util.List;
 public class HighScoresImpl implements HighScores {
     private final static Logger logger = LoggerFactory.getLogger(HighScoresImpl.class);
 
-    private ScoreService scoreService;
-    private ProfanityFilterService profanityFilterService;
+    private final ScoreService scoreService;
+    private final ProfanityFilterService profanityFilterService;
 
     public HighScoresImpl(ScoreService scoreService, ProfanityFilterService profanityFilterService) {
         logger.info("Constructing HighScoresImpl.");
@@ -25,7 +25,6 @@ public class HighScoresImpl implements HighScores {
         this.scoreService = scoreService;
     }
 
-    // Returns the sorted scores as an array or null if empty.
     public Score[] getTopTenSortedScores() {
         List<Score> scores = scoreService.findTopTenScoresSorted();
 
@@ -44,7 +43,6 @@ public class HighScoresImpl implements HighScores {
         return scores.toArray(scoresArr);
     }
 
-    // TODO: Does @transactional work in this context?
     @Transactional
     public boolean checkAndSaveIfTopTenScore(Score score) {
         logger.info("Checking if score " + score.getScore() + " is in top ten scores.");

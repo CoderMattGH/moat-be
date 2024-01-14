@@ -3,6 +3,9 @@ package com.moat.entity;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
+/**
+ * An Entity class representing an Administrator.
+ */
 @Entity
 @Table(name = "ADMINISTRATOR")
 public class Administrator {
@@ -52,6 +55,6 @@ public class Administrator {
     }
 
     public String toString() {
-        return String.format("ID: %d, Username: %s, Password: %d");
+        return String.format("ID: %d, Username: %s, Password: %s", id, username, password);
     }
 }

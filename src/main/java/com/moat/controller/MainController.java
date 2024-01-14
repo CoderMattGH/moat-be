@@ -11,13 +11,12 @@ import org.springframework.web.bind.annotation.*;
 public class MainController {
     private final static Logger logger = LoggerFactory.getLogger(MainController.class);
 
-    private HighScores highScores;
+    private final HighScores highScores;
 
     public MainController(HighScores highScores) {
         logger.info("Constructing MainController.");
 
         this.highScores = highScores;
-        // this.highScores.testPopulate();
     }
 
     /**
@@ -37,7 +36,6 @@ public class MainController {
     /**
      * Receives a Score object, and checks to see if the player score
      * is big enough to be entered into the leaderboard.
-     * TODO: Prevent cheating.
      *
      * @param score A Score object.
      * @return Returns true if it is a new high score.  False otherwise.

@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+/**
+ * AdminController class for providing Administrative functionality.
+ */
 @CrossOrigin
 @RestController
 @RequestMapping(value="/admin")
@@ -22,6 +25,10 @@ public class AdminController {
         this.highScores = highScores;
     }
 
+    /**
+     * Removes all Scores on the Leaderboard with the supplied Nickname.
+     * @param nicknameDTO A NicknameDTO object representing the Nickname.
+     */
     @PostMapping("/remove-scores-with-nickname/")
     public void removeHighScoresWithNickname(@Valid @RequestBody NicknameDTO nicknameDTO) {
         logger.info("Removing high scores with nickname: " + nicknameDTO.getNickname() + ".");
@@ -29,10 +36,16 @@ public class AdminController {
         boolean result = highScores.removeScoresWithNickname(nicknameDTO.getNickname());
     }
 
-    // TODO: Unimplemented method.
+    /**
+     * Unimplemented method.
+     */
     public void removeHighScoresById(int id) {
+        throw new UnsupportedOperationException();
     }
 
+    /**
+     * Removes all Scores from the Leaderboard.
+     */
     @PostMapping("/remove-all-scores/")
     public void removeAllScores() {
         logger.info("Removing all high scores!");
