@@ -16,7 +16,7 @@ To build this project, you will need `Maven v3.8.7`.
 
 ### Build
 
-1. Clone the repository by running: `git clone https://github.com/CoderMattGH/moat-be.git`.
+1. Clone the repository by running `git clone https://github.com/CoderMattGH/moat-be.git`.
 2. Change to the `moat-be` repository directory.
 3. Run `mvn clean package`. This will build the project after running any tests.
 4. Change to the `target` directory, where you will find the `MOATserver.jar` file.
