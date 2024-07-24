@@ -8,7 +8,20 @@ This is the server software written in Java using Spring Boot.  This software is
 
 ## Notes
 
+### Requirements
+
 This software requires `Java 17` to run.
+
+To build this project, you will need `Maven v3.8.7`.
+
+### Build
+
+1. Clone the repository by running: `git clone https://github.com/CoderMattGH/moat-be.git`.
+2. Change to the `moat-be` repository directory.
+3. Run `mvn clean package`. This will build the project after running any tests.
+4. Change to the `target` directory, where you will find the `MOATserver.jar` file.
+
+### Running
 
 The software is compiled to the file `MOATserver.jar`, which is an executable `jar` file containing an embedded Apache TomCat server courtesy of Spring Boot.
 
