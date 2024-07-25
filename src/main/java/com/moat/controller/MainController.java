@@ -47,15 +47,9 @@ public class MainController {
     return new ResponseEntity<>(endpoints, HttpStatus.OK);
   }
 
-  /**
-   * Returns the leaderboard as a sorted array. Returns 'null' if there are no scores in the
-   * database.
-   *
-   * @return An array of Score objects.
-   */
   @GetMapping("/scores/")
-  public ResponseEntity<Score[]> getLeaderBoard() {
-    logger.info("In getLeaderBoard() in MainController.");
+  public ResponseEntity<Score[]> getScores() {
+    logger.info("In getScores() in MainController.");
 
     Score[] leaderboard = this.highScores.getTopTenSortedScores();
 
@@ -66,16 +60,9 @@ public class MainController {
     return new ResponseEntity<>(leaderboard, HttpStatus.OK);
   }
 
-  /**
-   * Receives a Score object, and checks to see if the player score is big enough to be entered into
-   * the leaderboard.
-   *
-   * @param score A Score object.
-   * @return Returns true if it is a new high score.  False otherwise.
-   */
   @PostMapping("/score/")
-  public boolean sendScore(@RequestBody Score score) {
-    logger.info("In sendScore() in MainController.");
+  public boolean postScore(@RequestBody Score score) {
+    logger.info("In postScore() in MainController.");
 
     boolean result = highScores.checkAndSaveIfTopTenScore(score);
 
