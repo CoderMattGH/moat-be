@@ -3,7 +3,6 @@ package com.moat.startup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 /**
@@ -11,11 +10,11 @@ import org.springframework.stereotype.Component;
  * Boot has been initialised.
  */
 @Component
-public class Startup implements InitializingBean{
-    private static final Logger logger = LoggerFactory.getLogger(Startup.class);
+public class Startup implements InitializingBean {
+  private static final Logger logger = LoggerFactory.getLogger(Startup.class);
 
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        // Startup logic goes here.
-    }
+  @Override
+  public void afterPropertiesSet() throws Exception {
+    // Startup logic goes here.
+  }
 }

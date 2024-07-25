@@ -13,119 +13,119 @@ import java.util.List;
 
 @Component("highScores")
 public class HighScoresImpl implements HighScores {
-    private final static Logger logger = LoggerFactory.getLogger(HighScoresImpl.class);
+  private final static Logger logger = LoggerFactory.getLogger(HighScoresImpl.class);
 
-    private final ScoreService scoreService;
-    private final ProfanityFilterService profanityFilterService;
+  private final ScoreService scoreService;
+  private final ProfanityFilterService profanityFilterService;
 
-    public HighScoresImpl(ScoreService scoreService, ProfanityFilterService profanityFilterService) {
-        logger.info("Constructing HighScoresImpl.");
+  public HighScoresImpl(ScoreService scoreService, ProfanityFilterService profanityFilterService) {
+    logger.info("Constructing HighScoresImpl.");
 
-        this.profanityFilterService = profanityFilterService;
-        this.scoreService = scoreService;
+    this.profanityFilterService = profanityFilterService;
+    this.scoreService = scoreService;
+  }
+
+  public Score[] getTopTenSortedScores() {
+    List<Score> scores = scoreService.findTopTenScoresSorted();
+
+    if (scores.isEmpty())
+      return null;
+
+    logger.info("Returning top ten scores.");
+
+    for (int i = 0; i < scores.size(); i++) {
+      logger.info(String.format("ScorePos %d: %s %d",
+          i, scores.get(i).getNickname(), scores.get(i).getScore()));
     }
 
-    public Score[] getTopTenSortedScores() {
-        List<Score> scores = scoreService.findTopTenScoresSorted();
+    Score[] scoresArr = new Score[scores.size()];
 
-        if (scores.isEmpty())
-            return null;
+    return scores.toArray(scoresArr);
+  }
 
-        logger.info("Returning top ten scores.");
+  @Transactional
+  public boolean checkAndSaveIfTopTenScore(Score score) {
+    logger.info("Checking if score " + score.getScore() + " is in top ten scores.");
 
-        for (int i = 0; i < scores.size(); i++) {
-            logger.info(String.format("ScorePos %d: %s %d",
-                    i, scores.get(i).getNickname(), scores.get(i).getScore()));
-        }
+    boolean result = false;
 
-        Score[] scoresArr = new Score[scores.size()];
+    // Check that nickname does not contain profanity.
+    if (profanityFilterService.isEnabled()) {
+      result = profanityFilterService.isValid(score.getNickname());
 
-        return scores.toArray(scoresArr);
+      if (!result) {
+        logger.info("Nickname contained a profane word.  Not updating the leaderboard.");
+
+        return false;
+      }
     }
 
-    @Transactional
-    public boolean checkAndSaveIfTopTenScore(Score score) {
-        logger.info("Checking if score " + score.getScore() + " is in top ten scores.");
+    List<Score> scores = scoreService.findTopTenScoresSorted();
 
-        boolean result = false;
+    if (!scores.isEmpty() && (scores.size() >= 10)) {
+      Score minScoreObj = scores.get(scores.size() - 1);
+      int minScore = minScoreObj.getScore();
 
-        // Check that nickname does not contain profanity.
-        if (profanityFilterService.isEnabled()) {
-            result = profanityFilterService.isValid(score.getNickname());
+      if (score.getScore() > minScore) {
+        // Remove current lowest score.
+        scoreService.delete(minScoreObj);
 
-            if (!result) {
-                logger.info("Nickname contained a profane word.  Not updating the leaderboard.");
-
-                return false;
-            }
-        }
-
-        List<Score> scores = scoreService.findTopTenScoresSorted();
-
-        if (!scores.isEmpty() && (scores.size() >= 10)) {
-            Score minScoreObj = scores.get(scores.size()-1);
-            int minScore = minScoreObj.getScore();
-
-            if (score.getScore() > minScore) {
-                // Remove current lowest score.
-                scoreService.delete(minScoreObj);
-
-                // Save current score.
-                scoreService.save(score);
-
-                return true;
-            } else {
-                return false;
-            }
-        } else {
-            // If there is space on the leaderboard then save new score.
-            scoreService.save(score);
-
-            return true;
-        }
-    }
-
-    @Transactional
-    public boolean removeScoresWithNickname(String nickname) {
-        if (nickname == null || nickname.isEmpty() || nickname == "") {
-            logger.error("Nickname cannot be empty or null");
-
-            return false;
-        }
-
-        logger.info("Removing scores with nickname: " + nickname + ".");
-
-        List<Score> scores = scoreService.findScoresByNickname(nickname);
-
-        if (scores.isEmpty())
-            return false;
-
-        Iterator<Score> iterator = scores.iterator();
-
-        while(iterator.hasNext()) {
-            Score score = iterator.next();
-
-            logger.info("Removing score with id: " + score.getId() + ".");
-
-            scoreService.delete(score);
-        }
+        // Save current score.
+        scoreService.save(score);
 
         return true;
+      } else {
+        return false;
+      }
+    } else {
+      // If there is space on the leaderboard then save new score.
+      scoreService.save(score);
+
+      return true;
+    }
+  }
+
+  @Transactional
+  public boolean removeScoresWithNickname(String nickname) {
+    if (nickname == null || nickname.isEmpty() || nickname == "") {
+      logger.error("Nickname cannot be empty or null");
+
+      return false;
     }
 
-    @Transactional
-    public void removeAllScores() {
-        logger.info("Trying to remove all high scores...");
+    logger.info("Removing scores with nickname: " + nickname + ".");
 
-        List<Score> scores = scoreService.findAll();
+    List<Score> scores = scoreService.findScoresByNickname(nickname);
 
-        Iterator<Score> iterator = scores.iterator();
+    if (scores.isEmpty())
+      return false;
 
-        while(iterator.hasNext()) {
-            Score score = iterator.next();
+    Iterator<Score> iterator = scores.iterator();
 
-            logger.info("Deleting score with ID: " + score.getId());
-            scoreService.delete(score);
-        }
+    while (iterator.hasNext()) {
+      Score score = iterator.next();
+
+      logger.info("Removing score with id: " + score.getId() + ".");
+
+      scoreService.delete(score);
     }
+
+    return true;
+  }
+
+  @Transactional
+  public void removeAllScores() {
+    logger.info("Trying to remove all high scores...");
+
+    List<Score> scores = scoreService.findAll();
+
+    Iterator<Score> iterator = scores.iterator();
+
+    while (iterator.hasNext()) {
+      Score score = iterator.next();
+
+      logger.info("Deleting score with ID: " + score.getId());
+      scoreService.delete(score);
+    }
+  }
 }
