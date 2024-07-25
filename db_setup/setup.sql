@@ -1,0 +1,5 @@
+DROP DATABASE IF EXISTS moat_db;
+DROP DATABASE IF EXISTS moat_db_dev;
+
+CREATE DATABASE moat_db;
+CREATE DATABASE moat_db_dev;
