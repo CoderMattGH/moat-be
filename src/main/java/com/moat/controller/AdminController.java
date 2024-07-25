@@ -27,8 +27,9 @@ public class AdminController {
     logger.info("In deleteScoresByNickname() in AdminController");
     logger.info("Removing high scores with nickname: " + nickname + ".");
 
-    // Validate nickname?
     boolean result = highScores.removeScoresWithNickname(nickname);
+
+    // TODO: Return 404 / 200
   }
 
   /**
