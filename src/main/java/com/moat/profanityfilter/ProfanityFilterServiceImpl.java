@@ -133,5 +133,5 @@ public class ProfanityFilterServiceImpl implements ProfanityFilterService {
 
   public boolean isEnabled() {
     return this.enabled;
-    }
+  }
 }

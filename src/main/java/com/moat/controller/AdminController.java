@@ -13,52 +13,53 @@ import javax.validation.Valid;
  */
 @CrossOrigin
 @RestController
-@RequestMapping(value="/admin")
+@RequestMapping(value = "/admin")
 public class AdminController {
-    private static Logger logger = LoggerFactory.getLogger(AdminController.class);
+  private static Logger logger = LoggerFactory.getLogger(AdminController.class);
 
-    private HighScores highScores;
+  private HighScores highScores;
 
-    public AdminController(HighScores highScores) {
-        logger.info("Construcing AdminController.");
+  public AdminController(HighScores highScores) {
+    logger.info("Construcing AdminController.");
 
-        this.highScores = highScores;
-    }
+    this.highScores = highScores;
+  }
 
-    /**
-     * Removes all Scores on the Leaderboard with the supplied Nickname.
-     * @param nicknameDTO A NicknameDTO object representing the Nickname.
-     */
-    @PostMapping("/remove-scores-with-nickname/")
-    public void removeHighScoresWithNickname(@Valid @RequestBody NicknameDTO nicknameDTO) {
-        logger.info("Removing high scores with nickname: " + nicknameDTO.getNickname() + ".");
+  /**
+   * Removes all Scores on the Leaderboard with the supplied Nickname.
+   *
+   * @param nicknameDTO A NicknameDTO object representing the Nickname.
+   */
+  @PostMapping("/remove-scores-with-nickname/")
+  public void removeHighScoresWithNickname(@Valid @RequestBody NicknameDTO nicknameDTO) {
+    logger.info("Removing high scores with nickname: " + nicknameDTO.getNickname() + ".");
 
-        boolean result = highScores.removeScoresWithNickname(nicknameDTO.getNickname());
-    }
+    boolean result = highScores.removeScoresWithNickname(nicknameDTO.getNickname());
+  }
 
-    /**
-     * Unimplemented method.
-     */
-    public void removeHighScoresById(int id) {
-        throw new UnsupportedOperationException();
-    }
+  /**
+   * Unimplemented method.
+   */
+  public void removeHighScoresById(int id) {
+    throw new UnsupportedOperationException();
+  }
 
-    /**
-     * Removes all Scores from the Leaderboard.
-     */
-    @PostMapping("/remove-all-scores/")
-    public void removeAllScores() {
-        logger.info("Removing all high scores!");
+  /**
+   * Removes all Scores from the Leaderboard.
+   */
+  @PostMapping("/remove-all-scores/")
+  public void removeAllScores() {
+    logger.info("Removing all high scores!");
 
-        highScores.removeAllScores();
-    }
+    highScores.removeAllScores();
+  }
 
-    /**
-     * This method is left intentionally blank as the method is intercepted and the logic is injected
-     * by Spring Security.
-     */
-    @PostMapping("/check-login/")
-    public void checkLogin() {
-        logger.info("Checking administrator login credentials.");
-    }
+  /**
+   * This method is left intentionally blank as the method is intercepted and the logic is injected
+   * by Spring Security.
+   */
+  @PostMapping("/check-login/")
+  public void checkLogin() {
+    logger.info("Checking administrator login credentials.");
+  }
 }

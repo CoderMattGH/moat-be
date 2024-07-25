@@ -10,31 +10,31 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 public class MOATUserDetailsService implements UserDetailsService {
-    private final Logger logger = LoggerFactory.getLogger(MOATUserDetailsService.class);
+  private final Logger logger = LoggerFactory.getLogger(MOATUserDetailsService.class);
 
-    private final AdministratorService administratorService;
+  private final AdministratorService administratorService;
 
-    public MOATUserDetailsService(AdministratorService administratorService) {
-        logger.info("Constructing MOATUserDetailsService.");
+  public MOATUserDetailsService(AdministratorService administratorService) {
+    logger.info("Constructing MOATUserDetailsService.");
 
-        this.administratorService = administratorService;
+    this.administratorService = administratorService;
+  }
+
+  @Override
+  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    try {
+      final Administrator administrator = this.administratorService.findByUsername(username);
+
+      if (administrator != null) {
+        String password = administrator.getPassword();
+
+        return User.withUsername(username).password(password).roles("ADMIN", "USER")
+            .build();
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
     }
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        try {
-            final Administrator administrator = this.administratorService.findByUsername(username);
-
-            if (administrator != null) {
-                String password = administrator.getPassword();
-
-                return User.withUsername(username).password(password).roles("ADMIN", "USER")
-                        .build();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        throw new UsernameNotFoundException(username);
-    }
+    throw new UsernameNotFoundException(username);
+  }
 }
