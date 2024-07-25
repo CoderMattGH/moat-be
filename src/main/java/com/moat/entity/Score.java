@@ -1,6 +1,7 @@
 package com.moat.entity;
 
 import javax.persistence.*;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,84 +15,87 @@ import java.util.regex.Pattern;
 @Entity
 @Table(name = "Score")
 @NamedQueries({
-        @NamedQuery(name=Score.FIND_ALL, query="select s from Score s"),
-        @NamedQuery(name=Score.FIND_TOP_TEN, query="select s from Score s ORDER BY s.score DESC")
+    @NamedQuery(name = Score.FIND_ALL, query = "select s from Score s"),
+    @NamedQuery(name = Score.FIND_TOP_TEN,
+        query = "select s from Score s ORDER BY s.score DESC")
 })
 public class Score implements Serializable {
-    static Logger logger = LoggerFactory.getLogger(Score.class);
+  static Logger logger = LoggerFactory.getLogger(Score.class);
 
-    public static final String FIND_ALL = "Score.findAll";
-    public static final String FIND_TOP_TEN = "Score.findTopTen";
-    
-    private final static int NAME_MIN_LENGTH = 5;
-    private final static int NAME_MAX_LENGTH = 10;
+  public static final String FIND_ALL = "Score.findAll";
+  public static final String FIND_TOP_TEN = "Score.findTopTen";
 
-    @Id
-    @GeneratedValue(strategy=GenerationType.SEQUENCE)
-    @Column(name = "ID")
-    private Long id;
+  private final static int NAME_MIN_LENGTH = 5;
+  private final static int NAME_MAX_LENGTH = 10;
 
-    @Column(name = "SCORE")
-    private int score;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "ID")
+  private Long id;
 
-    @Column(name = "NICKNAME")
-    private String nickname;
+  @Column(name = "SCORE")
+  private int score;
 
-    public Score() {
-    }
+  @Column(name = "NICKNAME")
+  private String nickname;
 
-    public Score(int score, String nickname) {
-        setScore(score);
-        setNickname(nickname);
-    }
+  public Score() {
+  }
 
-    public Long getId() {
-        return this.id;
-    }
+  public Score(int score, String nickname) {
+    setScore(score);
+    setNickname(nickname);
+  }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+  public Long getId() {
+    return this.id;
+  }
 
-    public int getScore() {
-        return this.score;
-    }
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-    public void setScore(int score) {
-        if (score < 0)
-            throw new IllegalArgumentException("Score cannot be below 0.");
-        else
-            this.score = score;
-    }
+  public int getScore() {
+    return this.score;
+  }
 
-    public String getNickname() {
-        return this.nickname;
-    }
+  public void setScore(int score) {
+    if (score < 0)
+      throw new IllegalArgumentException("Score cannot be below 0.");
+    else
+      this.score = score;
+  }
 
-    /**
-     * Sets the Nickname.  This method will try and validate the Nickname.  If the Nickname is
-     * considered invalid, then the function will throw an IllegalArgumentException error.
-     * @param nickname A String representing the Nickname.
-     * @throws IllegalArgumentException When the Nickname is not considered valid.
-     */
-    public void setNickname(String nickname) {
-        // Validate nickname.
-        if (nickname == null || nickname == "")
-            throw new IllegalArgumentException("Nickname cannot be null or empty.");
+  public String getNickname() {
+    return this.nickname;
+  }
 
-        if (nickname.length() < NAME_MIN_LENGTH || nickname.length() > NAME_MAX_LENGTH)
-            throw new IllegalArgumentException("Nickname is the incorrect length.");
+  /**
+   * Sets the Nickname.  This method will try and validate the Nickname.
+   * If the Nickname is considered invalid, then the function will throw an
+   * IllegalArgumentException error.
+   *
+   * @param nickname A String representing the Nickname.
+   * @throws IllegalArgumentException When the Nickname is not considered valid.
+   */
+  public void setNickname(String nickname) {
+    // Validate nickname.
+    if (nickname == null || nickname == "")
+      throw new IllegalArgumentException("Nickname cannot be null or empty.");
 
-        String regex = String.format("^[a-zA-Z0-9]{%d,%d}$", NAME_MIN_LENGTH, NAME_MAX_LENGTH);
+    if (nickname.length() < NAME_MIN_LENGTH || nickname.length() > NAME_MAX_LENGTH)
+      throw new IllegalArgumentException("Nickname is the incorrect length.");
 
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(nickname);
+    String regex = String.format("^[a-zA-Z0-9]{%d,%d}$", NAME_MIN_LENGTH, NAME_MAX_LENGTH);
 
-        if(!matcher.find())
-            throw new IllegalArgumentException("Nickname contains invalid characters.");
+    Pattern pattern = Pattern.compile(regex);
+    Matcher matcher = pattern.matcher(nickname);
 
-        nickname = nickname.toUpperCase();
+    if (!matcher.find())
+      throw new IllegalArgumentException("Nickname contains invalid characters.");
 
-        this.nickname = nickname;
-    }
+    nickname = nickname.toUpperCase();
+
+    this.nickname = nickname;
+  }
 }
