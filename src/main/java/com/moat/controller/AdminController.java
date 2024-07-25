@@ -1,12 +1,9 @@
 package com.moat.controller;
 
-import com.moat.dto.NicknameDTO;
 import com.moat.service.HighScores;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
 
 /**
  * AdminController class for providing Administrative functionality.
@@ -32,7 +29,7 @@ public class AdminController {
   public void removeHighScoresWithNickname(@PathVariable("nickname") String nickname) {
     logger.info("Removing high scores with nickname: " + nickname + ".");
 
-    // Validate?
+    // Validate nickname?
     boolean result = highScores.removeScoresWithNickname(nickname);
   }
 
