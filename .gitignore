@@ -1,5 +1,5 @@
 target/
 secrets/
 /filters/
-.idea/
 moat.iml
+/.idea/
