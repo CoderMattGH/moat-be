@@ -22,11 +22,9 @@ public class AdminController {
     this.highScores = highScores;
   }
 
-  /**
-   * Removes all Scores on the Leaderboard with the supplied Nickname.
-   */
   @DeleteMapping("/scores/{nickname}")
-  public void removeHighScoresWithNickname(@PathVariable("nickname") String nickname) {
+  public void deleteScoresByNickname(@PathVariable("nickname") String nickname) {
+    logger.info("In deleteScoresByNickname() in AdminController");
     logger.info("Removing high scores with nickname: " + nickname + ".");
 
     // Validate nickname?
@@ -44,8 +42,8 @@ public class AdminController {
    * Removes all Scores from the Leaderboard.
    */
   @DeleteMapping("/scores/")
-  public void removeAllScores() {
-    logger.info("Removing all high scores!");
+  public void removeScores() {
+    logger.info("In remoeveScores() in AdminController.");
 
     highScores.removeAllScores();
   }
