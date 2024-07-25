@@ -18,10 +18,10 @@ public class MOATSecurityConfig extends WebSecurityConfigurerAdapter {
 
   private AdministratorService administratorService;
 
-  public MOATSecurityConfig(AdministratorService administratoService) {
+  public MOATSecurityConfig(AdministratorService administratorService) {
     logger.info("Constructing MoatSecurityConfig.");
 
-    this.administratorService = administratoService;
+    this.administratorService = administratorService;
   }
 
   @Override

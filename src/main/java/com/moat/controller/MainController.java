@@ -14,7 +14,7 @@ public class MainController {
   private final HighScores highScores;
 
   public MainController(HighScores highScores) {
-    logger.info("Constructing MainController.");
+    logger.debug("Constructing MainController.");
 
     this.highScores = highScores;
   }
@@ -27,7 +27,7 @@ public class MainController {
    */
   @GetMapping("/get-leaderboard/")
   public Score[] getLeaderBoard() {
-    logger.info("Executing getLeaderBoard() method.");
+    logger.debug("In getLeaderBoard() in MainController.");
 
     Score[] leaderboard = this.highScores.getTopTenSortedScores();
 
@@ -43,6 +43,8 @@ public class MainController {
    */
   @PostMapping("/send-score/")
   public boolean sendScore(@RequestBody Score score) {
+    logger.debug("In sendScore() in MainController.");
+
     boolean result = highScores.checkAndSaveIfTopTenScore(score);
 
     return result;

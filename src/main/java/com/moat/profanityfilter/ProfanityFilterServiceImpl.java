@@ -26,7 +26,7 @@ public class ProfanityFilterServiceImpl implements ProfanityFilterService {
 
   public ProfanityFilterServiceImpl(
       @Value("${moat.filters.load-profanity-filter}") boolean loadFilter) {
-    logger.info("Constructing ProfanityFilterServiceImpl");
+    logger.debug("Constructing ProfanityFilterServiceImpl");
     enabled = false;
 
     if (loadFilter) {

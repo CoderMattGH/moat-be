@@ -15,13 +15,15 @@ public class MOATUserDetailsService implements UserDetailsService {
   private final AdministratorService administratorService;
 
   public MOATUserDetailsService(AdministratorService administratorService) {
-    logger.info("Constructing MOATUserDetailsService.");
+    logger.debug("Constructing MOATUserDetailsService.");
 
     this.administratorService = administratorService;
   }
 
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    logger.debug("In loadUserByUsername() in MOATUserDetailsService.");
+
     try {
       final Administrator administrator = this.administratorService.findByUsername(username);
 
