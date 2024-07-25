@@ -19,12 +19,12 @@ public class AdministratorServiceImpl implements AdministratorService {
   EntityManager em;
 
   public AdministratorServiceImpl() {
-    logger.debug("Constructing AdministratorServiceImpl.");
+    logger.info("Constructing AdministratorServiceImpl.");
   }
 
   @Transactional(readOnly = true)
   public Administrator findById(int id) {
-    logger.debug("In findById() in AdministratorServiceImpl");
+    logger.info("In findById() in AdministratorServiceImpl");
     logger.info("Finding Administrator with ID=" + id);
 
     Administrator administrator = null;
@@ -41,7 +41,7 @@ public class AdministratorServiceImpl implements AdministratorService {
   }
 
   public Administrator findByUsername(String username) {
-    logger.debug("In findByUsername() in AdministratorServiceImpl.");
+    logger.info("In findByUsername() in AdministratorServiceImpl.");
     logger.info("Finding Administrator with username=" + username);
 
     Administrator administrator = null;
@@ -64,7 +64,7 @@ public class AdministratorServiceImpl implements AdministratorService {
 
   @Transactional(readOnly = true)
   public List<Administrator> findAll() {
-    logger.debug("In findAll() in AdministratorServiceImpl.");
+    logger.info("In findAll() in AdministratorServiceImpl.");
     logger.info("Finding all Administrators.");
 
     List<Administrator> administrators = em.createQuery(
@@ -74,7 +74,7 @@ public class AdministratorServiceImpl implements AdministratorService {
   }
 
   public void saveOrUpdate(Administrator administrator) {
-    logger.debug("In saveOrUpdate() in AdministratorServiceImpl.");
+    logger.info("In saveOrUpdate() in AdministratorServiceImpl.");
     logger.info("Saving administrator.");
 
     if (administrator.getId() == 0)
@@ -84,7 +84,7 @@ public class AdministratorServiceImpl implements AdministratorService {
   }
 
   public void delete(Administrator administrator) {
-    logger.debug("In delete() in AdministratorServiceImpl");
+    logger.info("In delete() in AdministratorServiceImpl");
 
     em.remove(administrator);
   }

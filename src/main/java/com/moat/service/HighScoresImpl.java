@@ -25,7 +25,7 @@ public class HighScoresImpl implements HighScores {
   }
 
   public Score[] getTopTenSortedScores() {
-    logger.debug("In getTopTenSortedScores() in HighScoresImpl.");
+    logger.info("In getTopTenSortedScores() in HighScoresImpl.");
 
     List<Score> scores = scoreService.findTopTenScoresSorted();
 
@@ -44,7 +44,7 @@ public class HighScoresImpl implements HighScores {
 
   @Transactional
   public boolean checkAndSaveIfTopTenScore(Score score) {
-    logger.debug("In checkAndSaveIfTopTenScore() in HighScoresImpl");
+    logger.info("In checkAndSaveIfTopTenScore() in HighScoresImpl");
     logger.info("Checking if score " + score.getScore() + " is in top ten scores.");
 
     boolean result = false;
@@ -87,7 +87,7 @@ public class HighScoresImpl implements HighScores {
 
   @Transactional
   public boolean removeScoresWithNickname(String nickname) {
-    logger.debug("In removeScoresWithNickname() in HighScoresImpl");
+    logger.info("In removeScoresWithNickname() in HighScoresImpl");
 
     if (nickname == null || nickname.isEmpty() || nickname == "") {
       logger.error("Nickname cannot be empty or null");

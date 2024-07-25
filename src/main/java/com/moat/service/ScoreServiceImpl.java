@@ -23,7 +23,7 @@ public class ScoreServiceImpl implements ScoreService {
   private EntityManager em;
 
   public void save(Score score) {
-    logger.debug("In save() in ScoreServiceImpl.");
+    logger.info("In save() in ScoreServiceImpl.");
 
     if (score.getId() == null) {
       logger.info("Saving score {} {} into db.", score.getScore(), score.getNickname());
@@ -35,7 +35,7 @@ public class ScoreServiceImpl implements ScoreService {
   }
 
   public void delete(Score score) {
-    logger.debug("In delete() in ScoreServiceImpl.");
+    logger.info("In delete() in ScoreServiceImpl.");
 
     if (score.getId() == null) {
       logger.error("Cannot delete Score object with no id.");
@@ -61,21 +61,21 @@ public class ScoreServiceImpl implements ScoreService {
 
   @Transactional(readOnly = true)
   public List<Score> findAll() {
-    logger.debug("In findAll() in ScoreServiceImpl.");
+    logger.info("In findAll() in ScoreServiceImpl.");
 
     return em.createNamedQuery(Score.FIND_ALL, Score.class).getResultList();
   }
 
   @Transactional(readOnly = true)
   public List<Score> findTopTenScoresSorted() {
-    logger.debug("In findTopTenScoresSorted() in ScoreServiceImpl.");
+    logger.info("In findTopTenScoresSorted() in ScoreServiceImpl.");
 
     return em.createNamedQuery(Score.FIND_TOP_TEN, Score.class)
         .setMaxResults(10).getResultList();
   }
 
   public List<Score> findScoresByNickname(String nickname) {
-    logger.debug("In findScoresByNickname() in ScoreServiceImpl.");
+    logger.info("In findScoresByNickname() in ScoreServiceImpl.");
     logger.info("Finding scores by nickname: " + nickname + ".");
 
     nickname = nickname.toUpperCase();
