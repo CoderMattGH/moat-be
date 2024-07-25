@@ -9,4 +9,6 @@ public class Constants {
 
   // Profanity filter filename.
   public final static String FILTER_PROF_FILE = "prof_filter.txt";
+
+  public final static String ENDPOINTS_FILE_PATH = "endpoints.json";
 }

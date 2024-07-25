@@ -1,0 +1,43 @@
+{
+  "endpoints": [
+    {
+      "path": "GET /",
+      "description": "Returns a JSON object of all available endpoints."
+    },
+    {
+      "path": "GET /scores/",
+      "description": "Returns the top ten scores sorted in descending order.",
+      "exampleResponse": [
+        {
+          "nickname": "MATTD",
+          "score": 100
+        },
+        {
+          "nickname": "BOBBY",
+          "score": 50
+        }
+      ]
+    },
+    {
+      "path": "DELETE /scores",
+      "authRequired": true,
+      "requiredRole": "admin",
+      "description": "Deletes all scores."
+    },
+    {
+      "path": "DELETE /scores/{nickname}",
+      "authRequired": true,
+      "requiredRole": "admin",
+      "description": "Deletes all scores with the specified nickname."
+    },
+    {
+      "path": "POST /score/",
+      "description": "Saves the user's score and adds it to the leaderboard if a high score. Returns 'true' if a high score.",
+      "requestBody": {
+        "nickname": "user's nickname",
+        "score": 40
+      },
+      "exampleResponse": false
+    }
+  ]
+}
