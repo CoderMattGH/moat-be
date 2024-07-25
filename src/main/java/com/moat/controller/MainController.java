@@ -22,6 +22,7 @@ public class MainController {
     /**
      * Returns the leaderboard as a sorted array.
      * Returns 'null' if there are no scores in the database.
+     *
      * @return An array of Score objects.
      */
     @GetMapping("/get-leaderboard/")
