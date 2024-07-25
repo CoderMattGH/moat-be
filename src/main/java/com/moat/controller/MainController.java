@@ -25,7 +25,7 @@ public class MainController {
    *
    * @return An array of Score objects.
    */
-  @GetMapping("/get-leaderboard/")
+  @GetMapping("/leaderboard/")
   public Score[] getLeaderBoard() {
     logger.info("In getLeaderBoard() in MainController.");
 
@@ -41,7 +41,7 @@ public class MainController {
    * @param score A Score object.
    * @return Returns true if it is a new high score.  False otherwise.
    */
-  @PostMapping("/send-score/")
+  @PostMapping("/score/")
   public boolean sendScore(@RequestBody Score score) {
     logger.info("In sendScore() in MainController.");
 

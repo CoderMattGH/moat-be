@@ -27,14 +27,13 @@ public class AdminController {
 
   /**
    * Removes all Scores on the Leaderboard with the supplied Nickname.
-   *
-   * @param nicknameDTO A NicknameDTO object representing the Nickname.
    */
-  @PostMapping("/remove-scores-with-nickname/")
-  public void removeHighScoresWithNickname(@Valid @RequestBody NicknameDTO nicknameDTO) {
-    logger.info("Removing high scores with nickname: " + nicknameDTO.getNickname() + ".");
+  @DeleteMapping("/scores/{nickname}")
+  public void removeHighScoresWithNickname(@PathVariable("nickname") String nickname) {
+    logger.info("Removing high scores with nickname: " + nickname + ".");
 
-    boolean result = highScores.removeScoresWithNickname(nicknameDTO.getNickname());
+    // Validate?
+    boolean result = highScores.removeScoresWithNickname(nickname);
   }
 
   /**
@@ -47,7 +46,7 @@ public class AdminController {
   /**
    * Removes all Scores from the Leaderboard.
    */
-  @PostMapping("/remove-all-scores/")
+  @DeleteMapping("/scores/")
   public void removeAllScores() {
     logger.info("Removing all high scores!");
 
