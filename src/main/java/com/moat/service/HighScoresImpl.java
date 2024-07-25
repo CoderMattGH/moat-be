@@ -1,8 +1,7 @@
-package com.moat.highscores;
+package com.moat.service;
 
 import com.moat.entity.Score;
 import com.moat.profanityfilter.ProfanityFilterService;
-import com.moat.service.ScoreService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;

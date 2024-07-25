@@ -1,6 +1,6 @@
 package com.moat.profanityfilter;
 
-import com.moat.exceptions.FilterNotEnabledException;
+import com.moat.exception.FilterNotEnabledException;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,52 +10,52 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * A test class to unit test the ProfanityFilterService.
- *
+ * <p>
  * This test requires the following file in the root directory:
  * `./filters/prof_filter.txt`.
- *
+ * <p>
  * If this file isn't present, then the test will fail.
  */
 public class ProfanityFilterServiceTest {
-    private final static Logger logger = LoggerFactory.getLogger(ProfanityFilterServiceTest.class);
+  private final static Logger logger = LoggerFactory.getLogger(ProfanityFilterServiceTest.class);
 
-    public ProfanityFilterServiceTest() {
-        logger.info("Constructing ProfanityFilterServiceTest.");
+  public ProfanityFilterServiceTest() {
+    logger.info("Constructing ProfanityFilterServiceTest.");
+  }
+
+  @Test
+  public void testIsValid_FilterDisabled() {
+    ProfanityFilterService profanityFilterService =
+        new ProfanityFilterServiceImpl(false);
+
+    boolean exceptionOccurred = false;
+
+    try {
+      profanityFilterService.isValid("valid");
+    } catch (FilterNotEnabledException e) {
+      exceptionOccurred = true;
     }
 
-    @Test
-    public void testIsValid_FilterDisabled() {
-        ProfanityFilterService profanityFilterService =
-                new ProfanityFilterServiceImpl(false);
+    assertTrue(exceptionOccurred);
+  }
 
-        boolean exceptionOccurred = false;
+  @Test
+  public void testIsValid_ValidAndFilterEnabled() {
+    ProfanityFilterService profanityFilterService =
+        new ProfanityFilterServiceImpl(true);
 
-        try {
-            profanityFilterService.isValid("valid");
-        } catch (FilterNotEnabledException e) {
-            exceptionOccurred = true;
-        }
+    boolean result = profanityFilterService.isValid("valid");
 
-        assertTrue(exceptionOccurred);
-    }
+    assertTrue(result);
+  }
 
-    @Test
-    public void testIsValid_ValidAndFilterEnabled() {
-        ProfanityFilterService profanityFilterService =
-                new ProfanityFilterServiceImpl(true);
+  @Test
+  public void testIsValid_InValidAndFilterEnabled() {
+    ProfanityFilterService profanityFilterService =
+        new ProfanityFilterServiceImpl(true);
 
-        boolean result = profanityFilterService.isValid("valid");
+    boolean result = profanityFilterService.isValid("BLYAT");
 
-        assertTrue(result);
-    }
-
-    @Test
-    public void testIsValid_InValidAndFilterEnabled() {
-        ProfanityFilterService profanityFilterService =
-                new ProfanityFilterServiceImpl(true);
-
-        boolean result = profanityFilterService.isValid("BLYAT");
-
-        assertFalse(result);
-    }
+    assertFalse(result);
+  }
 }

@@ -1,7 +1,7 @@
 package com.moat.profanityfilter;
 
-import com.moat.constants.Constants;
-import com.moat.exceptions.FilterNotEnabledException;
+import com.moat.constant.Constants;
+import com.moat.exception.FilterNotEnabledException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;

@@ -1,6 +1,6 @@
 package com.moat.controller;
 
-import com.moat.highscores.HighScores;
+import com.moat.service.HighScores;
 import com.moat.entity.Score;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

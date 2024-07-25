@@ -1,4 +1,4 @@
-package com.moat.constants;
+package com.moat.constant;
 
 public class Constants {
   private Constants() {

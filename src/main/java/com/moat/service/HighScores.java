@@ -1,4 +1,4 @@
-package com.moat.highscores;
+package com.moat.service;
 
 import com.moat.entity.Score;
 
