@@ -31,9 +31,7 @@ public class MainController {
   }
 
   /**
-   * Returns the available API endpoints.
-   *
-   * @return
+   * @return A JSON object of the API endpoints.
    */
   @GetMapping(value = "/", produces = "application/json")
   public ResponseEntity<String> getEndpoints() {
