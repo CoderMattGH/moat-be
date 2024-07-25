@@ -18,118 +18,120 @@ import java.util.*;
  */
 @Component
 public class ProfanityFilterServiceImpl implements ProfanityFilterService {
-    private final static Logger logger = LoggerFactory.getLogger(ProfanityFilterServiceImpl.class);
+  private final static Logger logger = LoggerFactory.getLogger(ProfanityFilterServiceImpl.class);
 
-    private boolean enabled;
-    private File filterFile;
-    private Set<String> profFilter;
+  private boolean enabled;
+  private File filterFile;
+  private Set<String> profFilter;
 
-    public ProfanityFilterServiceImpl(
-            @Value("${moat.filters.load-profanity-filter}") boolean loadFilter) {
-        logger.info("Constructing ProfanityFilterServiceImpl");
-        enabled = false;
+  public ProfanityFilterServiceImpl(
+      @Value("${moat.filters.load-profanity-filter}") boolean loadFilter) {
+    logger.info("Constructing ProfanityFilterServiceImpl");
+    enabled = false;
 
-        if (loadFilter) {
-            logger.info("Initialising Profanity Filter.");
-            init();
-        } else {
-            logger.info("Skipping initialising Profanity Filter.");
-        }
+    if (loadFilter) {
+      logger.info("Initialising Profanity Filter.");
+      init();
+    } else {
+      logger.info("Skipping initialising Profanity Filter.");
+    }
+  }
+
+  private void init() {
+    profFilter = new HashSet<>();
+
+    String filterFilePath = Constants.FILTERS_DIR + File.separator + Constants.FILTER_PROF_FILE;
+    filterFile = new File(filterFilePath);
+
+    boolean loaded = loadProfanityFilter();
+
+    if (loaded) {
+      enabled = true;
+      logger.info("Profanity Filter was successfully loaded.");
+    } else {
+      enabled = false;
+      logger.error("Failed to load Profanity Filter! Disabling filter.");
+    }
+  }
+
+  /**
+   * Loads the Profanity Filter file.
+   *
+   * @return A boolean representing whether the operation was successful or not.
+   */
+  private boolean loadProfanityFilter() {
+    logger.info("Loading Profanity Filter from file: " + filterFile.getAbsolutePath());
+
+    try {
+      BufferedReader br = new BufferedReader(new FileReader(filterFile));
+      List<String> profaneWords = readFile(br);
+
+      profFilter.addAll(profaneWords);
+    } catch (Exception e) {
+      logger.error("Failed to load Profanity Filter file!");
+      e.printStackTrace();
+
+      return false;
     }
 
-    private void init() {
-        profFilter = new HashSet<>();
+    return true;
+  }
 
-        String filterFilePath = Constants.FILTERS_DIR + File.separator + Constants.FILTER_PROF_FILE;
-        filterFile = new File(filterFilePath);
+  /**
+   * Reads from the supplied BufferedReader object and returns a list of all words found on a
+   * new line.
+   *
+   * @param br BufferedReader object containing the data to read.
+   * @return A List<String> object containing the words read.
+   */
+  private List<String> readFile(BufferedReader br) throws IOException {
+    List<String> list = new ArrayList<>();
 
-        boolean loaded = loadProfanityFilter();
+    int i = 0;
+    for (String line; (line = br.readLine()) != null; ) {
+      line = line.trim();
 
-        if (loaded) {
-            enabled = true;
-            logger.info("Profanity Filter was successfully loaded.");
-        } else {
-            enabled = false;
-            logger.error("Failed to load Profanity Filter! Disabling filter.");
-        }
+      if (!line.isEmpty()) {
+        list.add(line);
+        i++;
+      }
     }
 
-    /**
-     * Loads the Profanity Filter file.
-     * @return A boolean representing whether the operation was successful or not.
-     */
-    private boolean loadProfanityFilter() {
-        logger.info("Loading Profanity Filter from file: " + filterFile.getAbsolutePath());
+    logger.info("Added " + i + " words to Profanity Filter.");
 
-        try {
-            BufferedReader br = new BufferedReader(new FileReader(filterFile));
-            List<String> profaneWords = readFile(br);
+    return list;
+  }
 
-            profFilter.addAll(profaneWords);
-        } catch (Exception e) {
-            logger.error("Failed to load Profanity Filter file!");
-            e.printStackTrace();
-
-            return false;
-        }
-
-        return true;
+  @Override
+  public boolean isValid(String text) throws FilterNotEnabledException {
+    if (!enabled) {
+      throw new FilterNotEnabledException("Profanity Filter is not enabled.");
     }
 
-    /**
-     * Reads from the supplied BufferedReader object and returns a list of all words found on a
-     * new line.
-     * @param br BufferedReader object containing the data to read.
-     * @return A List<String> object containing the words read.
-     */
-    private List<String> readFile(BufferedReader br) throws IOException {
-        List<String> list = new ArrayList<>();
-
-        int i = 0;
-        for (String line; (line = br.readLine()) != null;) {
-            line = line.trim();
-
-            if (!line.isEmpty()) {
-                list.add(line);
-                i++;
-            }
-        }
-
-        logger.info("Added " + i + " words to Profanity Filter.");
-
-        return list;
+    if (text == null) {
+      logger.error("Parameter 'text' cannot be null.");
+      throw new NullPointerException();
     }
 
-    @Override
-    public boolean isValid(String text) throws FilterNotEnabledException {
-        if (!enabled) {
-            throw new FilterNotEnabledException("Profanity Filter is not enabled.");
-        }
+    text = text.trim();
+    text = text.toUpperCase();
 
-        if (text == null) {
-            logger.error("Parameter 'text' cannot be null.");
-            throw new NullPointerException();
-        }
+    Iterator<String> iterator = profFilter.iterator();
+    while (iterator.hasNext()) {
+      String profaneWord = iterator.next();
 
-        text = text.trim();
-        text = text.toUpperCase();
+      // Convert to uppercase and compare.
+      if (text.toUpperCase().contains(profaneWord.toUpperCase())) {
+        logger.info("Profane word detected.");
 
-        Iterator<String> iterator = profFilter.iterator();
-        while (iterator.hasNext()) {
-            String profaneWord = iterator.next();
-
-            // Convert to uppercase and compare.
-            if (text.toUpperCase().contains(profaneWord.toUpperCase())) {
-                logger.info("Profane word detected.");
-
-                return false;
-            }
-        }
-
-        return true;
+        return false;
+      }
     }
 
-    public boolean isEnabled() {
-        return this.enabled;
+    return true;
+  }
+
+  public boolean isEnabled() {
+    return this.enabled;
     }
 }
