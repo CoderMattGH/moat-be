@@ -1,4 +1,5 @@
 target/
-SECRET_FOLDER/
-dbfile/
+secrets/
 /filters/
+moat.iml
+/.idea/
