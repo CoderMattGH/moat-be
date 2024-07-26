@@ -10,7 +10,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Entity
-@Table(name = "Score")
+@Table(name = "score")
 @NamedQueries({
     @NamedQuery(name = Score.FIND_ALL, query = "select s from Score s"),
     @NamedQuery(name = Score.FIND_TOP_TEN,
@@ -24,14 +24,14 @@ public class Score implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "ID")
+  @Column(name = "score_id")
   private Long id;
 
-  @Column(name = "SCORE")
+  @Column(name = "score")
   private int score;
 
   @OneToOne(cascade = CascadeType.ALL)
-  @JoinColumn(name = "MOATUserId", referencedColumnName = "id")
+  @JoinColumn(name = "moat_user_id", referencedColumnName = "moat_user_id")
   private MOATUser mOATUserId;
 
   public Long getId() {

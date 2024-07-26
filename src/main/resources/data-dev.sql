@@ -1,8 +1,12 @@
-INSERT INTO score (score, nickname)
-VALUES (100, 'MATTD'),
-       (200, 'MATTD'),
-       (400, 'BOBBY'),
-       (500, 'PAUL');
+INSERT INTO moat_user (username)
+VALUES ('MATTD'),
+       ('BOBBY');
+
+INSERT INTO score (score, moat_user_id)
+VALUES (100, 1),
+       (200, 1),
+       (400, 2),
+       (500, 1);
 
 INSERT INTO administrator (username, password)
 -- password: 'password' hashed bcrypt strength 10.

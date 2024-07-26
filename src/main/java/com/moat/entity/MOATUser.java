@@ -7,7 +7,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "MOATUser")
+@Table(name = "moat_user")
 public class MOATUser implements Serializable {
   static Logger logger = LoggerFactory.getLogger(MOATUser.class);
 
@@ -25,22 +25,22 @@ public class MOATUser implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "ID")
+  @Column(name = "moat_user_id")
   private Long id;
 
-  @Column(name = "USERNAME")
+  @Column(name = "username")
   private String username;
 
-  @Column(name = "PASSWORD")
+  @Column(name = "password")
   private String password;
 
-  @Column(name = "EMAIL")
+  @Column(name = "email")
   private String email;
 
-  @Column(name = "VERIFIED")
+  @Column(name = "verified")
   private boolean verified;
 
-  @Column(name = "BANNED")
+  @Column(name = "banned")
   private boolean banned;
 
   public Long getId() {
