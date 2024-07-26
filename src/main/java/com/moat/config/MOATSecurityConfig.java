@@ -35,26 +35,6 @@ public class MOATSecurityConfig extends WebSecurityConfigurerAdapter {
     return new BCryptPasswordEncoder();
   }
 
-//  @Override
-//  protected void configure(HttpSecurity http) throws Exception {
-//    http
-//        .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-//        .and()
-//        .authorizeRequests()
-//        .antMatchers("/get-leaderboard/").permitAll()
-//        .antMatchers("/send-score/").permitAll()
-//        .anyRequest().fullyAuthenticated()
-//        .and()
-//        .httpBasic()
-//        .and()
-//        .cors()
-//        .and()
-//        .headers().frameOptions().sameOrigin()
-//        .httpStrictTransportSecurity().disable()
-//        .and()
-//        .csrf().disable();
-//  }
-
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     http
