@@ -19,7 +19,7 @@
       ]
     },
     {
-      "path": "DELETE /scores",
+      "path": "DELETE /scores/",
       "authRequired": true,
       "requiredRole": "admin",
       "description": "Deletes all scores."
