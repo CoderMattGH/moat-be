@@ -5,9 +5,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
-/**
- * AdminController class for providing Administrative functionality.
- */
 @CrossOrigin
 @RestController
 @RequestMapping(value = "/admin")
@@ -20,33 +17,6 @@ public class AdminController {
     logger.info("Construcing AdminController.");
 
     this.highScores = highScores;
-  }
-
-  @DeleteMapping("/scores/{nickname}")
-  public void deleteScoresByNickname(@PathVariable("nickname") String nickname) {
-    logger.info("In deleteScoresByNickname() in AdminController");
-    logger.info("Removing high scores with nickname: " + nickname + ".");
-
-    boolean result = highScores.removeScoresWithNickname(nickname);
-
-    // TODO: Return 404 / 200
-  }
-
-  /**
-   * Unimplemented method.
-   */
-  public void removeHighScoresById(int id) {
-    throw new UnsupportedOperationException();
-  }
-
-  /**
-   * Removes all Scores from the Leaderboard.
-   */
-  @DeleteMapping("/scores/")
-  public void removeScores() {
-    logger.info("In remoeveScores() in AdminController.");
-
-    highScores.removeAllScores();
   }
 
   /**

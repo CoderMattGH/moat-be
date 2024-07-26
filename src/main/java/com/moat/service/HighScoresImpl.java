@@ -32,11 +32,6 @@ public class HighScoresImpl implements HighScores {
     if (scores.isEmpty())
       return null;
 
-    for (int i = 0; i < scores.size(); i++) {
-      logger.info(String.format("ScorePos %d: %s %d",
-          i, scores.get(i).getNickname(), scores.get(i).getScore()));
-    }
-
     Score[] scoresArr = new Score[scores.size()];
 
     return scores.toArray(scoresArr);
