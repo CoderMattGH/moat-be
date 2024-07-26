@@ -9,7 +9,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "moat_user")
 public class MOATUser implements Serializable {
-  static Logger logger = LoggerFactory.getLogger(MOATUser.class);
+  private static Logger logger = LoggerFactory.getLogger(MOATUser.class);
 
   public final static int USERNAME_MIN_LENGTH = 5;
   public final static int USERNAME_MAX_LENGTH = 15;
@@ -37,11 +37,11 @@ public class MOATUser implements Serializable {
   @Column(name = "email")
   private String email;
 
-  @Column(name = "verified")
-  private boolean verified;
+  @Column(name = "verified", columnDefinition = "boolean default false")
+  private Boolean verified;
 
-  @Column(name = "banned")
-  private boolean banned;
+  @Column(name = "banned", columnDefinition = "boolean default false")
+  private Boolean banned;
 
   public Long getId() {
     return id;
@@ -75,19 +75,19 @@ public class MOATUser implements Serializable {
     this.email = email;
   }
 
-  public boolean isVerified() {
+  public Boolean isVerified() {
     return verified;
   }
 
-  public void setVerified(boolean verified) {
+  public void setVerified(Boolean verified) {
     this.verified = verified;
   }
 
-  public boolean isBanned() {
+  public Boolean isBanned() {
     return banned;
   }
 
-  public void setBanned(boolean banned) {
+  public void setBanned(Boolean banned) {
     this.banned = banned;
   }
 }

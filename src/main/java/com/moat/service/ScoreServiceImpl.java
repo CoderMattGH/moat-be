@@ -5,6 +5,7 @@ import com.moat.entity.Score;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import org.hibernate.cfg.NotYetImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
@@ -72,12 +73,6 @@ public class ScoreServiceImpl implements ScoreService {
   }
 
   public List<Score> findScoresByNickname(String nickname) {
-    logger.info("In findScoresByNickname() in ScoreServiceImpl.");
-    logger.info("Finding scores by nickname: " + nickname + ".");
-
-    nickname = nickname.toUpperCase();
-
-    return em.createQuery("SELECT s FROM Score s WHERE upper(s.nickname) = :nickname",
-        Score.class).setParameter("nickname", nickname).getResultList();
+    throw new NotYetImplementedException();
   }
 }
