@@ -9,9 +9,6 @@ import java.io.Serializable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * An Entity class representing a Score.
- */
 @Entity
 @Table(name = "Score")
 @NamedQueries({
@@ -71,9 +68,8 @@ public class Score implements Serializable {
   }
 
   /**
-   * Sets the Nickname.  This method will try and validate the Nickname.
-   * If the Nickname is considered invalid, then the function will throw an
-   * IllegalArgumentException error.
+   * Sets the Nickname.  This method will try and validate the Nickname. If the Nickname is
+   * considered invalid, then the function will throw an IllegalArgumentException error.
    *
    * @param nickname A String representing the Nickname.
    * @throws IllegalArgumentException When the Nickname is not considered valid.
