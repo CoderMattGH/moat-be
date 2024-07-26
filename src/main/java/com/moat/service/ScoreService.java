@@ -33,14 +33,4 @@ public interface ScoreService {
    * @param score A Score object representing the Score to delete.
    */
   void delete(Score score);
-
-  /**
-   * Finds all Scores with the supplied Nickname.
-   * Note that this function does not return 'NULL', but will instead return an empty list
-   * if no results are found.
-   *
-   * @param nickname A String representing the Nickname.
-   * @return A List<Score> object containing all the Scores found.
-   */
-  List<Score> findScoresByNickname(String nickname);
 }

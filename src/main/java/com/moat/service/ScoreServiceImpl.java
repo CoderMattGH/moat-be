@@ -70,14 +70,4 @@ public class ScoreServiceImpl implements ScoreService {
     return em.createNamedQuery(Score.FIND_TOP_TEN, Score.class)
         .setMaxResults(10).getResultList();
   }
-
-  public List<Score> findScoresByNickname(String nickname) {
-    logger.info("In findScoresByNickname() in ScoreServiceImpl.");
-    logger.info("Finding scores by nickname: " + nickname + ".");
-
-    nickname = nickname.toUpperCase();
-
-    return em.createQuery("SELECT s FROM Score s WHERE upper(s.nickname) = :nickname",
-        Score.class).setParameter("nickname", nickname).getResultList();
-  }
 }
