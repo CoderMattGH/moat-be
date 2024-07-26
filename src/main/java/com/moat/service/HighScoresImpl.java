@@ -44,17 +44,6 @@ public class HighScoresImpl implements HighScores {
 
     boolean result = false;
 
-    // Check that nickname does not contain profanity.
-//    if (profanityFilterService.isEnabled()) {
-//      result = profanityFilterService.isValid(score.getNickname());
-//
-//      if (!result) {
-//        logger.info("Nickname contained a profane word.  Not updating the leaderboard.");
-//
-//        return false;
-//      }
-//    }
-
     List<Score> scores = scoreService.findTopTenScoresSorted();
 
     if (!scores.isEmpty() && (scores.size() >= 10)) {
