@@ -15,7 +15,7 @@ import java.io.Serializable;
         query = "select s from Score s ORDER BY s.score DESC")
 })
 public class Score implements Serializable {
-  static Logger logger = LoggerFactory.getLogger(Score.class);
+  private static Logger logger = LoggerFactory.getLogger(Score.class);
 
   public static final String FIND_ALL = "Score.findAll";
   public static final String FIND_TOP_TEN = "Score.findTopTen";
