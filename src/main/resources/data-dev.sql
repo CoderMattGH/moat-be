@@ -1,6 +1,6 @@
-INSERT INTO moat_user (username)
-VALUES ('MATTD'),
-       ('BOBBY');
+INSERT INTO moat_user (username, password, email)
+VALUES ('MATTD', 'pass', 'matt@email.com'),
+       ('BOBBY', 'pass', 'bobby@email.com');
 
 INSERT INTO score (score, moat_user_id)
 VALUES (100, 1),

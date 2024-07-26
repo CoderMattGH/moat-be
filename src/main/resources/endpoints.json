@@ -31,13 +31,44 @@
       "description": "Deletes all scores with the specified nickname."
     },
     {
-      "path": "POST /score/",
+      "path": "POST /scores/",
       "description": "Saves the user's score and adds it to the leaderboard if a high score. Returns 'true' if a high score.",
       "requestBody": {
         "nickname": "user's nickname",
         "score": 40
       },
       "exampleResponse": false
+    },
+    {
+      "path": "GET /user/",
+      "description": "Returns all users.",
+      "exampleResponse": [
+        {
+          "id": 1,
+          "username": "MATTD",
+          "email": "mattd@email.com",
+          "verified": true,
+          "banned": false
+        },
+        {
+          "id": 2,
+          "username": "BOBBY",
+          "email": "bobby@email.com",
+          "verified": false,
+          "banned": false
+        }
+      ]
+    },
+    {
+      "path": "POST /user/",
+      "description": "Creates a new user",
+      "exampleResponse": {
+        "id": 3,
+        "username": "BILLY",
+        "email": "billy@email.com",
+        "verified": false,
+        "banned": false
+      }
     }
   ]
 }
