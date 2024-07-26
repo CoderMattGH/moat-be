@@ -7,9 +7,9 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "User")
-public class User implements Serializable {
-  private static Logger logger = LoggerFactory.getLogger(User.class);
+@Table(name = "moat_user")
+public class MOATUser implements Serializable {
+  static Logger logger = LoggerFactory.getLogger(MOATUser.class);
 
   public final static int USERNAME_MIN_LENGTH = 5;
   public final static int USERNAME_MAX_LENGTH = 15;
