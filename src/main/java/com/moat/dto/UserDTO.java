@@ -1,6 +1,6 @@
 package com.moat.dto;
 
-public class MoatUserDTO {
+public class UserDTO {
   private String username;
   private String password;
   private String email;
