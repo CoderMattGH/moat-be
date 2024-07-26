@@ -26,7 +26,6 @@ public class ScoreServiceImpl implements ScoreService {
     logger.info("In save() in ScoreServiceImpl.");
 
     if (score.getId() == null) {
-      logger.info("Saving score {} {} into db.", score.getScore(), score.getNickname());
       em.persist(score);
     } else {
       logger.info("Merging score into db.");
@@ -40,8 +39,6 @@ public class ScoreServiceImpl implements ScoreService {
     if (score.getId() == null) {
       logger.error("Cannot delete Score object with no id.");
     } else {
-      logger.info("Removing score {}:{} from DB", score.getNickname(), score.getScore());
-
       if (!em.contains(score)) {
         Score result = em.find(Score.class, score.getId());
 

@@ -9,11 +9,8 @@ import java.io.Serializable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * An Entity class representing a Score.
- */
 @Entity
-@Table(name = "Score")
+@Table(name = "score")
 @NamedQueries({
     @NamedQuery(name = Score.FIND_ALL, query = "select s from Score s"),
     @NamedQuery(name = Score.FIND_TOP_TEN,
@@ -25,27 +22,17 @@ public class Score implements Serializable {
   public static final String FIND_ALL = "Score.findAll";
   public static final String FIND_TOP_TEN = "Score.findTopTen";
 
-  private final static int NAME_MIN_LENGTH = 5;
-  private final static int NAME_MAX_LENGTH = 10;
-
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "ID")
+  @Column(name = "score_id")
   private Long id;
 
-  @Column(name = "SCORE")
+  @Column(name = "score")
   private int score;
 
-  @Column(name = "NICKNAME")
-  private String nickname;
-
-  public Score() {
-  }
-
-  public Score(int score, String nickname) {
-    setScore(score);
-    setNickname(nickname);
-  }
+  @OneToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "moat_user_id", referencedColumnName = "moat_user_id")
+  private MOATUser mOATUserId;
 
   public Long getId() {
     return this.id;
@@ -66,36 +53,11 @@ public class Score implements Serializable {
       this.score = score;
   }
 
-  public String getNickname() {
-    return this.nickname;
+  public MOATUser getMOATUserId() {
+    return this.mOATUserId;
   }
 
-  /**
-   * Sets the Nickname.  This method will try and validate the Nickname.
-   * If the Nickname is considered invalid, then the function will throw an
-   * IllegalArgumentException error.
-   *
-   * @param nickname A String representing the Nickname.
-   * @throws IllegalArgumentException When the Nickname is not considered valid.
-   */
-  public void setNickname(String nickname) {
-    // Validate nickname.
-    if (nickname == null || nickname == "")
-      throw new IllegalArgumentException("Nickname cannot be null or empty.");
-
-    if (nickname.length() < NAME_MIN_LENGTH || nickname.length() > NAME_MAX_LENGTH)
-      throw new IllegalArgumentException("Nickname is the incorrect length.");
-
-    String regex = String.format("^[a-zA-Z0-9]{%d,%d}$", NAME_MIN_LENGTH, NAME_MAX_LENGTH);
-
-    Pattern pattern = Pattern.compile(regex);
-    Matcher matcher = pattern.matcher(nickname);
-
-    if (!matcher.find())
-      throw new IllegalArgumentException("Nickname contains invalid characters.");
-
-    nickname = nickname.toUpperCase();
-
-    this.nickname = nickname;
+  public void setMOATUserId(MOATUser mOATUserId) {
+    this.mOATUserId = mOATUserId;
   }
 }
