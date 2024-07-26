@@ -5,6 +5,7 @@ import com.moat.entity.Score;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import org.hibernate.cfg.NotYetImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
@@ -69,5 +70,9 @@ public class ScoreServiceImpl implements ScoreService {
 
     return em.createNamedQuery(Score.FIND_TOP_TEN, Score.class)
         .setMaxResults(10).getResultList();
+  }
+
+  public List<Score> findScoresByNickname(String nickname) {
+    throw new NotYetImplementedException();
   }
 }
