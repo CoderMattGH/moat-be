@@ -7,7 +7,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "moat_user")
+@Table(name = "MOATUser")
 public class MOATUser implements Serializable {
   static Logger logger = LoggerFactory.getLogger(MOATUser.class);
 
