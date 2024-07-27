@@ -1,6 +1,7 @@
 package com.moat.security;
 
 import com.moat.entity.Administrator;
+import com.moat.dao.AdministratorDao;
 import com.moat.service.AdministratorService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,31 +10,37 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-public class MOATUserDetailsService implements UserDetailsService {
-  private final Logger logger = LoggerFactory.getLogger(MOATUserDetailsService.class);
+import javax.persistence.NoResultException;
 
-  private final AdministratorService administratorService;
+public class MOATUserDetailsService implements UserDetailsService {
+  private final Logger logger =
+      LoggerFactory.getLogger(MOATUserDetailsService.class);
+
+  private final AdministratorService adminstratorService;
 
   public MOATUserDetailsService(AdministratorService administratorService) {
     logger.info("Constructing MOATUserDetailsService.");
 
-    this.administratorService = administratorService;
+    this.adminstratorService = administratorService;
   }
 
   @Override
-  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+  public UserDetails loadUserByUsername(String username)
+      throws UsernameNotFoundException {
     logger.info("In loadUserByUsername() in MOATUserDetailsService.");
 
     try {
-      final Administrator administrator = this.administratorService.findByUsername(username);
+      final Administrator administrator =
+          adminstratorService.selectByUsername(username);
 
-      if (administrator != null) {
-        String password = administrator.getPassword();
+      String password = administrator.getPassword();
 
-        return User.withUsername(username).password(password).roles("ADMIN", "USER")
-            .build();
-      }
+      return User.withUsername(username).password(password)
+          .roles("ADMIN", "USER").build();
+    } catch (NoResultException e) {
+      logger.error("Administrator username not found!");
     } catch (Exception e) {
+      logger.error("An unknown error occurred trying to login!");
       e.printStackTrace();
     }
 

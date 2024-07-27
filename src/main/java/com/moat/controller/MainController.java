@@ -1,7 +1,7 @@
 package com.moat.controller;
 
+import com.moat.dto.MessageDTO;
 import com.moat.service.EndpointService;
-import com.moat.service.HighScores;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -11,15 +11,14 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin
 @RestController
 public class MainController {
-  private final static Logger logger = LoggerFactory.getLogger(MainController.class);
+  private final static Logger logger =
+      LoggerFactory.getLogger(MainController.class);
 
-  private final HighScores highScores;
   private final EndpointService endpointService;
 
-  public MainController(HighScores highScores, EndpointService endpointService) {
+  public MainController(EndpointService endpointService) {
     logger.info("Constructing MainController.");
 
-    this.highScores = highScores;
     this.endpointService = endpointService;
   }
 
@@ -31,7 +30,8 @@ public class MainController {
     try {
       endpoints = endpointService.getEndpoints();
     } catch (Exception e) {
-      return new ResponseEntity(null, HttpStatus.INTERNAL_SERVER_ERROR);
+      return new ResponseEntity(new MessageDTO("Cannot fetch endpoints!"),
+          HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     return new ResponseEntity<>(endpoints, HttpStatus.OK);

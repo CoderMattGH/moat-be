@@ -1,7 +1,6 @@
 package com.moat.controller;
 
 import com.moat.entity.Score;
-import com.moat.service.HighScores;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -14,7 +13,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class MainControllerTest {
-  private final static Logger logger = LoggerFactory.getLogger(MainControllerTest.class);
+  private final static Logger logger =
+      LoggerFactory.getLogger(MainControllerTest.class);
 
   private final Score[] leaderboard = new Score[5];
 

@@ -1,54 +1,52 @@
 package com.moat.service;
 
+import com.moat.dao.UserDao;
 import com.moat.entity.MOATUser;
 import com.moat.exception.AlreadyExistsException;
+import com.moat.exception.MOATValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
 import java.util.List;
 
 @Service("userService")
-@Transactional
-@Repository
 public class UserServiceImpl implements UserService {
   private Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
-  @PersistenceContext
-  private EntityManager em;
+  private UserDao userDao;
 
-  @Transactional(readOnly = true)
+  public UserServiceImpl(UserDao userDao) {
+    this.userDao = userDao;
+  }
+
   public List<MOATUser> selectAllUsers() {
-    logger.info("In selectAllUsers() in UserServiceImpl.");
+    logger.info("In selectAllUsers() in userServiceImpl.");
 
-    return em.createQuery("SELECT u FROM MOATUser u", MOATUser.class).getResultList();
+    return userDao.selectAllUsers();
   }
 
-  @Transactional(readOnly = true)
-  public MOATUser selectUserByUsername(String username) throws NoResultException {
-    logger.info("In selectUserByUsername() in UserServiceImpl.");
+  public MOATUser selectByUsername(String username) throws NoResultException {
+    logger.info("In selectByUsername() in userServiceImpl.");
 
-    if (username == null || username.trim().isEmpty()) {
-      throw new IllegalArgumentException("Username cannot be null or empty!");
+    return userDao.selectUserByUsername(username);
+  }
+
+  @Transactional
+  public void createUser(MOATUser user)
+      throws AlreadyExistsException, MOATValidationException {
+    logger.info("In createUser() in userServiceImpl.");
+
+    if (user.getId() != null) {
+      throw new MOATValidationException("User ID must be null!");
     }
-
-    return em.createQuery("SELECT u FROM MOATUser u where u.username = :username", MOATUser.class)
-        .setParameter("username", username).getSingleResult();
-  }
-
-  // TODO: Validation
-  public MOATUser createUser(MOATUser user) throws AlreadyExistsException {
-    logger.info("In createUser() in UserServiceImpl.");
 
     // Check username doesn't already exist
     boolean userExists = true;
     try {
-      selectUserByUsername(user.getUsername());
+      userDao.selectUserByUsername(user.getUsername());
     } catch (NoResultException e) {
       userExists = false;
     }
@@ -57,10 +55,6 @@ public class UserServiceImpl implements UserService {
       throw new AlreadyExistsException("User already exists!");
     }
 
-    em.persist(user);
-
-    System.out.println("SAVED userID:" + user.getId());
-
-    return user;
+    userDao.saveUser(user);
   }
 }

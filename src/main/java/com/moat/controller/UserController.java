@@ -1,7 +1,9 @@
 package com.moat.controller;
 
+import com.moat.dto.MessageDTO;
 import com.moat.entity.MOATUser;
 import com.moat.exception.AlreadyExistsException;
+import com.moat.exception.MOATValidationException;
 import com.moat.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +21,7 @@ import java.util.List;
 public class UserController {
   private static Logger logger = LoggerFactory.getLogger(UserController.class);
 
-  private UserService userService;
+  private final UserService userService;
 
   public UserController(UserService userService) {
     logger.info("Constructing UserController.");
@@ -34,7 +36,8 @@ public class UserController {
     List<MOATUser> users = userService.selectAllUsers();
 
     if (users.isEmpty()) {
-      return new ResponseEntity<>("No users found!", HttpStatus.NOT_FOUND);
+      return new ResponseEntity<>(new MessageDTO("No users found!"),
+          HttpStatus.NOT_FOUND);
     }
 
     return new ResponseEntity<>(users, HttpStatus.OK);
@@ -45,11 +48,11 @@ public class UserController {
     logger.info("In getUserByUsername() in UserController.");
 
     MOATUser user;
-
     try {
-      user = userService.selectUserByUsername(username);
+      user = userService.selectByUsername(username);
     } catch (NoResultException e) {
-      return new ResponseEntity<>("User not found!", HttpStatus.NOT_FOUND);
+      return new ResponseEntity<>(new MessageDTO("User not found!"),
+          HttpStatus.NOT_FOUND);
     }
 
     return new ResponseEntity<>(user, HttpStatus.OK);
@@ -57,15 +60,18 @@ public class UserController {
 
   @PostMapping("/")
   public ResponseEntity<?> postUser(@RequestBody @Valid MOATUser user) {
-    System.out.println(user.getUsername());
+    logger.info("In postUser() in UserController.");
 
-    MOATUser newUser;
     try {
-      newUser = userService.createUser(user);
+      userService.createUser(user);
     } catch (AlreadyExistsException e) {
-      return new ResponseEntity<>("User already exists!", HttpStatus.BAD_REQUEST);
+      return new ResponseEntity<>(new MessageDTO(e.getMessage()),
+          HttpStatus.BAD_REQUEST);
+    } catch (MOATValidationException e) {
+      return new ResponseEntity<>(new MessageDTO(e.getMessage()),
+          HttpStatus.BAD_REQUEST);
     }
 
-    return new ResponseEntity<>(newUser, HttpStatus.CREATED);
+    return new ResponseEntity<>(null, HttpStatus.CREATED);
   }
 }
