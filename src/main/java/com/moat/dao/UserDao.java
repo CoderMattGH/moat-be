@@ -1,7 +1,6 @@
 package com.moat.dao;
 
 import com.moat.entity.MOATUser;
-import com.moat.exception.AlreadyExistsException;
 
 import javax.persistence.NoResultException;
 import java.util.List;

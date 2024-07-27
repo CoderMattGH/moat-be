@@ -1,7 +1,6 @@
 package com.moat.security;
 
 import com.moat.entity.Administrator;
-import com.moat.dao.AdministratorDao;
 import com.moat.service.AdministratorService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
