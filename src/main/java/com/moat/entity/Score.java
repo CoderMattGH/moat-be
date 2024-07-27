@@ -9,11 +9,10 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "score")
-@NamedQueries({
-    @NamedQuery(name = Score.FIND_ALL, query = "select s from Score s"),
-    @NamedQuery(name = Score.FIND_TOP_TEN,
-        query = "select s from Score s ORDER BY s.score DESC")
-})
+@NamedQueries(
+    {@NamedQuery(name = Score.FIND_ALL, query = "select s from Score s"),
+        @NamedQuery(name = Score.FIND_TOP_TEN,
+            query = "select s from Score s ORDER BY s.score DESC")})
 public class Score implements Serializable {
   private static Logger logger = LoggerFactory.getLogger(Score.class);
 
@@ -30,7 +29,7 @@ public class Score implements Serializable {
 
   @OneToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "moat_user_id", referencedColumnName = "moat_user_id")
-  private MOATUser mOATUserId;
+  private MOATUser moatUserId;
 
   public Long getId() {
     return this.id;
@@ -52,10 +51,10 @@ public class Score implements Serializable {
   }
 
   public MOATUser getMOATUserId() {
-    return this.mOATUserId;
+    return this.moatUserId;
   }
 
   public void setMOATUserId(MOATUser mOATUserId) {
-    this.mOATUserId = mOATUserId;
+    this.moatUserId = mOATUserId;
   }
 }

@@ -13,12 +13,10 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 
-/**
- * Class to filter out profanity in nicknames, etc.
- */
 @Component
 public class ProfanityFilterServiceImpl implements ProfanityFilterService {
-  private final static Logger logger = LoggerFactory.getLogger(ProfanityFilterServiceImpl.class);
+  private final static Logger logger =
+      LoggerFactory.getLogger(ProfanityFilterServiceImpl.class);
 
   private boolean enabled;
   private File filterFile;
@@ -40,7 +38,8 @@ public class ProfanityFilterServiceImpl implements ProfanityFilterService {
   private void init() {
     profFilter = new HashSet<>();
 
-    String filterFilePath = Constants.FILTERS_DIR + File.separator + Constants.FILTER_PROF_FILE;
+    String filterFilePath =
+        Constants.FILTERS_DIR + File.separator + Constants.FILTER_PROF_FILE;
     filterFile = new File(filterFilePath);
 
     boolean loaded = loadProfanityFilter();
@@ -54,13 +53,9 @@ public class ProfanityFilterServiceImpl implements ProfanityFilterService {
     }
   }
 
-  /**
-   * Loads the Profanity Filter file.
-   *
-   * @return A boolean representing whether the operation was successful or not.
-   */
   private boolean loadProfanityFilter() {
-    logger.info("Loading Profanity Filter from file: " + filterFile.getAbsolutePath());
+    logger.info(
+        "Loading Profanity Filter from file: " + filterFile.getAbsolutePath());
 
     try {
       BufferedReader br = new BufferedReader(new FileReader(filterFile));
@@ -77,13 +72,6 @@ public class ProfanityFilterServiceImpl implements ProfanityFilterService {
     return true;
   }
 
-  /**
-   * Reads from the supplied BufferedReader object and returns a list of all words found on a
-   * new line.
-   *
-   * @param br BufferedReader object containing the data to read.
-   * @return A List<String> object containing the words read.
-   */
   private List<String> readFile(BufferedReader br) throws IOException {
     List<String> list = new ArrayList<>();
 
