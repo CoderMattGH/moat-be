@@ -1,8 +1,16 @@
-INSERT INTO score (id, score, nickname) VALUES (1, 1000, 'mattd');
-INSERT INTO score (id, score, nickname) VALUES (2, 2000, 'alanw');
-INSERT INTO score (id, score, nickname) VALUES (3, 3000, 'paulp');
-INSERT INTO score (id, score, nickname) VALUES (4, 4000, 'peterp');
-INSERT INTO score (id, score, nickname) VALUES (5, 5000, 'jgosl');
+INSERT INTO moat_user (username, password, email)
+VALUES ('MATTD', 'pass', 'matt@email.com'),
+       ('BOBBY', 'pass', 'bobby@email.com'),
+       ('BEANIE', 'pass', 'beanie@email.com');
 
-INSERT INTO administrator (username, password) VALUES ('admin',
-        '$2a$10$MT.R82UFSQ320Q9wwKRJjuNoOE2.CIBojcrMr5GFxdSvC9e1Rtfw2');
+INSERT INTO score (score, moat_user_id)
+VALUES (100, 1),
+       (200, 1),
+       (400, 2),
+       (500, 1),
+       (600, 1);
+
+INSERT INTO administrator (username, password)
+-- password: 'password' hashed bcrypt strength 10.
+VALUES ('mattd',
+        '$2a$10$iqRvPqnXnmpsMChjx9RFReFwm9RcnSZFQQvdlqWTToFrQtOYGreFO');

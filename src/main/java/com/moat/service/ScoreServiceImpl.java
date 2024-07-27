@@ -3,11 +3,13 @@ package com.moat.service;
 import com.moat.dao.ScoreDao;
 import com.moat.entity.Score;
 import com.moat.profanityfilter.ProfanityFilterService;
+import org.hibernate.cfg.NotYetImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.NoResultException;
 import java.util.Iterator;
 import java.util.List;
 
@@ -49,7 +51,11 @@ public class ScoreServiceImpl implements ScoreService {
   public void delete(Score score) {
     logger.info("In delete() in ScoreServiceImpl.");
 
-    scoreDao.delete(score);
+    try {
+      scoreDao.delete(score);
+    } catch (NoResultException e) {
+      throw new NoResultException("Score doesn't exist!");
+    }
   }
 
   // TODO: Make one query
@@ -57,15 +63,6 @@ public class ScoreServiceImpl implements ScoreService {
   public void deleteAll() {
     logger.info("In deleteAll() in ScoreServiceImpl.");
 
-    List<Score> scores = scoreDao.selectAll();
-
-    Iterator<Score> iterator = scores.iterator();
-
-    while (iterator.hasNext()) {
-      Score score = iterator.next();
-
-      logger.info("Deleting score with ID: " + score.getId());
-      scoreDao.delete(score);
-    }
+    throw new NotYetImplementedException();
   }
 }
