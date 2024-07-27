@@ -3,6 +3,7 @@ package com.moat.dao;
 import com.moat.entity.Score;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 
 import org.hibernate.cfg.NotYetImplementedException;
@@ -25,34 +26,29 @@ public class ScoreDaoImpl implements ScoreDao {
     logger.info("In save() in ScoreDaoImpl.");
 
     if (score.getId() == null) {
+      logger.info("Persisting score into db.");
+
       em.persist(score);
     } else {
       logger.info("Merging score into db.");
+
       em.merge(score);
     }
   }
 
-  public void delete(Score score) {
+  public void delete(Score score) throws NoResultException {
     logger.info("In delete() in ScoreDaoImpl.");
 
-    if (score.getId() == null) {
-      logger.error("Cannot delete Score object with no id.");
-    } else {
-      if (!em.contains(score)) {
-        Score result = em.find(Score.class, score.getId());
+    if (!em.contains(score)) {
+      Score result = em.find(Score.class, score.getId());
 
-        if (result == null) {
-          logger.info(
-              "Cannot remove score with id={} because it cannot be found.",
-              score.getId());
-
-          return;
-        }
-
-        em.remove(result);
-      } else {
-        em.remove(score);
+      if (result == null) {
+        throw new NoResultException("Score doesn't exist!");
       }
+
+      em.remove(result);
+    } else {
+      em.remove(score);
     }
   }
 
@@ -66,14 +62,14 @@ public class ScoreDaoImpl implements ScoreDao {
   public List<Score> selectAll() {
     logger.info("In selectAll() in ScoreDaoImpl.");
 
-    return em.createNamedQuery(Score.FIND_ALL, Score.class).getResultList();
+    return em.createQuery("select s from Score s", Score.class).getResultList();
   }
 
   @Transactional(readOnly = true)
   public List<Score> selectTopTenScoresSorted() {
     logger.info("In findTopTenScoresSorted() in ScoreDaoImpl.");
 
-    return em.createNamedQuery(Score.FIND_TOP_TEN, Score.class)
-        .setMaxResults(10).getResultList();
+    return em.createQuery("select s from Score s ORDER BY s.score DESC",
+        Score.class).setMaxResults(10).getResultList();
   }
 }

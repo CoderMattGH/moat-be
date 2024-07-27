@@ -9,10 +9,6 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "score")
-@NamedQueries(
-    {@NamedQuery(name = Score.FIND_ALL, query = "select s from Score s"),
-        @NamedQuery(name = Score.FIND_TOP_TEN,
-            query = "select s from Score s ORDER BY s.score DESC")})
 public class Score implements Serializable {
   private static Logger logger = LoggerFactory.getLogger(Score.class);
 

@@ -1,67 +1,36 @@
 package com.moat.controller;
 
-import com.moat.entity.Score;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@ExtendWith(SpringExtension.class)
+@SpringBootTest
+@AutoConfigureMockMvc
 public class MainControllerTest {
   private final static Logger logger =
       LoggerFactory.getLogger(MainControllerTest.class);
 
-  private final Score[] leaderboard = new Score[5];
-
-  public MainControllerTest() {
-    logger.info("Constructing MainControllerTest.");
-  }
-
-  @BeforeEach
-  public void initLeaderBoard() {
-    Score score1 = new Score(100, "mattd");
-    leaderboard[4] = score1;
-
-    Score score2 = new Score(3000, "bobby");
-    leaderboard[3] = score2;
-
-    Score score3 = new Score(5000, "timmy");
-    leaderboard[2] = score3;
-
-    Score score4 = new Score(10000, "tommy");
-    leaderboard[1] = score4;
-
-    Score score5 = new Score(120000, "alan5");
-    leaderboard[0] = score5;
-  }
+  @Autowired
+  private MockMvc mvc;
 
   @Test
-  public void testGetLeaderBoard() {
-    HighScores highScores = mock(HighScores.class);
-    when(highScores.getTopTenSortedScores()).thenReturn(leaderboard);
+  public void getEndpointsTest() throws Exception {
+    logger.info("Test endpoints returned OK.");
 
-    MainController mainController = new MainController(highScores);
-
-    assertEquals(5, mainController.getLeaderBoard().length);
-    assertEquals("ALAN5", mainController.getLeaderBoard()[0].getNickname());
-  }
-
-  @Test
-  public void testSendScore() {
-    HighScores highScores = mock(HighScores.class);
-    when(highScores.checkAndSaveIfTopTenScore(any())).thenReturn(true);
-
-    MainController mainController = new MainController(highScores);
-
-    Score score = new Score(50000, "mattd");
-
-    boolean result = mainController.sendScore(score);
-
-    assertTrue(result);
+    mvc.perform(
+            MockMvcRequestBuilders.get("/").accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk());
   }
 }

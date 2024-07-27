@@ -2,6 +2,7 @@ package com.moat.dao;
 
 import com.moat.entity.Score;
 
+import javax.persistence.NoResultException;
 import java.util.List;
 
 public interface ScoreDao {
@@ -12,5 +13,5 @@ public interface ScoreDao {
 
   void save(Score score);
 
-  void delete(Score score);
+  void delete(Score score) throws NoResultException;
 }
