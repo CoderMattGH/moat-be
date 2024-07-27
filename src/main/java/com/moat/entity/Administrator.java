@@ -12,7 +12,7 @@ public class Administrator {
   @Id
   @Column(name = "ID")
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private int id;
+  private Long id;
 
   @NotNull
   @Column(name = "USERNAME")
@@ -30,7 +30,7 @@ public class Administrator {
     setPassword(password);
   }
 
-  public void setId(int id) {
+  public void setId(Long id) {
     this.id = id;
   }
 
@@ -42,7 +42,7 @@ public class Administrator {
     this.password = password;
   }
 
-  public int getId() {
+  public Long getId() {
     return id;
   }
 
@@ -55,6 +55,7 @@ public class Administrator {
   }
 
   public String toString() {
-    return String.format("ID: %d, Username: %s, Password: %s", id, username, password);
+    return String.format("ID: %d, Username: %s, Password: %s", id, username,
+        password);
   }
 }

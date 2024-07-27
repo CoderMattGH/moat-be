@@ -1,17 +1,16 @@
-package com.moat.service;
+package com.moat.dao;
 
 import com.moat.entity.Score;
 
 import java.util.List;
 
-public interface ScoreService {
+public interface ScoreDao {
+
   List<Score> selectAll();
 
-  List<Score> selectTopTenScores();
+  List<Score> selectTopTenScoresSorted();
 
   void save(Score score);
 
   void delete(Score score);
-
-  void deleteAll();
 }

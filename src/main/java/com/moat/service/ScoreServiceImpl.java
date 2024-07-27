@@ -1,78 +1,71 @@
 package com.moat.service;
 
+import com.moat.dao.ScoreDao;
 import com.moat.entity.Score;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
-import org.hibernate.cfg.NotYetImplementedException;
+import com.moat.profanityfilter.ProfanityFilterService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Iterator;
 import java.util.List;
 
 @Service("scoreService")
-@Transactional
-@Repository
 public class ScoreServiceImpl implements ScoreService {
-  Logger logger = LoggerFactory.getLogger(ScoreServiceImpl.class);
+  private Logger logger = LoggerFactory.getLogger(ScoreServiceImpl.class);
 
-  @PersistenceContext
-  private EntityManager em;
+  ScoreDao scoreDao;
+  ProfanityFilterService profanityFilterService;
 
+  public ScoreServiceImpl(ScoreDao scoreDao,
+                          ProfanityFilterService profanityFilterService) {
+    logger.info("Constructing ScoreServiceImpl.");
+
+    this.scoreDao = scoreDao;
+    this.profanityFilterService = profanityFilterService;
+  }
+
+  public List<Score> selectAll() {
+    logger.info("In selectAll() in ScoreServiceImpl.");
+
+    return scoreDao.selectAll();
+  }
+
+  public List<Score> selectTopTenScores() {
+    logger.info("In selectTopTenScores() in ScoreServiceImpl.");
+
+    return scoreDao.selectTopTenScoresSorted();
+  }
+
+  // TODO: Validation
   public void save(Score score) {
     logger.info("In save() in ScoreServiceImpl.");
 
-    if (score.getId() == null) {
-      em.persist(score);
-    } else {
-      logger.info("Merging score into db.");
-      em.merge(score);
-    }
+    scoreDao.save(score);
   }
 
+  // TODO: Validation
   public void delete(Score score) {
     logger.info("In delete() in ScoreServiceImpl.");
 
-    if (score.getId() == null) {
-      logger.error("Cannot delete Score object with no id.");
-    } else {
-      if (!em.contains(score)) {
-        Score result = em.find(Score.class, score.getId());
+    scoreDao.delete(score);
+  }
 
-        if (result == null) {
-          logger.info("Cannot remove score with id={} because it cannot be found.",
-              score.getId());
+  // TODO: Make one query
+  @Transactional
+  public void deleteAll() {
+    logger.info("In deleteAll() in ScoreServiceImpl.");
 
-          return;
-        }
+    List<Score> scores = scoreDao.selectAll();
 
-        em.remove(result);
-      } else {
-        em.remove(score);
-      }
+    Iterator<Score> iterator = scores.iterator();
+
+    while (iterator.hasNext()) {
+      Score score = iterator.next();
+
+      logger.info("Deleting score with ID: " + score.getId());
+      scoreDao.delete(score);
     }
-  }
-
-  @Transactional(readOnly = true)
-  public List<Score> findAll() {
-    logger.info("In findAll() in ScoreServiceImpl.");
-
-    return em.createNamedQuery(Score.FIND_ALL, Score.class).getResultList();
-  }
-
-  @Transactional(readOnly = true)
-  public List<Score> findTopTenScoresSorted() {
-    logger.info("In findTopTenScoresSorted() in ScoreServiceImpl.");
-
-    return em.createNamedQuery(Score.FIND_TOP_TEN, Score.class)
-        .setMaxResults(10).getResultList();
-  }
-
-  public List<Score> findScoresByNickname(String nickname) {
-    throw new NotYetImplementedException();
   }
 }

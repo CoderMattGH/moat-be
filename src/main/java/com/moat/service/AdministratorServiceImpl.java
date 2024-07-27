@@ -1,91 +1,65 @@
 package com.moat.service;
 
+import com.moat.dao.AdministratorDao;
 import com.moat.entity.Administrator;
+import com.moat.exception.MOATValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import javax.persistence.NoResultException;
 import java.util.List;
 
-@Service
-@Transactional
+@Service("administratorService")
 public class AdministratorServiceImpl implements AdministratorService {
-  Logger logger = LoggerFactory.getLogger(AdministratorServiceImpl.class);
+  private Logger logger =
+      LoggerFactory.getLogger(AdministratorServiceImpl.class);
 
-  @PersistenceContext
-  EntityManager em;
+  AdministratorDao administratorDao;
 
-  public AdministratorServiceImpl() {
+  public AdministratorServiceImpl(AdministratorDao administratorDao) {
     logger.info("Constructing AdministratorServiceImpl.");
+
+    this.administratorDao = administratorDao;
   }
 
-  @Transactional(readOnly = true)
-  public Administrator findById(int id) {
-    logger.info("In findById() in AdministratorServiceImpl");
-    logger.info("Finding Administrator with ID=" + id);
+  public List<Administrator> selectAll() throws NoResultException {
+    logger.info("In selectAll() in AdministratorServiceImpl.");
 
-    Administrator administrator = null;
+    List<Administrator> administrators = administratorDao.selectAll();
 
-    List<Administrator> administratorList = em.createQuery(
-            "SELECT a FROM Administrator a WHERE a.id = :id", Administrator.class)
-        .setParameter("id", id)
-        .getResultList();
-
-    if (!administratorList.isEmpty())
-      administrator = administratorList.get(0);
-
-    return administrator;
-  }
-
-  public Administrator findByUsername(String username) {
-    logger.info("In findByUsername() in AdministratorServiceImpl.");
-    logger.info("Finding Administrator with username=" + username);
-
-    Administrator administrator = null;
-
-    List<Administrator> administratorList = em.createQuery(
-            "SELECT a FROM Administrator a WHERE a.username = :username", Administrator.class)
-        .setParameter("username", username)
-        .getResultList();
-
-    if (!administratorList.isEmpty())
-      administrator = administratorList.get(0);
-
-    if (administrator == null)
-      logger.info("Administrator with username=" + username + " not found!");
-    else
-      logger.info("Administrator with username=" + username + " found!");
-
-    return administrator;
-  }
-
-  @Transactional(readOnly = true)
-  public List<Administrator> findAll() {
-    logger.info("In findAll() in AdministratorServiceImpl.");
-    logger.info("Finding all Administrators.");
-
-    List<Administrator> administrators = em.createQuery(
-        "SELECT a FROM Administrator a", Administrator.class).getResultList();
+    if (administrators.isEmpty()) {
+      throw new NoResultException();
+    }
 
     return administrators;
   }
 
-  public void saveOrUpdate(Administrator administrator) {
-    logger.info("In saveOrUpdate() in AdministratorServiceImpl.");
-    logger.info("Saving administrator.");
+  public Administrator selectById(int id) throws NoResultException {
+    logger.info("In selectById() in AdministratorServiceImpl.");
 
-    if (administrator.getId() == 0)
-      em.persist(administrator);
-    else
-      em.merge(administrator);
+    return administratorDao.selectById(id);
   }
 
-  public void delete(Administrator administrator) {
-    logger.info("In delete() in AdministratorServiceImpl");
+  public Administrator selectByUsername(String username)
+      throws NoResultException {
+    logger.info("In selectByUsername() in AdministratorServiceImpl.");
 
-    em.remove(administrator);
+    return administratorDao.selectByUsername(username);
+  }
+
+  @Transactional
+  public void createAdministrator(Administrator administrator)
+      throws MOATValidationException {
+    logger.info("In createAdministrator in AdministratorServiceImpl.");
+
+    if (administrator.getId() != null) {
+      throw new MOATValidationException("Administrator ID must be null!");
+    }
+
+    // TODO: Check doesn't exist
+
+    administratorDao.save(administrator);
   }
 }

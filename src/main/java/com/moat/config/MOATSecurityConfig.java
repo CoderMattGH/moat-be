@@ -16,7 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class MOATSecurityConfig extends WebSecurityConfigurerAdapter {
   private Logger logger = LoggerFactory.getLogger(MOATSecurityConfig.class);
 
-  private AdministratorService administratorService;
+  private final AdministratorService administratorService;
 
   public MOATSecurityConfig(AdministratorService administratorService) {
     logger.info("Constructing MoatSecurityConfig.");
@@ -26,6 +26,9 @@ public class MOATSecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Override
   protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    logger.info("In configure(AuthenticationManagerBuilder) in " +
+        "MOATSecurityConfig.");
+
     auth.userDetailsService(
         new MOATUserDetailsService(this.administratorService));
   }
@@ -37,22 +40,14 @@ public class MOATSecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
-    http
-        .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        .and()
-        .authorizeRequests()
-        .antMatchers("/score/").permitAll()
-        .antMatchers("/user/").permitAll()
-        .antMatchers("/").permitAll()
-        .anyRequest().fullyAuthenticated()
-        .and()
-        .httpBasic()
-        .and()
-        .cors()
-        .and()
-        .headers().frameOptions().sameOrigin()
-        .httpStrictTransportSecurity().disable()
-        .and()
-        .csrf().disable();
+    logger.info("In configure(HttpSecurity) in MOATSecurityConfig.");
+
+    http.sessionManagement()
+        .sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+        .authorizeRequests().antMatchers("/score/").permitAll()
+        .antMatchers("/user/").permitAll().antMatchers("/").permitAll()
+        .anyRequest().fullyAuthenticated().and().httpBasic().and().cors().and()
+        .headers().frameOptions().sameOrigin().httpStrictTransportSecurity()
+        .disable().and().csrf().disable();
   }
 }

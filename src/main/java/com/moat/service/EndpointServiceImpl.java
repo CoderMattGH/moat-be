@@ -9,9 +9,10 @@ import org.springframework.stereotype.Service;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 
-@Service
+@Service("endpointService")
 public class EndpointServiceImpl implements EndpointService {
-  private static Logger logger = LoggerFactory.getLogger(EndpointServiceImpl.class);
+  private static Logger logger =
+      LoggerFactory.getLogger(EndpointServiceImpl.class);
 
   public String getEndpoints() throws Exception {
     logger.info("In getEndpoints() in EndpointServiceImpl.");
@@ -19,11 +20,11 @@ public class EndpointServiceImpl implements EndpointService {
     String endpointsStr = "";
 
     try {
-      InputStream bis =
-          new BufferedInputStream(
-              new ClassPathResource(Constants.ENDPOINTS_FILE_PATH).getInputStream());
+      InputStream bis = new BufferedInputStream(new ClassPathResource(
+          Constants.ENDPOINTS_FILE_PATH).getInputStream());
 
-      Reader reader = new BufferedReader(new InputStreamReader(bis, StandardCharsets.UTF_8));
+      Reader reader = new BufferedReader(
+          new InputStreamReader(bis, StandardCharsets.UTF_8));
 
       int c;
       while ((c = reader.read()) != -1) {

@@ -2,9 +2,7 @@ package com.moat.highscores;
 
 import com.moat.entity.Score;
 import com.moat.profanityfilter.ProfanityFilterService;
-import com.moat.service.HighScores;
-import com.moat.service.HighScoresImpl;
-import com.moat.service.ScoreService;
+import com.moat.dao.ScoreDao;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -19,7 +17,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 
 public class HighScoresTest {
-  private final static Logger logger = LoggerFactory.getLogger(HighScoresTest.class);
+  private final static Logger logger =
+      LoggerFactory.getLogger(HighScoresTest.class);
 
   private final List<Score> leaderboard = new ArrayList<>();
 
@@ -47,12 +46,14 @@ public class HighScoresTest {
 
   @Test
   public void testGetTopTenSortedScores() {
-    ScoreService scoreService = Mockito.mock(ScoreService.class);
-    ProfanityFilterService profanityFilterService = Mockito.mock(ProfanityFilterService.class);
+    ScoreDao scoreDao = Mockito.mock(ScoreDao.class);
+    ProfanityFilterService profanityFilterService =
+        Mockito.mock(ProfanityFilterService.class);
 
-    Mockito.when(scoreService.findTopTenScoresSorted()).thenReturn(leaderboard);
+    Mockito.when(scoreDao.findTopTenScoresSorted()).thenReturn(leaderboard);
 
-    HighScores highScores = new HighScoresImpl(scoreService, profanityFilterService);
+    HighScores highScores =
+        new HighScoresImpl(scoreDao, profanityFilterService);
 
     Score[] leaderboard = highScores.getTopTenSortedScores();
 
@@ -61,15 +62,18 @@ public class HighScoresTest {
 
   @Test
   public void testCheckAndSaveIfTopTenScore_IfValidNickname() {
-    ScoreService scoreService = Mockito.mock(ScoreService.class);
-    ProfanityFilterService profanityFilterService = Mockito.mock(ProfanityFilterService.class);
+    ScoreDao scoreDao = Mockito.mock(ScoreDao.class);
+    ProfanityFilterService profanityFilterService =
+        Mockito.mock(ProfanityFilterService.class);
 
-    Mockito.when(scoreService.findTopTenScoresSorted()).thenReturn(leaderboard);
+    Mockito.when(scoreDao.findTopTenScoresSorted()).thenReturn(leaderboard);
 
     Mockito.when(profanityFilterService.isEnabled()).thenReturn(true);
-    Mockito.when(profanityFilterService.isValid(Mockito.anyString())).thenReturn(true);
+    Mockito.when(profanityFilterService.isValid(Mockito.anyString()))
+        .thenReturn(true);
 
-    HighScores highScores = new HighScoresImpl(scoreService, profanityFilterService);
+    HighScores highScores =
+        new HighScoresImpl(scoreDao, profanityFilterService);
 
     Score score = new Score(20000, "mattd");
 
@@ -78,15 +82,18 @@ public class HighScoresTest {
 
   @Test
   public void testCheckAndSaveIfTopTenScore_IfInvalidNickname() {
-    ScoreService scoreService = Mockito.mock(ScoreService.class);
-    ProfanityFilterService profanityFilterService = Mockito.mock(ProfanityFilterService.class);
+    ScoreDao scoreDao = Mockito.mock(ScoreDao.class);
+    ProfanityFilterService profanityFilterService =
+        Mockito.mock(ProfanityFilterService.class);
 
-    Mockito.when(scoreService.findTopTenScoresSorted()).thenReturn(leaderboard);
+    Mockito.when(scoreDao.findTopTenScoresSorted()).thenReturn(leaderboard);
 
     Mockito.when(profanityFilterService.isEnabled()).thenReturn(true);
-    Mockito.when(profanityFilterService.isValid(Mockito.anyString())).thenReturn(false);
+    Mockito.when(profanityFilterService.isValid(Mockito.anyString()))
+        .thenReturn(false);
 
-    HighScores highScores = new HighScoresImpl(scoreService, profanityFilterService);
+    HighScores highScores =
+        new HighScoresImpl(scoreDao, profanityFilterService);
 
     Score score = new Score(20000, "invalid");
 
@@ -95,15 +102,17 @@ public class HighScoresTest {
 
   @Test
   public void testCheckAndSaveIfTopTenScore_IfProfFilterDisabled() {
-    ScoreService scoreService = Mockito.mock(ScoreService.class);
-    ProfanityFilterService profanityFilterService = Mockito.mock(ProfanityFilterService.class);
+    ScoreDao scoreDao = Mockito.mock(ScoreDao.class);
+    ProfanityFilterService profanityFilterService =
+        Mockito.mock(ProfanityFilterService.class);
 
-    Mockito.when(scoreService.findTopTenScoresSorted()).thenReturn(leaderboard);
+    Mockito.when(scoreDao.findTopTenScoresSorted()).thenReturn(leaderboard);
 
     Mockito.when(profanityFilterService.isEnabled()).thenReturn(false);
     Mockito.when(profanityFilterService.isValid(any())).thenReturn(false);
 
-    HighScores highScores = new HighScoresImpl(scoreService, profanityFilterService);
+    HighScores highScores =
+        new HighScoresImpl(scoreDao, profanityFilterService);
 
     Score score = new Score(20000, "invalid");
 
@@ -128,15 +137,17 @@ public class HighScoresTest {
     Score score5 = new Score(12000, "alan5");
     leaderboard.add(score5);
 
-    ScoreService scoreService = Mockito.mock(ScoreService.class);
-    ProfanityFilterService profanityFilterService = Mockito.mock(ProfanityFilterService.class);
+    ScoreDao scoreDao = Mockito.mock(ScoreDao.class);
+    ProfanityFilterService profanityFilterService =
+        Mockito.mock(ProfanityFilterService.class);
 
-    Mockito.when(scoreService.findTopTenScoresSorted()).thenReturn(leaderboard);
+    Mockito.when(scoreDao.findTopTenScoresSorted()).thenReturn(leaderboard);
 
     Mockito.when(profanityFilterService.isEnabled()).thenReturn(true);
     Mockito.when(profanityFilterService.isValid(any())).thenReturn(true);
 
-    HighScores highScores = new HighScoresImpl(scoreService, profanityFilterService);
+    HighScores highScores =
+        new HighScoresImpl(scoreDao, profanityFilterService);
 
     Score score = new Score(9999999, "highscore");
 
@@ -161,15 +172,17 @@ public class HighScoresTest {
     Score score5 = new Score(12000, "alan5");
     leaderboard.add(score5);
 
-    ScoreService scoreService = Mockito.mock(ScoreService.class);
-    ProfanityFilterService profanityFilterService = Mockito.mock(ProfanityFilterService.class);
+    ScoreDao scoreDao = Mockito.mock(ScoreDao.class);
+    ProfanityFilterService profanityFilterService =
+        Mockito.mock(ProfanityFilterService.class);
 
-    Mockito.when(scoreService.findTopTenScoresSorted()).thenReturn(leaderboard);
+    Mockito.when(scoreDao.findTopTenScoresSorted()).thenReturn(leaderboard);
 
     Mockito.when(profanityFilterService.isEnabled()).thenReturn(true);
     Mockito.when(profanityFilterService.isValid(any())).thenReturn(true);
 
-    HighScores highScores = new HighScoresImpl(scoreService, profanityFilterService);
+    HighScores highScores =
+        new HighScoresImpl(scoreDao, profanityFilterService);
 
     Score score = new Score(10, "lowscore");
 
@@ -178,8 +191,9 @@ public class HighScoresTest {
 
   @Test
   public void testRemoveScoresWithNickname_valid2Entries() {
-    ScoreService scoreService = Mockito.mock(ScoreService.class);
-    ProfanityFilterService profanityFilterService = Mockito.mock(ProfanityFilterService.class);
+    ScoreDao scoreDao = Mockito.mock(ScoreDao.class);
+    ProfanityFilterService profanityFilterService =
+        Mockito.mock(ProfanityFilterService.class);
 
     String nickname = "mattd";
 
@@ -191,9 +205,11 @@ public class HighScoresTest {
     Score score2 = new Score(120000, nickname);
     scores.add(score2);
 
-    Mockito.when(scoreService.findScoresByNickname(eq(nickname))).thenReturn(scores);
+    Mockito.when(scoreDao.findScoresByNickname(eq(nickname)))
+        .thenReturn(scores);
 
-    HighScores highScores = new HighScoresImpl(scoreService, profanityFilterService);
+    HighScores highScores =
+        new HighScoresImpl(scoreDao, profanityFilterService);
 
     boolean result = highScores.removeScoresWithNickname(nickname);
 
@@ -202,16 +218,19 @@ public class HighScoresTest {
 
   @Test
   public void testRemoveScoresWithNickname_validNoEntries() {
-    ScoreService scoreService = Mockito.mock(ScoreService.class);
-    ProfanityFilterService profanityFilterService = Mockito.mock(ProfanityFilterService.class);
+    ScoreDao scoreDao = Mockito.mock(ScoreDao.class);
+    ProfanityFilterService profanityFilterService =
+        Mockito.mock(ProfanityFilterService.class);
 
     String nickname = "mattd";
 
     List<Score> scores = new ArrayList<>();
 
-    Mockito.when(scoreService.findScoresByNickname(eq(nickname))).thenReturn(scores);
+    Mockito.when(scoreDao.findScoresByNickname(eq(nickname)))
+        .thenReturn(scores);
 
-    HighScores highScores = new HighScoresImpl(scoreService, profanityFilterService);
+    HighScores highScores =
+        new HighScoresImpl(scoreDao, profanityFilterService);
 
     boolean result = highScores.removeScoresWithNickname(nickname);
 
@@ -220,10 +239,12 @@ public class HighScoresTest {
 
   @Test
   public void testRemoveScoresWithNickname_invalidNickname() {
-    ScoreService scoreService = Mockito.mock(ScoreService.class);
-    ProfanityFilterService profanityFilterService = Mockito.mock(ProfanityFilterService.class);
+    ScoreDao scoreDao = Mockito.mock(ScoreDao.class);
+    ProfanityFilterService profanityFilterService =
+        Mockito.mock(ProfanityFilterService.class);
 
-    HighScores highScores = new HighScoresImpl(scoreService, profanityFilterService);
+    HighScores highScores =
+        new HighScoresImpl(scoreDao, profanityFilterService);
 
     assertFalse(highScores.removeScoresWithNickname(""));
     assertFalse(highScores.removeScoresWithNickname(null));
