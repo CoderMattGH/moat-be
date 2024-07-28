@@ -1,6 +1,6 @@
 package com.moat.controller;
 
-import com.moat.dto.MessageDTO;
+import com.moat.responsewrapper.DynamicResponseWrapperFactory;
 import com.moat.service.EndpointService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,25 +15,28 @@ public class MainController {
       LoggerFactory.getLogger(MainController.class);
 
   private final EndpointService endpointService;
+  private final DynamicResponseWrapperFactory resFact;
 
-  public MainController(EndpointService endpointService) {
+  public MainController(EndpointService endpointService,
+      DynamicResponseWrapperFactory resFact) {
     logger.info("Constructing MainController.");
 
     this.endpointService = endpointService;
+    this.resFact = resFact;
   }
 
   @GetMapping(value = "/", produces = "application/json")
-  public ResponseEntity<String> getEndpoints() {
+  public ResponseEntity<?> getEndpoints() {
     logger.info("In getEndpoints() in MainController.");
 
     String endpoints;
     try {
       endpoints = endpointService.getEndpoints();
     } catch (Exception e) {
-      return new ResponseEntity(new MessageDTO("Cannot fetch endpoints!"),
+      return resFact.build("message", "Cannot fetch endpoints!",
           HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    return new ResponseEntity<>(endpoints, HttpStatus.OK);
+    return ResponseEntity.status(HttpStatus.OK).body(endpoints);
   }
 }

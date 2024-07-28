@@ -1,7 +1,8 @@
 package com.moat.controller;
 
-import com.moat.dto.MessageDTO;
+import com.moat.dto.ScoreDTO;
 import com.moat.entity.Score;
+import com.moat.responsewrapper.DynamicResponseWrapperFactory;
 import com.moat.service.ScoreService;
 import org.hibernate.cfg.NotYetImplementedException;
 import org.slf4j.Logger;
@@ -16,28 +17,30 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/score")
 public class ScoreController {
-  private static Logger logger = LoggerFactory.getLogger(ScoreController.class);
+  private static final Logger logger =
+      LoggerFactory.getLogger(ScoreController.class);
 
-  private ScoreService scoreService;
+  private final ScoreService scoreService;
+  private final DynamicResponseWrapperFactory resFact;
 
-  public ScoreController(ScoreService scoreService) {
+  public ScoreController(ScoreService scoreService,
+      DynamicResponseWrapperFactory resFact) {
     logger.info("Constructing ScoreController.");
 
     this.scoreService = scoreService;
+    this.resFact = resFact;
   }
 
   @GetMapping("/")
   public ResponseEntity<?> getScores() {
     logger.info("In getScores() in ScoreController.");
 
-    List<Score> leaderboard = this.scoreService.selectTopTenScores();
-
-    if (leaderboard.isEmpty()) {
-      return new ResponseEntity(new MessageDTO("Leaderboard is empty!"),
-          HttpStatus.NOT_FOUND);
+    List<ScoreDTO> scores = this.scoreService.selectAll();
+    if (scores.isEmpty()) {
+      return resFact.build("message", "No scores found!", HttpStatus.NOT_FOUND);
     }
 
-    return new ResponseEntity<>(leaderboard, HttpStatus.OK);
+    return resFact.build("scores", scores, HttpStatus.OK);
   }
 
   @PostMapping("/")
@@ -46,7 +49,7 @@ public class ScoreController {
 
     scoreService.save(score);
 
-    return new ResponseEntity<>(null, HttpStatus.CREATED);
+    return ResponseEntity.status(HttpStatus.CREATED).build();
   }
 
   // TODO: Auth
@@ -56,12 +59,12 @@ public class ScoreController {
 
     scoreService.deleteAll();
 
-    return new ResponseEntity<>(null, HttpStatus.OK);
+    return ResponseEntity.status(HttpStatus.OK).build();
   }
 
   // TODO: Implement
   @DeleteMapping("/{nickname}")
-  public ResponseEntity deleteScoresByNickname(
+  public ResponseEntity<?> deleteScoresByNickname(
       @PathVariable("nickname") String nickname) {
     logger.info("In deleteScoresByNickname() in ScoreController.");
     logger.info("Removing high scores with nickname: " + nickname + ".");

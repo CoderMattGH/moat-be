@@ -13,7 +13,7 @@ import java.util.List;
 
 @Service("administratorService")
 public class AdministratorServiceImpl implements AdministratorService {
-  private Logger logger =
+  private final Logger logger =
       LoggerFactory.getLogger(AdministratorServiceImpl.class);
 
   AdministratorDao administratorDao;

@@ -6,7 +6,6 @@ import javax.persistence.NoResultException;
 import java.util.List;
 
 public interface ScoreDao {
-
   List<Score> selectAll();
 
   List<Score> selectTopTenScoresSorted();

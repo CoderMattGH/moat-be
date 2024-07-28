@@ -43,11 +43,29 @@ public class MOATSecurityConfig extends WebSecurityConfigurerAdapter {
     logger.info("In configure(HttpSecurity) in MOATSecurityConfig.");
 
     http.sessionManagement()
-        .sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-        .authorizeRequests().antMatchers("/score/").permitAll()
-        .antMatchers("/user/").permitAll().antMatchers("/").permitAll()
-        .anyRequest().fullyAuthenticated().and().httpBasic().and().cors().and()
-        .headers().frameOptions().sameOrigin().httpStrictTransportSecurity()
-        .disable().and().csrf().disable();
+        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        .and()
+        .authorizeRequests()
+        .antMatchers("/score/")
+        .permitAll()
+        .antMatchers("/user/")
+        .permitAll()
+        .antMatchers("/")
+        .permitAll()
+        .anyRequest()
+        .fullyAuthenticated()
+        .and()
+        .httpBasic()
+        .and()
+        .cors()
+        .and()
+        .headers()
+        .frameOptions()
+        .sameOrigin()
+        .httpStrictTransportSecurity()
+        .disable()
+        .and()
+        .csrf()
+        .disable();
   }
 }

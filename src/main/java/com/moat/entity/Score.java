@@ -10,10 +10,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "score")
 public class Score implements Serializable {
-  private static Logger logger = LoggerFactory.getLogger(Score.class);
-
-  public static final String FIND_ALL = "Score.findAll";
-  public static final String FIND_TOP_TEN = "Score.findTopTen";
+  private static final Logger logger = LoggerFactory.getLogger(Score.class);
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,11 +43,11 @@ public class Score implements Serializable {
       this.score = score;
   }
 
-  public MOATUser getMOATUserId() {
+  public MOATUser getMoatUserId() {
     return this.moatUserId;
   }
 
-  public void setMOATUserId(MOATUser mOATUserId) {
-    this.moatUserId = mOATUserId;
+  public void setMoatUserId(MOATUser moatUserId) {
+    this.moatUserId = moatUserId;
   }
 }

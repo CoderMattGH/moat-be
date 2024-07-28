@@ -1,6 +1,7 @@
 package com.moat.service;
 
 import com.moat.dao.ScoreDao;
+import com.moat.dto.ScoreDTO;
 import com.moat.entity.Score;
 import com.moat.profanityfilter.ProfanityFilterService;
 import org.hibernate.cfg.NotYetImplementedException;
@@ -10,28 +11,40 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.NoResultException;
-import java.util.Iterator;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service("scoreService")
 public class ScoreServiceImpl implements ScoreService {
-  private Logger logger = LoggerFactory.getLogger(ScoreServiceImpl.class);
+  private final Logger logger = LoggerFactory.getLogger(ScoreServiceImpl.class);
 
   ScoreDao scoreDao;
   ProfanityFilterService profanityFilterService;
 
   public ScoreServiceImpl(ScoreDao scoreDao,
-                          ProfanityFilterService profanityFilterService) {
+      ProfanityFilterService profanityFilterService) {
     logger.info("Constructing ScoreServiceImpl.");
 
     this.scoreDao = scoreDao;
     this.profanityFilterService = profanityFilterService;
   }
 
-  public List<Score> selectAll() {
+  public List<ScoreDTO> selectAll() {
     logger.info("In selectAll() in ScoreServiceImpl.");
 
-    return scoreDao.selectAll();
+    List<Score> scores = scoreDao.selectAll();
+
+    // Marshall into DTO.
+    List<ScoreDTO> scoreDTOs = new ArrayList<ScoreDTO>();
+
+    for (Score score : scores) {
+      ScoreDTO dto = new ScoreDTO(score.getId(), score.getScore(),
+          score.getMoatUserId().getId(), score.getMoatUserId().getUsername());
+
+      scoreDTOs.add(dto);
+    }
+
+    return scoreDTOs;
   }
 
   public List<Score> selectTopTenScores() {

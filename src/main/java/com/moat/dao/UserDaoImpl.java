@@ -34,7 +34,8 @@ public class UserDaoImpl implements UserDao {
 
     return em.createQuery(
             "SELECT u FROM MOATUser u where u.username = :username", MOATUser.class)
-        .setParameter("username", username).getSingleResult();
+        .setParameter("username", username)
+        .getSingleResult();
   }
 
   public void saveUser(MOATUser user) {

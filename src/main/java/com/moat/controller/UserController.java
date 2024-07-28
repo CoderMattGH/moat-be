@@ -4,6 +4,7 @@ import com.moat.dto.MessageDTO;
 import com.moat.entity.MOATUser;
 import com.moat.exception.AlreadyExistsException;
 import com.moat.exception.MOATValidationException;
+import com.moat.responsewrapper.DynamicResponseWrapperFactory;
 import com.moat.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,14 +20,18 @@ import java.util.List;
 @RestController
 @RequestMapping("/user")
 public class UserController {
-  private static Logger logger = LoggerFactory.getLogger(UserController.class);
+  private final static Logger logger =
+      LoggerFactory.getLogger(UserController.class);
 
   private final UserService userService;
+  private final DynamicResponseWrapperFactory resFact;
 
-  public UserController(UserService userService) {
+  public UserController(UserService userService,
+      DynamicResponseWrapperFactory resFact) {
     logger.info("Constructing UserController.");
 
     this.userService = userService;
+    this.resFact = resFact;
   }
 
   @GetMapping("/")
@@ -36,11 +41,10 @@ public class UserController {
     List<MOATUser> users = userService.selectAllUsers();
 
     if (users.isEmpty()) {
-      return new ResponseEntity<>(new MessageDTO("No users found!"),
-          HttpStatus.NOT_FOUND);
+      return resFact.build("message", "No users found!", HttpStatus.NOT_FOUND);
     }
 
-    return new ResponseEntity<>(users, HttpStatus.OK);
+    return resFact.build("users", users, HttpStatus.OK);
   }
 
   @GetMapping("/{username}")
@@ -51,11 +55,10 @@ public class UserController {
     try {
       user = userService.selectByUsername(username);
     } catch (NoResultException e) {
-      return new ResponseEntity<>(new MessageDTO("User not found!"),
-          HttpStatus.NOT_FOUND);
+      return resFact.build("message", "No user found!", HttpStatus.NOT_FOUND);
     }
 
-    return new ResponseEntity<>(user, HttpStatus.OK);
+    return resFact.build("user", user, HttpStatus.OK);
   }
 
   @PostMapping("/")
@@ -64,14 +67,10 @@ public class UserController {
 
     try {
       userService.createUser(user);
-    } catch (AlreadyExistsException e) {
-      return new ResponseEntity<>(new MessageDTO(e.getMessage()),
-          HttpStatus.BAD_REQUEST);
-    } catch (MOATValidationException e) {
-      return new ResponseEntity<>(new MessageDTO(e.getMessage()),
-          HttpStatus.BAD_REQUEST);
+    } catch (AlreadyExistsException | MOATValidationException e) {
+      return resFact.build("message", e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
-    return new ResponseEntity<>(null, HttpStatus.CREATED);
+    return ResponseEntity.status(HttpStatus.OK).build();
   }
 }

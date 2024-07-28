@@ -1,11 +1,12 @@
 package com.moat.service;
 
+import com.moat.dto.ScoreDTO;
 import com.moat.entity.Score;
 
 import java.util.List;
 
 public interface ScoreService {
-  List<Score> selectAll();
+  List<ScoreDTO> selectAll();
 
   List<Score> selectTopTenScores();
 
