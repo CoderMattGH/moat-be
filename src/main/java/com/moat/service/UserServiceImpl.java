@@ -41,6 +41,13 @@ public class UserServiceImpl implements UserService {
     return userDao.selectUserByUsername(username);
   }
 
+  @Transactional(readOnly = true)
+  public MOATUser selectUserById(Long id) throws NoResultException {
+    logger.info("In selectById() in userServiceImpl");
+
+    return userDao.selectUserById(id);
+  }
+
   public void createUser(MOATUser user)
       throws AlreadyExistsException, MOATValidationException {
     logger.info("In createUser() in userServiceImpl.");

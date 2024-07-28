@@ -1,8 +1,5 @@
 package com.moat.controller;
 
-import org.apache.tomcat.util.file.Matcher;
-import org.hamcrest.Matchers;
-import org.hamcrest.core.AllOf;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;
@@ -37,7 +34,6 @@ public class ScoreControllerTest {
     mvc.perform(MockMvcRequestBuilders.get("/score/")
             .accept(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$.scores[*].id").isArray())
         .andExpect(jsonPath("$.scores[*].id").isNotEmpty())
         .andExpect(jsonPath("$.scores[*].id",
             everyItem(allOf(instanceOf(Number.class), greaterThan(0)))))

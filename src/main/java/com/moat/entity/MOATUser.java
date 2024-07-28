@@ -8,6 +8,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
+// TODO: Move validation to DTO layer
 @Entity
 @Table(name = "moat_user")
 public class MOATUser implements Serializable {

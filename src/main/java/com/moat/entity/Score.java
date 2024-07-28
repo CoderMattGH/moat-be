@@ -1,6 +1,7 @@
 package com.moat.entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -35,6 +35,13 @@ public class UserDaoImpl implements UserDao {
         .getSingleResult();
   }
 
+  public MOATUser selectUserById(Long id) throws NoResultException {
+    logger.info("In selectUserById() in UserDaoImpl.");
+
+    return em.createQuery("SELECT u FROM MOATUser u where u.id = :id",
+        MOATUser.class).setParameter("id", id).getSingleResult();
+  }
+
   public void saveUser(MOATUser user) {
     logger.info("In createUser() in UserDaoImpl.");
 
