@@ -14,7 +14,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Configuration
 public class MOATSecurityConfig extends WebSecurityConfigurerAdapter {
-  private Logger logger = LoggerFactory.getLogger(MOATSecurityConfig.class);
+  private final Logger logger =
+      LoggerFactory.getLogger(MOATSecurityConfig.class);
 
   private final AdministratorService administratorService;
 

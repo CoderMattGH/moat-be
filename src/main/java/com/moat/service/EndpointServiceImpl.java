@@ -11,7 +11,7 @@ import java.nio.charset.StandardCharsets;
 
 @Service("endpointService")
 public class EndpointServiceImpl implements EndpointService {
-  private static Logger logger =
+  private final static Logger logger =
       LoggerFactory.getLogger(EndpointServiceImpl.class);
 
   public String getEndpoints() throws Exception {

@@ -18,10 +18,11 @@ import java.util.List;
 @Transactional
 @Service("scoreService")
 public class ScoreServiceImpl implements ScoreService {
-  private final Logger logger = LoggerFactory.getLogger(ScoreServiceImpl.class);
+  private final static Logger logger =
+      LoggerFactory.getLogger(ScoreServiceImpl.class);
 
-  ScoreDao scoreDao;
-  ProfanityFilterService profanityFilterService;
+  private final ScoreDao scoreDao;
+  private final ProfanityFilterService profanityFilterService;
 
   public ScoreServiceImpl(ScoreDao scoreDao,
       ProfanityFilterService profanityFilterService) {

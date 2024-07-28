@@ -4,7 +4,6 @@ import com.moat.entity.Administrator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -13,10 +12,11 @@ import java.util.List;
 
 @Repository("administratorDao")
 public class AdministratorDaoImpl implements AdministratorDao {
-  private Logger logger = LoggerFactory.getLogger(AdministratorDaoImpl.class);
+  private final static Logger logger =
+      LoggerFactory.getLogger(AdministratorDaoImpl.class);
 
   @PersistenceContext
-  EntityManager em;
+  private EntityManager em;
 
   public AdministratorDaoImpl() {
     logger.info("Constructing AdministratorDaoImpl.");

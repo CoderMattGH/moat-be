@@ -10,13 +10,13 @@ import org.hibernate.cfg.NotYetImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Repository("scoreDao")
 public class ScoreDaoImpl implements ScoreDao {
-  private final Logger logger = LoggerFactory.getLogger(ScoreDaoImpl.class);
+  private final static Logger logger =
+      LoggerFactory.getLogger(ScoreDaoImpl.class);
 
   @PersistenceContext
   private EntityManager em;

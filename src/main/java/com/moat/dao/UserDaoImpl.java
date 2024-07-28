@@ -12,7 +12,8 @@ import java.util.List;
 
 @Repository("userDao")
 public class UserDaoImpl implements UserDao {
-  private final Logger logger = LoggerFactory.getLogger(UserDaoImpl.class);
+  private final static Logger logger =
+      LoggerFactory.getLogger(UserDaoImpl.class);
 
   @PersistenceContext
   private EntityManager em;

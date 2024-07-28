@@ -8,7 +8,8 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(value = "/admin")
 public class AdminController {
-  private static Logger logger = LoggerFactory.getLogger(AdminController.class);
+  private final static Logger logger =
+      LoggerFactory.getLogger(AdminController.class);
 
   public AdminController() {
     logger.info("Construcing AdminController.");

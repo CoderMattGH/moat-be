@@ -14,10 +14,10 @@ import java.util.List;
 @Service("administratorService")
 @Transactional
 public class AdministratorServiceImpl implements AdministratorService {
-  private final Logger logger =
+  private static final Logger logger =
       LoggerFactory.getLogger(AdministratorServiceImpl.class);
 
-  AdministratorDao administratorDao;
+  private final AdministratorDao administratorDao;
 
   public AdministratorServiceImpl(AdministratorDao administratorDao) {
     logger.info("Constructing AdministratorServiceImpl.");
