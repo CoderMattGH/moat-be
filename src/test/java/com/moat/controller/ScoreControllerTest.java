@@ -1,5 +1,8 @@
 package com.moat.controller;
 
+import org.apache.tomcat.util.file.Matcher;
+import org.hamcrest.Matchers;
+import org.hamcrest.core.AllOf;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;
@@ -15,6 +18,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -32,23 +36,19 @@ public class ScoreControllerTest {
 
     mvc.perform(MockMvcRequestBuilders.get("/score/")
             .accept(MediaType.APPLICATION_JSON))
-        .andExpect((status().isOk()))
-        .andExpect(MockMvcResultMatchers.jsonPath("$.scores[*].id").isArray())
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.scores[*].id").isArray())
+        .andExpect(jsonPath("$.scores[*].id").isNotEmpty())
+        .andExpect(jsonPath("$.scores[*].id",
+            everyItem(allOf(instanceOf(Number.class), greaterThan(0)))))
+        .andExpect(jsonPath("$.scores[*].score").isNotEmpty())
         .andExpect(
-            MockMvcResultMatchers.jsonPath("$.scores[*].id").isNotEmpty())
-        .andExpect(MockMvcResultMatchers.jsonPath("$.scores[*].id",
-            everyItem(any(Number.class))))
-        .andExpect(
-            MockMvcResultMatchers.jsonPath("$.scores[*].score").isNotEmpty())
-        .andExpect(MockMvcResultMatchers.jsonPath("$.scores[*].score",
-            everyItem(any(Number.class))))
-        .andExpect(
-            MockMvcResultMatchers.jsonPath("$.scores[*].username").isNotEmpty())
-        .andExpect(MockMvcResultMatchers.jsonPath("$.scores[*].username",
-            everyItem(any(String.class))))
-        .andExpect(
-            MockMvcResultMatchers.jsonPath("$.scores[*].userId").isNotEmpty())
-        .andExpect(MockMvcResultMatchers.jsonPath("$.scores[*].userId",
-            everyItem(any(Number.class))));
+            jsonPath("$.scores[*].score", everyItem(instanceOf(Number.class))))
+        .andExpect(jsonPath("$.scores[*].username").isNotEmpty())
+        .andExpect(jsonPath("$.scores[*].username",
+            everyItem(allOf(instanceOf(String.class), not(emptyString())))))
+        .andExpect(jsonPath("$.scores[*].userId").isNotEmpty())
+        .andExpect(jsonPath("$.scores[*].userId",
+            everyItem(allOf(instanceOf(Number.class), greaterThan(0)))));
   }
 }
