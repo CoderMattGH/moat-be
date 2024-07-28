@@ -30,7 +30,10 @@ leaderboards, score updating and administrative access.
 
 ### Setup the database
 
-1. Run the script
+1. Run the script `./db_setup/setup.sh` from the repository root directory.
+
+___DATA LOSS WARNING:__ This will drop all the MOAT database tables if they
+exist!_
 
 ### Running in the development environment
 
