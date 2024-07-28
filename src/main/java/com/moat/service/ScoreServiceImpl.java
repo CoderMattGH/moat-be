@@ -29,22 +29,10 @@ public class ScoreServiceImpl implements ScoreService {
     this.profanityFilterService = profanityFilterService;
   }
 
-  public List<ScoreDTO> selectAll() {
+  public List<Score> selectAll() {
     logger.info("In selectAll() in ScoreServiceImpl.");
 
-    List<Score> scores = scoreDao.selectAll();
-
-    // Marshall into DTO.
-    List<ScoreDTO> scoreDTOs = new ArrayList<ScoreDTO>();
-
-    for (Score score : scores) {
-      ScoreDTO dto = new ScoreDTO(score.getId(), score.getScore(),
-          score.getMoatUserId().getId(), score.getMoatUserId().getUsername());
-
-      scoreDTOs.add(dto);
-    }
-
-    return scoreDTOs;
+    return scoreDao.selectAll();
   }
 
   public List<Score> selectTopTenScores() {
@@ -77,5 +65,20 @@ public class ScoreServiceImpl implements ScoreService {
     logger.info("In deleteAll() in ScoreServiceImpl.");
 
     throw new NotYetImplementedException();
+  }
+
+  public ScoreDTO marshallIntoDTO(Score score) {
+    return new ScoreDTO(score.getId(), score.getScore(),
+        score.getMoatUserId().getId(), score.getMoatUserId().getUsername());
+  }
+
+  public List<ScoreDTO> marshallIntoDTO(List<Score> scores) {
+    List<ScoreDTO> dtos = new ArrayList<>();
+
+    for (Score score : scores) {
+      dtos.add(marshallIntoDTO(score));
+    }
+
+    return dtos;
   }
 }

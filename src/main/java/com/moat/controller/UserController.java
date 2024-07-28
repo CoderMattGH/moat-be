@@ -1,6 +1,7 @@
 package com.moat.controller;
 
 import com.moat.dto.MessageDTO;
+import com.moat.dto.UserDTO;
 import com.moat.entity.MOATUser;
 import com.moat.exception.AlreadyExistsException;
 import com.moat.exception.MOATValidationException;
@@ -44,7 +45,9 @@ public class UserController {
       return resFact.build("message", "No users found!", HttpStatus.NOT_FOUND);
     }
 
-    return resFact.build("users", users, HttpStatus.OK);
+    List<UserDTO> userDTOS = userService.marshallIntoDTO(users);
+
+    return resFact.build("users", userDTOS, HttpStatus.OK);
   }
 
   @GetMapping("/{username}")
@@ -58,7 +61,9 @@ public class UserController {
       return resFact.build("message", "No user found!", HttpStatus.NOT_FOUND);
     }
 
-    return resFact.build("user", user, HttpStatus.OK);
+    UserDTO userDTO = userService.marshallIntoDTO(user);
+
+    return resFact.build("user", userDTO, HttpStatus.OK);
   }
 
   @PostMapping("/")

@@ -6,7 +6,7 @@ import com.moat.entity.Score;
 import java.util.List;
 
 public interface ScoreService {
-  List<ScoreDTO> selectAll();
+  List<Score> selectAll();
 
   List<Score> selectTopTenScores();
 
@@ -15,4 +15,8 @@ public interface ScoreService {
   void delete(Score score);
 
   void deleteAll();
+
+  ScoreDTO marshallIntoDTO(Score score);
+
+  List<ScoreDTO> marshallIntoDTO(List<Score> scores);
 }
