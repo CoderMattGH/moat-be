@@ -35,12 +35,14 @@ public class ScoreController {
   public ResponseEntity<?> getScores() {
     logger.info("In getScores() in ScoreController.");
 
-    List<ScoreDTO> scores = this.scoreService.selectAll();
+    List<Score> scores = this.scoreService.selectAll();
     if (scores.isEmpty()) {
       return resFact.build("message", "No scores found!", HttpStatus.NOT_FOUND);
     }
 
-    return resFact.build("scores", scores, HttpStatus.OK);
+    List<ScoreDTO> scoresDTO = scoreService.marshallIntoDTO(scores);
+
+    return resFact.build("scores", scoresDTO, HttpStatus.OK);
   }
 
   @PostMapping("/")

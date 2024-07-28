@@ -1,6 +1,7 @@
 package com.moat.service;
 
 import com.moat.dao.UserDao;
+import com.moat.dto.UserDTO;
 import com.moat.entity.MOATUser;
 import com.moat.exception.AlreadyExistsException;
 import com.moat.exception.MOATValidationException;
@@ -10,13 +11,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.NoResultException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service("userService")
 public class UserServiceImpl implements UserService {
-  private Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
+  private final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
-  private UserDao userDao;
+  private final UserDao userDao;
 
   public UserServiceImpl(UserDao userDao) {
     this.userDao = userDao;
@@ -56,5 +58,19 @@ public class UserServiceImpl implements UserService {
     }
 
     userDao.saveUser(user);
+  }
+
+  public UserDTO marshallIntoDTO(MOATUser user) {
+    return new UserDTO(user.getId(), user.getUsername(), user.getEmail());
+  }
+
+  public List<UserDTO> marshallIntoDTO(List<MOATUser> users) {
+    List<UserDTO> dtos = new ArrayList<>();
+
+    for (MOATUser user : users) {
+      dtos.add(marshallIntoDTO(user));
+    }
+
+    return dtos;
   }
 }
