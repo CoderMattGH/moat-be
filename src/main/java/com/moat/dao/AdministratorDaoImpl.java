@@ -12,7 +12,6 @@ import javax.persistence.PersistenceContext;
 import java.util.List;
 
 @Repository("administratorDao")
-@Transactional
 public class AdministratorDaoImpl implements AdministratorDao {
   private Logger logger = LoggerFactory.getLogger(AdministratorDaoImpl.class);
 
@@ -23,7 +22,6 @@ public class AdministratorDaoImpl implements AdministratorDao {
     logger.info("Constructing AdministratorDaoImpl.");
   }
 
-  @Transactional(readOnly = true)
   public Administrator selectById(int id) throws NoResultException {
     logger.info("In selectById() in AdministratorDaoImpl");
     logger.info("Finding Administrator with ID=" + id);
@@ -42,13 +40,13 @@ public class AdministratorDaoImpl implements AdministratorDao {
 
     Administrator administrator = em.createQuery(
             "SELECT a FROM Administrator a WHERE a.username = :username",
-            Administrator.class).setParameter("username", username)
+            Administrator.class)
+        .setParameter("username", username)
         .getSingleResult();
 
     return administrator;
   }
 
-  @Transactional(readOnly = true)
   public List<Administrator> selectAll() {
     logger.info("In findAll() in AdministratorDaoImpl.");
     logger.info("Finding all Administrators.");

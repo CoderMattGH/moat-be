@@ -37,10 +37,7 @@ public class Score implements Serializable {
   }
 
   public void setScore(int score) {
-    if (score < 0)
-      throw new IllegalArgumentException("Score cannot be below 0.");
-    else
-      this.score = score;
+    this.score = score;
   }
 
   public MOATUser getMoatUserId() {

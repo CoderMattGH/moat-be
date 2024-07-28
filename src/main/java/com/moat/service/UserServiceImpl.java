@@ -8,12 +8,14 @@ import com.moat.exception.MOATValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.NoResultException;
 import java.util.ArrayList;
 import java.util.List;
 
+@Transactional
 @Service("userService")
 public class UserServiceImpl implements UserService {
   private final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
@@ -24,19 +26,20 @@ public class UserServiceImpl implements UserService {
     this.userDao = userDao;
   }
 
+  @Transactional(readOnly = true)
   public List<MOATUser> selectAllUsers() {
     logger.info("In selectAllUsers() in userServiceImpl.");
 
     return userDao.selectAllUsers();
   }
 
+  @Transactional(readOnly = true)
   public MOATUser selectByUsername(String username) throws NoResultException {
     logger.info("In selectByUsername() in userServiceImpl.");
 
     return userDao.selectUserByUsername(username);
   }
 
-  @Transactional
   public void createUser(MOATUser user)
       throws AlreadyExistsException, MOATValidationException {
     logger.info("In createUser() in userServiceImpl.");
@@ -60,10 +63,12 @@ public class UserServiceImpl implements UserService {
     userDao.saveUser(user);
   }
 
+  @Transactional(propagation = Propagation.NOT_SUPPORTED)
   public UserDTO marshallIntoDTO(MOATUser user) {
     return new UserDTO(user.getId(), user.getUsername(), user.getEmail());
   }
 
+  @Transactional(propagation = Propagation.NOT_SUPPORTED)
   public List<UserDTO> marshallIntoDTO(List<MOATUser> users) {
     List<UserDTO> dtos = new ArrayList<>();
 

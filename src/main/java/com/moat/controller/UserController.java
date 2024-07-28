@@ -1,6 +1,5 @@
 package com.moat.controller;
 
-import com.moat.dto.MessageDTO;
 import com.moat.dto.UserDTO;
 import com.moat.entity.MOATUser;
 import com.moat.exception.AlreadyExistsException;

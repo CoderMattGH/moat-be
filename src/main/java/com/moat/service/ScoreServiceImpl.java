@@ -8,12 +8,14 @@ import org.hibernate.cfg.NotYetImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.NoResultException;
 import java.util.ArrayList;
 import java.util.List;
 
+@Transactional
 @Service("scoreService")
 public class ScoreServiceImpl implements ScoreService {
   private final Logger logger = LoggerFactory.getLogger(ScoreServiceImpl.class);
@@ -29,12 +31,14 @@ public class ScoreServiceImpl implements ScoreService {
     this.profanityFilterService = profanityFilterService;
   }
 
+  @Transactional(readOnly = true)
   public List<Score> selectAll() {
     logger.info("In selectAll() in ScoreServiceImpl.");
 
     return scoreDao.selectAll();
   }
 
+  @Transactional(readOnly = true)
   public List<Score> selectTopTenScores() {
     logger.info("In selectTopTenScores() in ScoreServiceImpl.");
 
@@ -60,18 +64,19 @@ public class ScoreServiceImpl implements ScoreService {
   }
 
   // TODO: Make one query
-  @Transactional
   public void deleteAll() {
     logger.info("In deleteAll() in ScoreServiceImpl.");
 
     throw new NotYetImplementedException();
   }
 
+  @Transactional(propagation = Propagation.NOT_SUPPORTED)
   public ScoreDTO marshallIntoDTO(Score score) {
     return new ScoreDTO(score.getId(), score.getScore(),
         score.getMoatUserId().getId(), score.getMoatUserId().getUsername());
   }
 
+  @Transactional(propagation = Propagation.NOT_SUPPORTED)
   public List<ScoreDTO> marshallIntoDTO(List<Score> scores) {
     List<ScoreDTO> dtos = new ArrayList<>();
 

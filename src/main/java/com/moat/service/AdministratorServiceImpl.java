@@ -12,6 +12,7 @@ import javax.persistence.NoResultException;
 import java.util.List;
 
 @Service("administratorService")
+@Transactional
 public class AdministratorServiceImpl implements AdministratorService {
   private final Logger logger =
       LoggerFactory.getLogger(AdministratorServiceImpl.class);
@@ -24,6 +25,7 @@ public class AdministratorServiceImpl implements AdministratorService {
     this.administratorDao = administratorDao;
   }
 
+  @Transactional(readOnly = true)
   public List<Administrator> selectAll() throws NoResultException {
     logger.info("In selectAll() in AdministratorServiceImpl.");
 
@@ -36,6 +38,7 @@ public class AdministratorServiceImpl implements AdministratorService {
     return administrators;
   }
 
+  @Transactional(readOnly = true)
   public Administrator selectById(int id) throws NoResultException {
     logger.info("In selectById() in AdministratorServiceImpl.");
 
@@ -49,7 +52,6 @@ public class AdministratorServiceImpl implements AdministratorService {
     return administratorDao.selectByUsername(username);
   }
 
-  @Transactional
   public void createAdministrator(Administrator administrator)
       throws MOATValidationException {
     logger.info("In createAdministrator in AdministratorServiceImpl.");

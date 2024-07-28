@@ -4,22 +4,19 @@ import com.moat.entity.MOATUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import java.util.List;
 
-@Transactional
 @Repository("userDao")
 public class UserDaoImpl implements UserDao {
-  private Logger logger = LoggerFactory.getLogger(UserDaoImpl.class);
+  private final Logger logger = LoggerFactory.getLogger(UserDaoImpl.class);
 
   @PersistenceContext
   private EntityManager em;
 
-  @Transactional(readOnly = true)
   public List<MOATUser> selectAllUsers() {
     logger.info("In selectAllUsers() in UserDaoImpl.");
 
@@ -27,7 +24,6 @@ public class UserDaoImpl implements UserDao {
         .getResultList();
   }
 
-  @Transactional(readOnly = true)
   public MOATUser selectUserByUsername(String username)
       throws NoResultException {
     logger.info("In selectUserByUsername() in UserDaoImpl.");

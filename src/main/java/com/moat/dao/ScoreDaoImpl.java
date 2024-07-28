@@ -14,10 +14,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@Transactional
 @Repository("scoreDao")
 public class ScoreDaoImpl implements ScoreDao {
-  private Logger logger = LoggerFactory.getLogger(ScoreDaoImpl.class);
+  private final Logger logger = LoggerFactory.getLogger(ScoreDaoImpl.class);
 
   @PersistenceContext
   private EntityManager em;
@@ -58,14 +57,12 @@ public class ScoreDaoImpl implements ScoreDao {
     throw new NotYetImplementedException();
   }
 
-  @Transactional(readOnly = true)
   public List<Score> selectAll() {
     logger.info("In selectAll() in ScoreDaoImpl.");
 
     return em.createQuery("select s from Score s", Score.class).getResultList();
   }
 
-  @Transactional(readOnly = true)
   public List<Score> selectTopTenScoresSorted() {
     logger.info("In findTopTenScoresSorted() in ScoreDaoImpl.");
 
