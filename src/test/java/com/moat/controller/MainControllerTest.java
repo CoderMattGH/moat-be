@@ -11,8 +11,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
@@ -31,6 +31,10 @@ public class MainControllerTest {
 
     mvc.perform(
             MockMvcRequestBuilders.get("/").accept(MediaType.APPLICATION_JSON))
-        .andExpect(status().isOk());
+        .andExpect(status().isOk())
+        .andExpect(
+            MockMvcResultMatchers.jsonPath("$.endpoints[*].path").isNotEmpty())
+        .andExpect(MockMvcResultMatchers.jsonPath("$.endpoints[*].description")
+            .isNotEmpty());
   }
 }
