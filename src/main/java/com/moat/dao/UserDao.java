@@ -10,5 +10,7 @@ public interface UserDao {
 
   MOATUser selectUserByUsername(String username) throws NoResultException;
 
+  MOATUser selectUserById(Long id) throws NoResultException;
+
   void saveUser(MOATUser user);
 }

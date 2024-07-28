@@ -2,6 +2,7 @@ package com.moat.controller;
 
 import com.moat.dto.ScoreDTO;
 import com.moat.entity.Score;
+import com.moat.exception.MOATValidationException;
 import com.moat.responsewrapper.DynamicResponseWrapperFactory;
 import com.moat.service.ScoreService;
 import org.hibernate.cfg.NotYetImplementedException;
@@ -11,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @CrossOrigin
@@ -46,12 +48,12 @@ public class ScoreController {
   }
 
   @PostMapping("/")
-  public ResponseEntity<?> postScore(@RequestBody Score score) {
+  public ResponseEntity<?> postScore(@RequestBody @Valid ScoreDTO scoreDTO) {
     logger.info("In postScore() in ScoreController.");
 
-    scoreService.save(score);
+    ScoreDTO savedScore = scoreService.save(scoreDTO);
 
-    return ResponseEntity.status(HttpStatus.CREATED).build();
+    return resFact.build("score", savedScore, HttpStatus.CREATED);
   }
 
   // TODO: Auth

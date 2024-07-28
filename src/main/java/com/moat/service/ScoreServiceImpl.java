@@ -1,8 +1,11 @@
 package com.moat.service;
 
 import com.moat.dao.ScoreDao;
+import com.moat.dao.UserDao;
 import com.moat.dto.ScoreDTO;
+import com.moat.entity.MOATUser;
 import com.moat.entity.Score;
+import com.moat.exception.MOATValidationException;
 import com.moat.profanityfilter.ProfanityFilterService;
 import org.hibernate.cfg.NotYetImplementedException;
 import org.slf4j.Logger;
@@ -22,13 +25,15 @@ public class ScoreServiceImpl implements ScoreService {
       LoggerFactory.getLogger(ScoreServiceImpl.class);
 
   private final ScoreDao scoreDao;
+  private final UserDao userDao;
   private final ProfanityFilterService profanityFilterService;
 
-  public ScoreServiceImpl(ScoreDao scoreDao,
+  public ScoreServiceImpl(ScoreDao scoreDao, UserDao userDao,
       ProfanityFilterService profanityFilterService) {
     logger.info("Constructing ScoreServiceImpl.");
 
     this.scoreDao = scoreDao;
+    this.userDao = userDao;
     this.profanityFilterService = profanityFilterService;
   }
 
@@ -46,11 +51,27 @@ public class ScoreServiceImpl implements ScoreService {
     return scoreDao.selectTopTenScoresSorted();
   }
 
-  // TODO: Validation
   public void save(Score score) {
     logger.info("In save() in ScoreServiceImpl.");
 
     scoreDao.save(score);
+  }
+
+  public ScoreDTO save(ScoreDTO scoreDTO) {
+    MOATUser user;
+    try {
+      user = userDao.selectUserById(scoreDTO.getUserId());
+    } catch (NoResultException e) {
+      throw new NoResultException("User doesn't exist!");
+    }
+
+    Score score = new Score();
+    score.setScore(scoreDTO.getScore());
+    score.setMoatUserId(user);
+
+    scoreDao.save(score);
+
+    return marshallIntoDTO(score);
   }
 
   // TODO: Validation

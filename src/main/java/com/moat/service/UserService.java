@@ -13,6 +13,8 @@ public interface UserService {
 
   MOATUser selectByUsername(String username) throws NoResultException;
 
+  MOATUser selectUserById(Long id) throws NoResultException;
+
   void createUser(MOATUser user)
       throws AlreadyExistsException, MOATValidationException;
 
