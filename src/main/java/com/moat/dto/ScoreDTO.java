@@ -1,7 +1,6 @@
 package com.moat.dto;
 
-import com.moat.entity.MOATUser;
-import org.hibernate.validator.constraints.Length;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -13,7 +12,7 @@ public class ScoreDTO {
 
   @NotNull(message = "score cannot be null!")
   @Min(value = 0, message = "Score must be bigger than 0!")
-  private int score;
+  private Integer score;
 
   @NotNull(message = "userId cannot be null!")
   @Min(value = 1, message = "userId cannot be less than 1!")
@@ -30,7 +29,18 @@ public class ScoreDTO {
   public ScoreDTO() {
   }
 
-  public ScoreDTO(Long id, int score, Long userId, String username) {
+  public ScoreDTO(Integer score, Long userId) {
+    this.score = score;
+    this.userId = userId;
+  }
+
+  public ScoreDTO(Integer score, Long userId, String username) {
+    this.score = score;
+    this.userId = userId;
+    this.username = username;
+  }
+
+  public ScoreDTO(Long id, Integer score, Long userId, String username) {
     this.id = id;
     this.score = score;
     this.userId = userId;
@@ -45,11 +55,11 @@ public class ScoreDTO {
     this.id = id;
   }
 
-  public int getScore() {
+  public Integer getScore() {
     return score;
   }
 
-  public void setScore(int score) {
+  public void setScore(Integer score) {
     this.score = score;
   }
 

@@ -1,5 +1,6 @@
 package com.moat.service;
 
+import com.moat.constant.ValidationMsg;
 import com.moat.dao.ScoreDao;
 import com.moat.dao.UserDao;
 import com.moat.dto.ScoreDTO;
@@ -59,7 +60,7 @@ public class ScoreServiceImpl implements ScoreService {
     try {
       user = userDao.selectUserById(scoreDTO.getUserId());
     } catch (NoResultException e) {
-      throw new NoResultException("User doesn't exist!");
+      throw new NoResultException(ValidationMsg.USER_DOES_EXIST);
     }
 
     Score score = new Score();
