@@ -2,17 +2,20 @@ package com.moat.dao;
 
 import com.moat.entity.Score;
 
-import javax.persistence.NoResultException;
 import java.util.List;
 
 public interface ScoreDao {
+  int deleteAll();
+
+  int deleteById(Long id);
+
+  int deleteByUserId(Long userId);
+
+  void saveOrUpdate(Score score);
+
   List<Score> selectAll();
 
+  List<Score> selectAllByUserId(Long userId);
+
   List<Score> selectTopTenScoresSorted();
-
-  void save(Score score);
-
-  void delete(Score score) throws NoResultException;
-
-  void deleteAll();
 }

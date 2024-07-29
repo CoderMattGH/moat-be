@@ -11,6 +11,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 
 @RestControllerAdvice
 public class ErrorController {
@@ -37,6 +41,19 @@ public class ErrorController {
         HttpStatus.BAD_REQUEST);
   }
 
+  @ExceptionHandler(ConstraintViolationException.class)
+  public ResponseEntity<?> handleValidationExceptions(
+      ConstraintViolationException e) {
+    logger.info("In handleValidationException() in ErrorController.");
+
+    // Note: Only return first validation error message
+    ConstraintViolation<?> violation =
+        e.getConstraintViolations().iterator().next();
+
+    return resFact.build("message", violation.getMessage(),
+        HttpStatus.BAD_REQUEST);
+  }
+
   @ExceptionHandler(JsonParseException.class)
   public ResponseEntity<?> handleJsonParseException(JsonParseException e) {
     logger.info("In handleJsonParseException() in ErrorController.");
@@ -51,6 +68,16 @@ public class ErrorController {
     logger.info("In handleMisMatchedInputException() in ErrorController.");
 
     return resFact.build("message", ValidationMsg.INCORRECT_DATA_TYPE,
+        HttpStatus.BAD_REQUEST);
+  }
+
+  @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+  public ResponseEntity<?> handleMethodArgumentTypeMismatchException(
+      MethodArgumentTypeMismatchException e) {
+    logger.info(
+        "In handleMethodArgumentTypeMismatchException() in ErrorController.");
+
+    return resFact.build("message", ValidationMsg.INCORRECT_PATH_VAR_DATA_TYPE,
         HttpStatus.BAD_REQUEST);
   }
 
