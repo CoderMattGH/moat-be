@@ -1,5 +1,6 @@
 package com.moat.controller;
 
+import com.moat.constant.ValidationMsg;
 import com.moat.dto.ScoreDTO;
 import com.moat.entity.Score;
 import com.moat.responsewrapper.DynamicResponseWrapperFactory;
@@ -39,7 +40,8 @@ public class ScoreController {
 
     List<Score> scores = this.scoreService.selectAll();
     if (scores.isEmpty()) {
-      return resFact.build("message", "No scores found!", HttpStatus.NOT_FOUND);
+      return resFact.build("message", ValidationMsg.SCORES_NOT_FOUND,
+          HttpStatus.NOT_FOUND);
     }
 
     List<ScoreDTO> scoresDTO = scoreService.marshallIntoDTO(scores);
@@ -61,23 +63,27 @@ public class ScoreController {
     return resFact.build("score", savedScore, HttpStatus.CREATED);
   }
 
-  // TODO: Auth
   @DeleteMapping("/")
-  public ResponseEntity<?> removeScores() {
-    logger.info("In removeScores() in ScoreController.");
+  public ResponseEntity<?> deleteAllScores() {
+    logger.info("In deleteAllScores() in ScoreController.");
 
-    scoreService.deleteAll();
+    try {
+      scoreService.deleteAll();
+    } catch (Exception e) {
+      return resFact.build("message", ValidationMsg.ERROR_DELETING_SCORES,
+          HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 
     return ResponseEntity.status(HttpStatus.OK).build();
   }
 
-  // TODO: Implement
-  @DeleteMapping("/{nickname}")
-  public ResponseEntity<?> deleteScoresByNickname(
-      @PathVariable("nickname") String nickname) {
-    logger.info("In deleteScoresByNickname() in ScoreController.");
-    logger.info("Removing high scores with nickname: " + nickname + ".");
-
-    throw new NotYetImplementedException();
-  }
+  //    // TODO: Implement
+  //    @DeleteMapping("/{nickname}")
+  //    public ResponseEntity<?> deleteScoresByNickname(
+  //        @PathVariable("nickname") String nickname) {
+  //      logger.info("In deleteScoresByNickname() in ScoreController.");
+  //      logger.info("Removing high scores with nickname: " + nickname + ".");
+  //
+  //      throw new NotYetImplementedException();
+  //    }
 }

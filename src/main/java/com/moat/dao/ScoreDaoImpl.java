@@ -54,19 +54,19 @@ public class ScoreDaoImpl implements ScoreDao {
   public void deleteAll() {
     logger.info("In deleteAll() in ScoreDaoImpl");
 
-    throw new NotYetImplementedException();
+    em.createQuery("DELETE FROM Score").executeUpdate();
   }
 
   public List<Score> selectAll() {
     logger.info("In selectAll() in ScoreDaoImpl.");
 
-    return em.createQuery("select s from Score s", Score.class).getResultList();
+    return em.createQuery("SELECT s FROM Score s", Score.class).getResultList();
   }
 
   public List<Score> selectTopTenScoresSorted() {
     logger.info("In findTopTenScoresSorted() in ScoreDaoImpl.");
 
-    return em.createQuery("select s from Score s ORDER BY s.score DESC",
+    return em.createQuery("SELECT s FROM Score s ORDER BY s.score DESC",
         Score.class).setMaxResults(10).getResultList();
   }
 }

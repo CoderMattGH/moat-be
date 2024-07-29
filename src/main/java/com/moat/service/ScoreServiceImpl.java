@@ -83,11 +83,10 @@ public class ScoreServiceImpl implements ScoreService {
     }
   }
 
-  // TODO: Make one query
   public void deleteAll() {
     logger.info("In deleteAll() in ScoreServiceImpl.");
 
-    throw new NotYetImplementedException();
+    scoreDao.deleteAll();
   }
 
   @Transactional(propagation = Propagation.NOT_SUPPORTED)

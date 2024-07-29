@@ -1,7 +1,5 @@
 package com.moat.dto;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
