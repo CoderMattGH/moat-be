@@ -5,7 +5,6 @@ import com.moat.dao.UserDao;
 import com.moat.dto.ScoreDTO;
 import com.moat.entity.MOATUser;
 import com.moat.entity.Score;
-import com.moat.exception.MOATValidationException;
 import com.moat.profanityfilter.ProfanityFilterService;
 import org.hibernate.cfg.NotYetImplementedException;
 import org.slf4j.Logger;
@@ -26,7 +25,6 @@ public class ScoreServiceImpl implements ScoreService {
 
   private final ScoreDao scoreDao;
   private final UserDao userDao;
-  private final ProfanityFilterService profanityFilterService;
 
   public ScoreServiceImpl(ScoreDao scoreDao, UserDao userDao,
       ProfanityFilterService profanityFilterService) {
@@ -34,7 +32,6 @@ public class ScoreServiceImpl implements ScoreService {
 
     this.scoreDao = scoreDao;
     this.userDao = userDao;
-    this.profanityFilterService = profanityFilterService;
   }
 
   @Transactional(readOnly = true)
@@ -57,7 +54,7 @@ public class ScoreServiceImpl implements ScoreService {
     scoreDao.save(score);
   }
 
-  public ScoreDTO save(ScoreDTO scoreDTO) {
+  public ScoreDTO save(ScoreDTO scoreDTO) throws NoResultException {
     MOATUser user;
     try {
       user = userDao.selectUserById(scoreDTO.getUserId());

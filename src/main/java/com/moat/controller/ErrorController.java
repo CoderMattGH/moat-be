@@ -44,13 +44,6 @@ public class ErrorController {
     return errors;
   }
 
-  @ExceptionHandler(NoResultException.class)
-  public ResponseEntity<?> handleNoResultExceptions(NoResultException e) {
-    logger.info("In handleNoResultExceptions() in ErrorController.");
-
-    return resFact.build("message", e.getMessage(), HttpStatus.NOT_FOUND);
-  }
-
   // TODO: More specific error message
   @ExceptionHandler(JsonParseException.class)
   public ResponseEntity<?> handleJsonParseException(JsonParseException e) {
