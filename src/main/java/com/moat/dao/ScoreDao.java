@@ -13,4 +13,6 @@ public interface ScoreDao {
   void save(Score score);
 
   void delete(Score score) throws NoResultException;
+
+  void deleteAll();
 }

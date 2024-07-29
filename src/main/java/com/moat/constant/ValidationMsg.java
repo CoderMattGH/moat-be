@@ -9,4 +9,7 @@ public class ValidationMsg {
   public final static String JSON_PARSE_ERROR = "Error parsing JSON object!";
 
   public final static String USER_DOES_EXIST = "User does not exist!";
+
+  public final static String SCORES_NOT_FOUND = "No scores found!";
+  public final static String ERROR_DELETING_SCORES = "Unable to delete scores!";
 }

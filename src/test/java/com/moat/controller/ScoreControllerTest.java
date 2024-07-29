@@ -2,8 +2,6 @@ package com.moat.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.moat.constant.ValidationMsg;
-import com.moat.dto.ScoreDTO;
-import com.moat.responsewrapper.DynamicResponseWrapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -307,5 +306,17 @@ public class ScoreControllerTest {
             .content(json))
         .andExpect(status().isBadRequest())
         .andExpect(jsonPath("$.message").value(ValidationMsg.JSON_PARSE_ERROR));
+  }
+
+  @Test
+  @DisplayName("Successfully deletes all scores.")
+  public void delete_score_valid_request_all_scores_deleted() throws Exception {
+    mvc.perform(MockMvcRequestBuilders.delete("/score/"))
+        .andExpect(status().isOk());
+
+    // Verify scores have been deleted
+    mvc.perform(MockMvcRequestBuilders.get("/score/"))
+        .andExpect(status().isNotFound())
+        .andExpect(jsonPath("$.message").value(ValidationMsg.SCORES_NOT_FOUND));
   }
 }

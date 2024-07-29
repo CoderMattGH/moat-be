@@ -2,42 +2,57 @@
   "endpoints": [
     {
       "path": "GET /",
-      "description": "Returns a JSON object of all available endpoints."
+      "description": "Returns all of the available API endpoints."
     },
     {
-      "path": "GET /scores/",
-      "description": "Returns the top ten scores sorted in descending order.",
-      "exampleResponse": [
-        {
-          "nickname": "MATTD",
-          "score": 100
-        },
-        {
-          "nickname": "BOBBY",
-          "score": 50
-        }
-      ]
+      "path": "GET /score/",
+      "description": "Returns all scores.",
+      "exampleResponse": {
+        "scores": [
+          {
+            "id": 1,
+            "score": 100,
+            "userId": 1,
+            "username": "MATTD"
+          },
+          {
+            "id": 2,
+            "score": 200,
+            "userId": 1,
+            "username": "MATTD"
+          }
+        ]
+      }
     },
     {
-      "path": "DELETE /scores/",
+      "path": "DELETE /score/",
       "authRequired": true,
       "requiredRole": "admin",
       "description": "Deletes all scores."
     },
     {
-      "path": "DELETE /scores/{nickname}",
+      "path": "DELETE /score/{nickname}",
       "authRequired": true,
       "requiredRole": "admin",
       "description": "Deletes all scores with the specified nickname."
     },
     {
-      "path": "POST /scores/",
-      "description": "Saves the user's score and adds it to the leaderboard if a high score. Returns 'true' if a high score.",
+      "path": "POST /score/",
+      "description": "Saves the user's score.",
+      "authRequired": true,
+      "requiredRole": "user",
       "requestBody": {
-        "nickname": "user's nickname",
+        "userId": "user's nickname",
         "score": 40
       },
-      "exampleResponse": false
+      "exampleResponse": {
+        "score": {
+          "id": 5,
+          "score": 200,
+          "userId": 1,
+          "username": "MATTD"
+        }
+      }
     },
     {
       "path": "GET /user/",
