@@ -2,22 +2,26 @@ package com.moat.service;
 
 import com.moat.dto.ScoreDTO;
 import com.moat.entity.Score;
-import com.moat.exception.MOATValidationException;
 
+import javax.persistence.NoResultException;
 import java.util.List;
 
 public interface ScoreService {
-  List<Score> selectAll();
+  void deleteAll();
 
-  List<Score> selectTopTenScores();
+  void deleteById(Long id) throws NoResultException;
 
-  void save(Score score);
+  void deleteByUserId(Long userId) throws NoResultException;
 
   ScoreDTO save(ScoreDTO scoreDTO);
 
-  void delete(Score score);
+  void saveOrUpdate(Score score);
 
-  void deleteAll();
+  List<ScoreDTO> selectAll() throws NoResultException;
+
+  List<ScoreDTO> selectAllByUserId(Long userId) throws NoResultException;
+
+  List<ScoreDTO> selectTopTenScores() throws NoResultException;
 
   ScoreDTO marshallIntoDTO(Score score);
 
