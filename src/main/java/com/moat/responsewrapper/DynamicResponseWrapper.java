@@ -15,13 +15,17 @@ public class DynamicResponseWrapper<T> {
     this.statusCode = statusCode;
   }
 
+  public DynamicResponseWrapper(String key, T response) {
+    this.responseMap.put(key, response);
+  }
+
   public DynamicResponseWrapper(String key, T response, HttpStatus statusCode) {
     this.responseMap.put(key, response);
     this.statusCode = statusCode;
   }
 
   public DynamicResponseWrapper(String key, List<T> response,
-                                HttpStatus statusCode) {
+      HttpStatus statusCode) {
     this.responseMap.put(key, response);
     this.statusCode = statusCode;
   }
