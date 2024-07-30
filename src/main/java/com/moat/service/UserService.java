@@ -3,20 +3,20 @@ package com.moat.service;
 import com.moat.dto.UserDTO;
 import com.moat.entity.MOATUser;
 import com.moat.exception.AlreadyExistsException;
-import com.moat.exception.MOATValidationException;
 
 import javax.persistence.NoResultException;
 import java.util.List;
 
 public interface UserService {
-  List<MOATUser> selectAllUsers();
+  UserDTO create(MOATUser user) throws AlreadyExistsException;
 
-  MOATUser selectByUsername(String username) throws NoResultException;
+  UserDTO create(UserDTO user) throws AlreadyExistsException;
 
-  MOATUser selectUserById(Long id) throws NoResultException;
+  List<UserDTO> selectAll() throws NoResultException;
 
-  void createUser(MOATUser user)
-      throws AlreadyExistsException, MOATValidationException;
+  UserDTO selectById(Long id) throws NoResultException;
+
+  UserDTO selectByUsername(String username) throws NoResultException;
 
   UserDTO marshallIntoDTO(MOATUser user);
 

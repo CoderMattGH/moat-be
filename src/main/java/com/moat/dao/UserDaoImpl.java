@@ -18,37 +18,43 @@ public class UserDaoImpl implements UserDao {
   @PersistenceContext
   private EntityManager em;
 
-  public List<MOATUser> selectAllUsers() {
-    logger.info("In selectAllUsers() in UserDaoImpl.");
-
-    return em.createQuery("SELECT u FROM MOATUser u", MOATUser.class)
-        .getResultList();
-  }
-
-  public MOATUser selectUserByUsername(String username)
-      throws NoResultException {
-    logger.info("In selectUserByUsername() in UserDaoImpl.");
-
-    return em.createQuery(
-            "SELECT u FROM MOATUser u where u.username = :username", MOATUser.class)
-        .setParameter("username", username)
-        .getSingleResult();
-  }
-
-  public MOATUser selectUserById(Long id) throws NoResultException {
-    logger.info("In selectUserById() in UserDaoImpl.");
-
-    return em.createQuery("SELECT u FROM MOATUser u where u.id = :id",
-        MOATUser.class).setParameter("id", id).getSingleResult();
-  }
-
-  public void saveUser(MOATUser user) {
-    logger.info("In createUser() in UserDaoImpl.");
+  public void saveOrUpdate(MOATUser user) {
+    logger.info("In saveOrUpdate() in UserDaoImpl.");
 
     if (user.getId() == null) {
       em.persist(user);
     } else {
       em.merge(user);
     }
+  }
+
+  public List<MOATUser> selectAll() throws NoResultException {
+    logger.info("In selectAll() in UserDaoImpl.");
+
+    return em.createQuery("SELECT u FROM MOATUser u", MOATUser.class)
+        .getResultList();
+  }
+
+  public MOATUser selectByEmail(String email) throws NoResultException {
+    logger.info("In selectByEmail in UserDaoImpl.");
+
+    return em.createQuery("SELECT u FROM MOATUser u WHERE u.email = :email",
+        MOATUser.class).setParameter("email", email).getSingleResult();
+  }
+
+  public MOATUser selectById(Long id) throws NoResultException {
+    logger.info("In selectById in UserDaoImpl.");
+
+    return em.createQuery("SELECT u FROM MOATUser u WHERE u.id = :id",
+        MOATUser.class).setParameter("id", id).getSingleResult();
+  }
+
+  public MOATUser selectByUsername(String username) throws NoResultException {
+    logger.info("In selectByUsername() in UserDaoImpl.");
+
+    return em.createQuery(
+            "SELECT u FROM MOATUser u WHERE u.username = :username", MOATUser.class)
+        .setParameter("username", username)
+        .getSingleResult();
   }
 }

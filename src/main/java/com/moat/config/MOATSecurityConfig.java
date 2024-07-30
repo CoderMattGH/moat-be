@@ -53,6 +53,8 @@ public class MOATSecurityConfig extends WebSecurityConfigurerAdapter {
         .permitAll()
         .antMatchers("/user/")
         .permitAll()
+        .antMatchers("/user/*/")
+        .permitAll()
         .antMatchers("/")
         .permitAll()
         .anyRequest()
