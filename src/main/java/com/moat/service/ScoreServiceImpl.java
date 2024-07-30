@@ -65,7 +65,7 @@ public class ScoreServiceImpl implements ScoreService {
 
     // Check user exists
     try {
-      userDao.selectUserById(userId);
+      userDao.selectById(userId);
     } catch (NoResultException e) {
       throw new NoResultException(ValidationMsg.USER_DOES_NOT_EXIST);
     }
@@ -88,7 +88,7 @@ public class ScoreServiceImpl implements ScoreService {
   public ScoreDTO save(ScoreDTO scoreDTO) throws NoResultException {
     MOATUser user;
     try {
-      user = userDao.selectUserById(scoreDTO.getUserId());
+      user = userDao.selectById(scoreDTO.getUserId());
     } catch (NoResultException e) {
       throw new NoResultException(ValidationMsg.USER_DOES_NOT_EXIST);
     }
@@ -113,7 +113,7 @@ public class ScoreServiceImpl implements ScoreService {
   }
 
   public void deleteById(Long id) throws NoResultException {
-    logger.info("In delete() in ScoreServiceImpl.");
+    logger.info("In deleteById() in ScoreServiceImpl.");
 
     int result = scoreDao.deleteById(id);
 
@@ -127,7 +127,7 @@ public class ScoreServiceImpl implements ScoreService {
 
     try {
       // Check user exists
-      userDao.selectUserById(userId);
+      userDao.selectById(userId);
     } catch (NoResultException e) {
       throw new NoResultException(ValidationMsg.USER_DOES_NOT_EXIST);
     }

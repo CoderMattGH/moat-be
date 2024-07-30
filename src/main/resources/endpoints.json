@@ -81,28 +81,36 @@
         {
           "id": 1,
           "username": "MATTD",
-          "email": "mattd@email.com",
-          "verified": true,
-          "banned": false
+          "email": "mattd@email.com"
         },
         {
           "id": 2,
           "username": "BOBBY",
-          "email": "bobby@email.com",
-          "verified": false,
-          "banned": false
+          "email": "bobby@email.com"
         }
       ]
     },
     {
+      "path": "GET /${username}/",
+      "description": "Returns the specified user.",
+      "exampleResponse": {
+        "id": 1,
+        "username": "MATTD",
+        "email": "mattd@email.com"
+      }
+    },
+    {
       "path": "POST /user/",
       "description": "Creates a new user",
+      "requestBody": {
+        "username": "BILLY",
+        "email": "billy@email.com",
+        "password": "password"
+      },
       "exampleResponse": {
         "id": 3,
         "username": "BILLY",
-        "email": "billy@email.com",
-        "verified": false,
-        "banned": false
+        "email": "billy@email.com"
       }
     }
   ]

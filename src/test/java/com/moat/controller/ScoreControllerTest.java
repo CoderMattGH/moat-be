@@ -15,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -38,6 +39,7 @@ public class ScoreControllerTest {
   private ObjectMapper objectMapper;
 
   @Nested
+  @Transactional
   @DisplayName("DELETE /score/")
   class deleteScoreTests {
     @Test
@@ -56,6 +58,7 @@ public class ScoreControllerTest {
   }
 
   @Nested
+  @Transactional
   @DisplayName("DELETE /score/{userId}")
   class deleteScoreUserId {
     @Test
@@ -122,6 +125,7 @@ public class ScoreControllerTest {
   }
 
   @Nested
+  @Transactional
   @DisplayName("GET /score/")
   class getScoreTests {
     @Test
@@ -146,6 +150,7 @@ public class ScoreControllerTest {
   }
 
   @Nested
+  @Transactional
   @DisplayName("GET /score/{userId}/")
   class getScoreByUserIdTests {
     @Test
@@ -224,6 +229,7 @@ public class ScoreControllerTest {
   }
 
   @Nested
+  @Transactional
   @DisplayName("POST /score/")
   class postScoreTests {
     @Test

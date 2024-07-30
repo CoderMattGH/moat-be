@@ -31,6 +31,7 @@ public class EndpointServiceImpl implements EndpointService {
         endpointsStr += (char) c;
       }
     } catch (Exception e) {
+      //TODO: Create custom exception
       throw new Exception("ERROR: Cannot parse endpoints!");
     }
 

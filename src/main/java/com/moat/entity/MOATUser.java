@@ -4,11 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
-// TODO: Move validation to DTO layer
 @Entity
 @Table(name = "moat_user")
 public class MOATUser implements Serializable {
@@ -16,33 +13,29 @@ public class MOATUser implements Serializable {
 
   public final static int USERNAME_MIN_LENGTH = 5;
   public final static int USERNAME_MAX_LENGTH = 15;
-  public final static String USERNAME_PATTERN = "";
+  public final static String USERNAME_PATTERN = "^[A-Z0-9]+$";
 
   public final static int PASSWORD_MIN_LENGTH = 5;
   public final static int PASSWORD_MAX_LENGTH = 15;
-  public final static String PASSWORD_PATTERN = "";
+  public final static String PASSWORD_PATTERN =
+      "^[*.!@#$%^&(){}\\[\\]:;,.,.?/~_+-=|A-Za-z0-9]+$";
 
   public final static int EMAIL_MIN_LENGTH = 4;
   public final static int EMAIL_MAX_LENGTH = 30;
-  public final static String EMAIL_PATTERN = "";
+  public final static String EMAIL_PATTERN =
+      "^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "moat_user_id")
   private Long id;
 
-  @NotNull(message = "Username cannot be null!")
-  @NotEmpty(message = "Username cannot be empty!")
   @Column(name = "username")
   private String username;
 
-  @NotNull(message = "Password cannot be null!")
-  @NotEmpty(message = "Password cannot be empty!")
   @Column(name = "password")
   private String password;
 
-  @NotNull(message = "Email cannot be null!")
-  @NotEmpty(message = "Email cannot be empty!")
   @Column(name = "email")
   private String email;
 

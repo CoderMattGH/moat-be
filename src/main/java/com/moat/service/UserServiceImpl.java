@@ -1,10 +1,10 @@
 package com.moat.service;
 
+import com.moat.constant.ValidationMsg;
 import com.moat.dao.UserDao;
 import com.moat.dto.UserDTO;
 import com.moat.entity.MOATUser;
 import com.moat.exception.AlreadyExistsException;
-import com.moat.exception.MOATValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -27,48 +27,87 @@ public class UserServiceImpl implements UserService {
     this.userDao = userDao;
   }
 
-  @Transactional(readOnly = true)
-  public List<MOATUser> selectAllUsers() {
-    logger.info("In selectAllUsers() in userServiceImpl.");
-
-    return userDao.selectAllUsers();
-  }
-
-  @Transactional(readOnly = true)
-  public MOATUser selectByUsername(String username) throws NoResultException {
-    logger.info("In selectByUsername() in userServiceImpl.");
-
-    return userDao.selectUserByUsername(username);
-  }
-
-  @Transactional(readOnly = true)
-  public MOATUser selectUserById(Long id) throws NoResultException {
-    logger.info("In selectById() in userServiceImpl");
-
-    return userDao.selectUserById(id);
-  }
-
-  public void createUser(MOATUser user)
-      throws AlreadyExistsException, MOATValidationException {
-    logger.info("In createUser() in userServiceImpl.");
-
-    if (user.getId() != null) {
-      throw new MOATValidationException("User ID must be null!");
-    }
+  public UserDTO create(MOATUser user) throws AlreadyExistsException {
+    logger.info("In create(MOATUser) in userServiceImpl.");
 
     // Check username doesn't already exist
     boolean userExists = true;
     try {
-      userDao.selectUserByUsername(user.getUsername());
+      userDao.selectByUsername(user.getUsername());
     } catch (NoResultException e) {
       userExists = false;
     }
 
     if (userExists) {
-      throw new AlreadyExistsException("User already exists!");
+      throw new AlreadyExistsException(ValidationMsg.USER_ALREADY_EXISTS);
     }
 
-    userDao.saveUser(user);
+    boolean emailExists = true;
+    try {
+      userDao.selectByEmail(user.getEmail());
+    } catch (NoResultException e) {
+      emailExists = false;
+    }
+
+    if (emailExists) {
+      throw new AlreadyExistsException(ValidationMsg.EMAIL_ALREADY_EXISTS);
+    }
+
+    userDao.saveOrUpdate(user);
+
+    return marshallIntoDTO(user);
+  }
+
+  public UserDTO create(UserDTO user) throws AlreadyExistsException {
+    logger.info("In create(UserDTO) in userServiceImpl.");
+
+    MOATUser moatUser = new MOATUser();
+    moatUser.setPassword(user.getPassword());
+    moatUser.setUsername(user.getUsername());
+    moatUser.setEmail(user.getEmail());
+
+    return create(moatUser);
+  }
+
+  @Transactional(readOnly = true)
+  public List<UserDTO> selectAll() {
+    logger.info("In selectAll() in userServiceImpl.");
+
+    List<MOATUser> users = userDao.selectAll();
+
+    if (users.isEmpty()) {
+      throw new NoResultException(ValidationMsg.USERS_NOT_FOUND);
+    }
+
+    return marshallIntoDTO(users);
+  }
+
+  @Transactional(readOnly = true)
+  public UserDTO selectById(Long id) throws NoResultException {
+    logger.info("In selectById() in userServiceImpl");
+
+    MOATUser user;
+    try {
+      user = userDao.selectById(id);
+    } catch (NoResultException e) {
+      throw new NoResultException(ValidationMsg.USER_DOES_NOT_EXIST);
+    }
+
+    return marshallIntoDTO(user);
+  }
+
+  @Transactional(readOnly = true)
+  public UserDTO selectByUsername(String username) throws NoResultException {
+    logger.info("In selectByUsername() in userServiceImpl.");
+
+    MOATUser user;
+    try {
+      user = userDao.selectByUsername(username);
+    } catch (NoResultException e) {
+      throw new NoResultException(ValidationMsg.USER_DOES_NOT_EXIST);
+    }
+
+    return marshallIntoDTO(user);
   }
 
   @Transactional(propagation = Propagation.NOT_SUPPORTED)

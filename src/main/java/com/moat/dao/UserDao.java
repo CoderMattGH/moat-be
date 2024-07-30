@@ -6,11 +6,13 @@ import javax.persistence.NoResultException;
 import java.util.List;
 
 public interface UserDao {
-  List<MOATUser> selectAllUsers();
+  void saveOrUpdate(MOATUser user);
 
-  MOATUser selectUserByUsername(String username) throws NoResultException;
+  List<MOATUser> selectAll();
 
-  MOATUser selectUserById(Long id) throws NoResultException;
+  MOATUser selectByEmail(String email) throws NoResultException;
 
-  void saveUser(MOATUser user);
+  MOATUser selectById(Long id) throws NoResultException;
+
+  MOATUser selectByUsername(String username) throws NoResultException;
 }
