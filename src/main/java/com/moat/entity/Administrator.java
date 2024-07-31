@@ -3,23 +3,21 @@ package com.moat.entity;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
-/**
- * An Entity class representing an Administrator.
- */
+// TODO: Fix
 @Entity
-@Table(name = "ADMINISTRATOR")
+@Table(name = "administrator")
 public class Administrator {
   @Id
-  @Column(name = "ID")
+  @Column(name = "id")
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   @NotNull
-  @Column(name = "USERNAME")
+  @Column(name = "username")
   private String username;
 
   @NotNull
-  @Column(name = "PASSWORD")
+  @Column(name = "password")
   private String password;
 
   public Administrator() {

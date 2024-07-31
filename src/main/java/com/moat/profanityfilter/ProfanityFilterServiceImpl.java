@@ -13,6 +13,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 
+// TODO: Fix
 @Component
 public class ProfanityFilterServiceImpl implements ProfanityFilterService {
   private final static Logger logger =
@@ -24,7 +25,7 @@ public class ProfanityFilterServiceImpl implements ProfanityFilterService {
 
   public ProfanityFilterServiceImpl(
       @Value("${moat.filters.load-profanity-filter}") boolean loadFilter) {
-    logger.info("Constructing ProfanityFilterServiceImpl");
+    logger.debug("Constructing ProfanityFilterServiceImpl");
     enabled = false;
 
     if (loadFilter) {

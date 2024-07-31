@@ -24,11 +24,13 @@ public class UserServiceImpl implements UserService {
   private final UserDao userDao;
 
   public UserServiceImpl(UserDao userDao) {
+    logger.debug("Constructing UserServiceImpl.");
+
     this.userDao = userDao;
   }
 
   public UserDTO create(MOATUser user) throws AlreadyExistsException {
-    logger.info("In create(MOATUser) in userServiceImpl.");
+    logger.debug("In create(MOATUser) in userServiceImpl.");
 
     // Check username doesn't already exist
     boolean userExists = true;
@@ -59,7 +61,7 @@ public class UserServiceImpl implements UserService {
   }
 
   public UserDTO create(UserDTO user) throws AlreadyExistsException {
-    logger.info("In create(UserDTO) in userServiceImpl.");
+    logger.debug("In create(UserDTO) in userServiceImpl.");
 
     MOATUser moatUser = new MOATUser();
     moatUser.setPassword(user.getPassword());
@@ -71,7 +73,7 @@ public class UserServiceImpl implements UserService {
 
   @Transactional(readOnly = true)
   public List<UserDTO> selectAll() {
-    logger.info("In selectAll() in userServiceImpl.");
+    logger.debug("In selectAll() in userServiceImpl.");
 
     List<MOATUser> users = userDao.selectAll();
 
@@ -84,7 +86,7 @@ public class UserServiceImpl implements UserService {
 
   @Transactional(readOnly = true)
   public UserDTO selectById(Long id) throws NoResultException {
-    logger.info("In selectById() in userServiceImpl");
+    logger.debug("In selectById() in userServiceImpl");
 
     MOATUser user;
     try {
@@ -98,7 +100,7 @@ public class UserServiceImpl implements UserService {
 
   @Transactional(readOnly = true)
   public UserDTO selectByUsername(String username) throws NoResultException {
-    logger.info("In selectByUsername() in userServiceImpl.");
+    logger.debug("In selectByUsername() in userServiceImpl.");
 
     MOATUser user;
     try {

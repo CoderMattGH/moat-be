@@ -10,6 +10,9 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import java.util.List;
 
+import static java.lang.String.format;
+
+// TODO: Fix
 @Repository("administratorDao")
 public class AdministratorDaoImpl implements AdministratorDao {
   private final static Logger logger =
@@ -19,12 +22,12 @@ public class AdministratorDaoImpl implements AdministratorDao {
   private EntityManager em;
 
   public AdministratorDaoImpl() {
-    logger.info("Constructing AdministratorDaoImpl.");
+    logger.debug("Constructing AdministratorDaoImpl.");
   }
 
   public Administrator selectById(int id) throws NoResultException {
-    logger.info("In selectById() in AdministratorDaoImpl");
-    logger.info("Finding Administrator with ID=" + id);
+    logger.debug("In selectById() in AdministratorDaoImpl");
+    logger.info(format("Finding Administrator where id: %d.", id));
 
     Administrator administrator =
         em.createQuery("SELECT a FROM Administrator a WHERE a.id = :id",
@@ -36,7 +39,7 @@ public class AdministratorDaoImpl implements AdministratorDao {
   public Administrator selectByUsername(String username)
       throws NoResultException {
     logger.info("In selectByUsername() in AdministratorDaoImpl.");
-    logger.info("Finding Administrator with username=" + username);
+    logger.info(format("Finding Administrator where username: %s.", username));
 
     Administrator administrator = em.createQuery(
             "SELECT a FROM Administrator a WHERE a.username = :username",
@@ -48,8 +51,7 @@ public class AdministratorDaoImpl implements AdministratorDao {
   }
 
   public List<Administrator> selectAll() {
-    logger.info("In findAll() in AdministratorDaoImpl.");
-    logger.info("Finding all Administrators.");
+    logger.debug("In selectAll() in AdministratorDaoImpl.");
 
     List<Administrator> administrators =
         em.createQuery("SELECT a FROM Administrator a", Administrator.class)
@@ -59,8 +61,7 @@ public class AdministratorDaoImpl implements AdministratorDao {
   }
 
   public void save(Administrator administrator) {
-    logger.info("In saveOrUpdate() in AdministratorDaoImpl.");
-    logger.info("Saving administrator.");
+    logger.debug("In saveOrUpdate() in AdministratorDaoImpl.");
 
     if (administrator.getId() == 0)
       em.persist(administrator);
@@ -69,7 +70,7 @@ public class AdministratorDaoImpl implements AdministratorDao {
   }
 
   public void delete(Administrator administrator) {
-    logger.info("In delete() in AdministratorDaoImpl.");
+    logger.debug("In delete() in AdministratorDaoImpl.");
 
     em.remove(administrator);
   }

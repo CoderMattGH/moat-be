@@ -17,7 +17,7 @@ public class EndpointServiceImpl implements EndpointService {
       LoggerFactory.getLogger(EndpointServiceImpl.class);
 
   public String getEndpoints() throws EndpointParseException {
-    logger.info("In getEndpoints() in EndpointServiceImpl.");
+    logger.debug("In getEndpoints() in EndpointServiceImpl.");
 
     StringBuilder endpointsStr = new StringBuilder();
 

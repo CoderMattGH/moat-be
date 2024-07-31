@@ -30,7 +30,7 @@ public class UserController {
 
   public UserController(UserService userService,
       DynamicResponseWrapperFactory resFact) {
-    logger.info("Constructing UserController.");
+    logger.debug("Constructing UserController.");
 
     this.userService = userService;
     this.resFact = resFact;
@@ -39,7 +39,7 @@ public class UserController {
   @GetMapping("/{username}")
   public ResponseEntity<?> getUserByUsername(
       @PathVariable @UsernameValid String username) {
-    logger.info("In getUserByUsername() in UserController.");
+    logger.debug("In getUserByUsername() in UserController.");
 
     UserDTO user;
     try {
@@ -57,7 +57,7 @@ public class UserController {
 
   @GetMapping("/")
   public ResponseEntity<?> getUsers() {
-    logger.info("In getUsers() in UserController");
+    logger.debug("In getUsers() in UserController");
 
     List<UserDTO> users;
     try {
@@ -75,7 +75,7 @@ public class UserController {
   @PostMapping("/")
   public ResponseEntity<?> postUser(
       @RequestBody @Validated(SaveUserGroup.class) UserDTO user) {
-    logger.info("In postUser() in UserController.");
+    logger.debug("In postUser() in UserController.");
 
     UserDTO newUser;
 
