@@ -141,8 +141,14 @@ public class ScoreServiceImpl implements ScoreService {
 
   @Transactional(propagation = Propagation.NOT_SUPPORTED)
   public ScoreDTO marshallIntoDTO(Score score) {
-    return new ScoreDTO(score.getId(), score.getScore(),
-        score.getMoatUserId().getId(), score.getMoatUserId().getUsername());
+    ScoreDTO dto = new ScoreDTO();
+
+    dto.setId(score.getId());
+    dto.setScore(score.getScore());
+    dto.setUsername(score.getMoatUserId().getUsername());
+    dto.setUserId(score.getMoatUserId().getId());
+
+    return dto;
   }
 
   @Transactional(propagation = Propagation.NOT_SUPPORTED)

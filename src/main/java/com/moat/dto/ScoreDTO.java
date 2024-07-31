@@ -16,26 +16,6 @@ public class ScoreDTO {
 
   private String username;
 
-  public ScoreDTO() {}
-
-  public ScoreDTO(Integer score, Long userId) {
-    this.score = score;
-    this.userId = userId;
-  }
-
-  public ScoreDTO(Integer score, Long userId, String username) {
-    this.score = score;
-    this.userId = userId;
-    this.username = username;
-  }
-
-  public ScoreDTO(Long id, Integer score, Long userId, String username) {
-    this.id = id;
-    this.score = score;
-    this.userId = userId;
-    this.username = username;
-  }
-
   public Long getId() {
     return id;
   }

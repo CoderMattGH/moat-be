@@ -115,7 +115,16 @@ public class UserServiceImpl implements UserService {
 
   @Transactional(propagation = Propagation.NOT_SUPPORTED)
   public UserDTO marshallIntoDTO(MOATUser user) {
-    return new UserDTO(user.getId(), user.getUsername(), user.getEmail());
+    UserDTO dto = new UserDTO();
+
+    dto.setId(user.getId());
+    dto.setUsername(user.getUsername());
+    dto.setEmail(user.getEmail());
+    dto.setPassword(user.getPassword());
+    dto.setBanned(user.isBanned());
+    dto.setVerified(user.isVerified());
+
+    return dto;
   }
 
   @Transactional(propagation = Propagation.NOT_SUPPORTED)

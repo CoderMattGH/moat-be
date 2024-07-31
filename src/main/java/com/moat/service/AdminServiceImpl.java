@@ -92,7 +92,13 @@ public class AdminServiceImpl implements AdminService {
 
   @Transactional(propagation = Propagation.NOT_SUPPORTED)
   public AdminDTO marshallIntoDTO(MOATAdmin admin) {
-    return new AdminDTO(admin.getId(), admin.getUsername(), admin.getEmail());
+    AdminDTO dto = new AdminDTO();
+    dto.setId(admin.getId());
+    dto.setUsername(admin.getUsername());
+    dto.setEmail(admin.getEmail());
+    admin.setPassword(admin.getPassword());
+
+    return dto;
   }
 
   @Transactional(propagation = Propagation.NOT_SUPPORTED)
