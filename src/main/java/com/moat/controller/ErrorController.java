@@ -27,7 +27,7 @@ public class ErrorController {
   private final DynamicResponseWrapperFactory resFact;
 
   public ErrorController(DynamicResponseWrapperFactory resFact) {
-    logger.info("Constructing ErrorController!");
+    logger.debug("Constructing ErrorController!");
 
     this.resFact = resFact;
   }
@@ -35,7 +35,7 @@ public class ErrorController {
   @ExceptionHandler(MethodArgumentNotValidException.class)
   public ResponseEntity<?> handleValidationExceptions(
       MethodArgumentNotValidException e) {
-    logger.info("In handleValidationException() in ErrorController.");
+    logger.debug("In handleValidationException() in ErrorController.");
 
     // Note: Only return first validation error message
     ObjectError firstError = e.getBindingResult().getAllErrors().get(0);
@@ -47,7 +47,7 @@ public class ErrorController {
   @ExceptionHandler(ConstraintViolationException.class)
   public ResponseEntity<?> handleValidationExceptions(
       ConstraintViolationException e) {
-    logger.info("In handleValidationException() in ErrorController.");
+    logger.debug("In handleValidationException() in ErrorController.");
 
     // Note: Only return first validation error message
     ConstraintViolation<?> violation =
@@ -60,29 +60,37 @@ public class ErrorController {
   @ExceptionHandler(HttpMessageNotReadableException.class)
   public ResponseEntity<?> handleHttpMessageNotReadableException(
       HttpMessageNotReadableException e) {
-    logger.info(
+    logger.debug(
         "In handleHttpMessageNotReadableException() in ErrorController.");
 
     Throwable cause = e.getCause();
-    // System.out.println(cause.getClass().getName());
+    logger.info("Handling " + cause.getClass().getName() + " exception.");
 
     if (cause instanceof MismatchedInputException) {
+      logger.debug("Handling instanceof MismatchedInputException.");
+
       return resFact.build("message", ValidationMsg.INCORRECT_DATA_TYPE,
           HttpStatus.BAD_REQUEST);
     }
 
     if (cause instanceof JsonMappingException) {
+      logger.debug("Handling instanceof JsonMappingException.");
+
       return resFact.build("message", ValidationMsg.INCORRECT_DATA_TYPE,
           HttpStatus.BAD_REQUEST);
     }
 
     if (cause instanceof JsonParseException) {
+      logger.debug("Handling instanceof JsonParseException.");
+
       return resFact.build("message", ValidationMsg.JSON_PARSE_ERROR,
           HttpStatus.BAD_REQUEST);
     }
 
     // TODO: Check subtypes in docs
     if (cause instanceof JsonProcessingException) {
+      logger.debug("Handling instanceof JsonProcessingException.");
+
       return resFact.build("message", ValidationMsg.INCORRECT_DATA_TYPE,
           HttpStatus.BAD_REQUEST);
     }
@@ -94,7 +102,7 @@ public class ErrorController {
   @ExceptionHandler(MethodArgumentTypeMismatchException.class)
   public ResponseEntity<?> handleMethodArgumentTypeMismatchException(
       MethodArgumentTypeMismatchException e) {
-    logger.info(
+    logger.debug(
         "In handleMethodArgumentTypeMismatchException() in ErrorController.");
 
     return resFact.build("message", ValidationMsg.INCORRECT_PATH_VAR_DATA_TYPE,
@@ -103,7 +111,7 @@ public class ErrorController {
 
   @ExceptionHandler(Exception.class)
   public ResponseEntity<?> handleGenericException(Exception e) {
-    logger.info("In handleGenericException() in ErrorController.");
+    logger.debug("In handleGenericException() in ErrorController.");
 
     return resFact.build("message", ValidationMsg.UNKNOWN_SERVER_ERROR,
         HttpStatus.INTERNAL_SERVER_ERROR);

@@ -26,7 +26,7 @@ public class ScoreServiceImpl implements ScoreService {
   private final UserDao userDao;
 
   public ScoreServiceImpl(ScoreDao scoreDao, UserDao userDao) {
-    logger.info("Constructing ScoreServiceImpl.");
+    logger.debug("Constructing ScoreServiceImpl.");
 
     this.scoreDao = scoreDao;
     this.userDao = userDao;
@@ -34,7 +34,7 @@ public class ScoreServiceImpl implements ScoreService {
 
   @Transactional(readOnly = true)
   public List<ScoreDTO> selectAll() throws NoResultException {
-    logger.info("In selectAll() in ScoreServiceImpl.");
+    logger.debug("In selectAll() in ScoreServiceImpl.");
 
     List<Score> scores = scoreDao.selectAll();
 
@@ -47,7 +47,7 @@ public class ScoreServiceImpl implements ScoreService {
 
   @Transactional(readOnly = true)
   public List<ScoreDTO> selectTopTenScores() throws NoResultException {
-    logger.info("In selectTopTenScores() in ScoreServiceImpl.");
+    logger.debug("In selectTopTenScores() in ScoreServiceImpl.");
 
     List<Score> scores = scoreDao.selectTopTenScoresSorted();
 
@@ -61,7 +61,7 @@ public class ScoreServiceImpl implements ScoreService {
   @Transactional(readOnly = true)
   public List<ScoreDTO> selectAllByUserId(Long userId)
       throws NoResultException {
-    logger.info("In selectAllByUserId() in ScoreServiceImpl.");
+    logger.debug("In selectAllByUserId() in ScoreServiceImpl.");
 
     // Check user exists
     try {
@@ -80,7 +80,7 @@ public class ScoreServiceImpl implements ScoreService {
   }
 
   public void saveOrUpdate(Score score) {
-    logger.info("In save() in ScoreServiceImpl.");
+    logger.debug("In saveOrUpdate() in ScoreServiceImpl.");
 
     scoreDao.saveOrUpdate(score);
   }
@@ -103,7 +103,7 @@ public class ScoreServiceImpl implements ScoreService {
   }
 
   public void deleteAll() throws NoResultException {
-    logger.info("In deleteAll() in ScoreServiceImpl.");
+    logger.debug("In deleteAll() in ScoreServiceImpl.");
 
     int result = scoreDao.deleteAll();
 
@@ -113,7 +113,7 @@ public class ScoreServiceImpl implements ScoreService {
   }
 
   public void deleteById(Long id) throws NoResultException {
-    logger.info("In deleteById() in ScoreServiceImpl.");
+    logger.debug("In deleteById() in ScoreServiceImpl.");
 
     int result = scoreDao.deleteById(id);
 
@@ -123,7 +123,7 @@ public class ScoreServiceImpl implements ScoreService {
   }
 
   public void deleteByUserId(Long userId) throws NoResultException {
-    logger.info("In deleteByUserId() in ScoreServiceImpl.");
+    logger.debug("In deleteByUserId() in ScoreServiceImpl.");
 
     try {
       // Check user exists

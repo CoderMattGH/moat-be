@@ -11,6 +11,8 @@ public class Startup implements InitializingBean {
 
   @Override
   public void afterPropertiesSet() throws Exception {
+    logger.debug("In afterPropertiesSet() in Startup.");
+
     // Startup logic goes here.
   }
 }

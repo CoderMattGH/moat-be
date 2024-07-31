@@ -17,6 +17,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.util.List;
 
+import static java.lang.String.format;
+
 @CrossOrigin
 @RestController
 @Validated
@@ -30,7 +32,7 @@ public class ScoreController {
 
   public ScoreController(ScoreService scoreService,
       DynamicResponseWrapperFactory resFact) {
-    logger.info("Constructing ScoreController.");
+    logger.debug("Constructing ScoreController.");
 
     this.scoreService = scoreService;
     this.resFact = resFact;
@@ -38,7 +40,7 @@ public class ScoreController {
 
   @DeleteMapping("/")
   public ResponseEntity<?> deleteAllScores() {
-    logger.info("In deleteAllScores() in ScoreController.");
+    logger.debug("In deleteAllScores() in ScoreController.");
 
     try {
       scoreService.deleteAll();
@@ -53,8 +55,8 @@ public class ScoreController {
   @DeleteMapping("/{userId}")
   public ResponseEntity<?> deleteScoresByUserId(
       @PathVariable("userId") @NotNull @Positive Long userId) {
-    logger.info("In deleteScoresByNickname() in ScoreController.");
-    logger.info("Removing high scores where userId: " + userId + ".");
+    logger.debug("In deleteScoresByNickname() in ScoreController.");
+    logger.info(format("Removing high scores where userId: %d.", userId));
 
     try {
       scoreService.deleteByUserId(userId);
@@ -70,7 +72,7 @@ public class ScoreController {
 
   @GetMapping("/")
   public ResponseEntity<?> getScores() {
-    logger.info("In getScores() in ScoreController.");
+    logger.debug("In getScores() in ScoreController.");
 
     List<ScoreDTO> scores;
 
@@ -89,8 +91,8 @@ public class ScoreController {
   @GetMapping("/{userId}")
   public ResponseEntity<?> getScoresByUserId(
       @PathVariable("userId") @NotNull @Positive Long userId) {
-    logger.info("In getScoresByUserId() in ScoreController.");
-    logger.info("Getting all scores where userId: " + userId + ".");
+    logger.debug("In getScoresByUserId() in ScoreController.");
+    logger.info(format("Getting all scores where userId: %d.", userId));
 
     List<ScoreDTO> scores;
     try {
@@ -107,7 +109,7 @@ public class ScoreController {
 
   @PostMapping("/")
   public ResponseEntity<?> postScore(@RequestBody @Valid ScoreDTO scoreDTO) {
-    logger.info("In postScore() in ScoreController.");
+    logger.debug("In postScore() in ScoreController.");
 
     ScoreDTO savedScore;
     try {

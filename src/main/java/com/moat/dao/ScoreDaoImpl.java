@@ -20,13 +20,13 @@ public class ScoreDaoImpl implements ScoreDao {
   private EntityManager em;
 
   public int deleteAll() {
-    logger.info("In deleteAll() in ScoreDaoImpl");
+    logger.debug("In deleteAll() in ScoreDaoImpl");
 
     return em.createQuery("DELETE FROM Score").executeUpdate();
   }
 
   public int deleteById(Long id) {
-    logger.info("In deleteById() in ScoreDaoImpl.");
+    logger.debug("In deleteById() in ScoreDaoImpl.");
 
     return em.createQuery("DELETE FROM Score s WHERE s.id = :id")
         .setParameter("id", id)
@@ -34,7 +34,7 @@ public class ScoreDaoImpl implements ScoreDao {
   }
 
   public int deleteByUserId(Long userId) {
-    logger.info("In deleteByUserId() in ScoreDaoImpl.");
+    logger.debug("In deleteByUserId() in ScoreDaoImpl.");
 
     return em.createQuery("DELETE FROM Score s WHERE s.moatUserId.id = :userId")
         .setParameter("userId", userId)
@@ -42,34 +42,30 @@ public class ScoreDaoImpl implements ScoreDao {
   }
 
   public void saveOrUpdate(Score score) {
-    logger.info("In save() in ScoreDaoImpl.");
+    logger.debug("In save() in ScoreDaoImpl.");
 
     if (score.getId() == null) {
-      logger.info("Persisting score into db.");
-
       em.persist(score);
     } else {
-      logger.info("Merging score into db.");
-
       em.merge(score);
     }
   }
 
   public List<Score> selectAll() {
-    logger.info("In selectAll() in ScoreDaoImpl.");
+    logger.debug("In selectAll() in ScoreDaoImpl.");
 
     return em.createQuery("SELECT s FROM Score s", Score.class).getResultList();
   }
 
   public List<Score> selectAllByUserId(Long userId) {
-    logger.info("In selectScoresByUserId() in ScoreDaoImpl.");
+    logger.debug("In selectAllByUserId() in ScoreDaoImpl.");
 
     return em.createQuery("SELECT s FROM Score s WHERE s.moatUserId.id=:userId",
         Score.class).setParameter("userId", userId).getResultList();
   }
 
   public List<Score> selectTopTenScoresSorted() {
-    logger.info("In findTopTenScoresSorted() in ScoreDaoImpl.");
+    logger.debug("In selectTopTenScoresSorted() in ScoreDaoImpl.");
 
     return em.createQuery("SELECT s FROM Score s ORDER BY s.score DESC",
         Score.class).setMaxResults(10).getResultList();

@@ -20,14 +20,14 @@ public class MOATSecurityConfig extends WebSecurityConfigurerAdapter {
   private final AdministratorService administratorService;
 
   public MOATSecurityConfig(AdministratorService administratorService) {
-    logger.info("Constructing MoatSecurityConfig.");
+    logger.debug("Constructing MoatSecurityConfig.");
 
     this.administratorService = administratorService;
   }
 
   @Override
   protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-    logger.info("In configure(AuthenticationManagerBuilder) in " +
+    logger.debug("In configure(AuthenticationManagerBuilder) in " +
         "MOATSecurityConfig.");
 
     auth.userDetailsService(
@@ -41,7 +41,7 @@ public class MOATSecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
-    logger.info("In configure(HttpSecurity) in MOATSecurityConfig.");
+    logger.debug("In configure(HttpSecurity) in MOATSecurityConfig.");
 
     http.sessionManagement()
         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)

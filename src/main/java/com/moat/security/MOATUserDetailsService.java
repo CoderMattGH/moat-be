@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import javax.persistence.NoResultException;
 
+// TODO: Fix
 public class MOATUserDetailsService implements UserDetailsService {
   private final static Logger logger =
       LoggerFactory.getLogger(MOATUserDetailsService.class);
@@ -18,7 +19,7 @@ public class MOATUserDetailsService implements UserDetailsService {
   private final AdministratorService administratorService;
 
   public MOATUserDetailsService(AdministratorService administratorService) {
-    logger.info("Constructing MOATUserDetailsService.");
+    logger.debug("Constructing MOATUserDetailsService.");
 
     this.administratorService = administratorService;
   }
@@ -26,7 +27,7 @@ public class MOATUserDetailsService implements UserDetailsService {
   @Override
   public UserDetails loadUserByUsername(String username)
       throws UsernameNotFoundException {
-    logger.info("In loadUserByUsername() in MOATUserDetailsService.");
+    logger.debug("In loadUserByUsername() in MOATUserDetailsService.");
 
     try {
       final Administrator administrator =
