@@ -33,29 +33,37 @@ public class ValidationMsg {
   public final static String ERROR_GETTING_SCORE = "Unable to get score!";
   public final static String ERROR_POSTING_SCORE = "Unable to save score!";
 
-  public final static String USERNAME_NULL_MSG = "Username cannot be null!";
+  public final static String USERNAME_NULL_MSG = "username cannot be null!";
   public final static String USERNAME_LENGTH_MSG =
-      String.format("Username must be between %d and %d characters in length!",
+      String.format("username must be between %d and %d characters in length!",
           MOATUser.USERNAME_MIN_LENGTH, MOATUser.USERNAME_MAX_LENGTH);
   public final static String USERNAME_PATTERN_MSG =
-      "Username must only contain uppercase alpha-numeric characters!";
+      "username must only contain uppercase alpha-numeric characters!";
 
-  public final static String EMAIL_NULL_MSG = "Email cannot be null!";
+  public final static String EMAIL_NULL_MSG = "'email' cannot be null!";
   public final static String EMAIL_LENGTH_MSG =
-      String.format("Email must be between %d and %d characters in length!",
+      String.format("'email' must be between %d and %d characters in length!",
           MOATUser.EMAIL_MIN_LENGTH, MOATUser.EMAIL_MAX_LENGTH);
   public final static String EMAIL_PATTERN_MSG =
-      "Email is not a valid email address!";
+      "'email' is not a valid email address!";
 
-  public final static String PASSWORD_NULL_MSG = "Password cannot be null!";
-  public final static String PASSWORD_LENGTH_MSG =
-      String.format("Password must be between %d and %d characters in length!",
-          MOATUser.PASSWORD_MIN_LENGTH, MOATUser.PASSWORD_MAX_LENGTH);
+  public final static String PASSWORD_NULL_MSG = "'password' cannot be null!";
+  public final static String PASSWORD_LENGTH_MSG = String.format(
+      "'password' must be between %d and %d characters in length!",
+      MOATUser.PASSWORD_MIN_LENGTH, MOATUser.PASSWORD_MAX_LENGTH);
   public final static String PASSWORD_PATTERN_MSG =
-      "Password contains invalid symbols!";
+      "'password' contains invalid symbols!";
 
-  public final static String ID_NULL_MSG = "Id cannot be null!";
-  public final static String ID_VALUE_MSG = "Id must be bigger than 0!";
+  public final static String SCORE_NULL_MSG = "'score' cannot be null!";
+  public final static String SCORE_POSITIVE_INT_MSG =
+      "'score' must be a positive integer!";
+
+  public final static String USER_ID_NULL_MSG = "'userId' cannot be null!";
+  public final static String USER_ID_VALUE_MSG =
+      "'userId' must be bigger than 0!";
+
+  public final static String ID_NULL_MSG = "'id' cannot be null!";
+  public final static String ID_VALUE_MSG = "'id' must be bigger than 0!";
 
   private ValidationMsg() {}
 }

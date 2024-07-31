@@ -248,8 +248,8 @@ public class ScoreControllerTest {
               .contentType(MediaType.APPLICATION_JSON)
               .content(json))
           .andExpect((status().isBadRequest()))
-          .andExpect(
-              jsonPath("$.message").value("Score must be bigger than 0!"));
+          .andExpect(jsonPath("$.message").value(
+              ValidationMsg.SCORE_POSITIVE_INT_MSG));
     }
 
     @Test
@@ -363,7 +363,7 @@ public class ScoreControllerTest {
               .content(json))
           .andExpect(status().isBadRequest())
           .andExpect(
-              jsonPath("$.message").value("userId cannot be less than 1!"));
+              jsonPath("$.message").value(ValidationMsg.USER_ID_VALUE_MSG));
     }
 
     @Test
@@ -400,7 +400,7 @@ public class ScoreControllerTest {
               .contentType(MediaType.APPLICATION_JSON)
               .content(json))
           .andExpect(status().isBadRequest())
-          .andExpect(jsonPath("$.message").value("score cannot be null!"));
+          .andExpect(jsonPath("$.message").value(ValidationMsg.SCORE_NULL_MSG));
     }
 
     @Test
@@ -419,7 +419,7 @@ public class ScoreControllerTest {
               .contentType(MediaType.APPLICATION_JSON)
               .content(json))
           .andExpect((status().isBadRequest()))
-          .andExpect(jsonPath("$.message").value("score cannot be null!"));
+          .andExpect(jsonPath("$.message").value(ValidationMsg.SCORE_NULL_MSG));
     }
 
     @Test
@@ -438,7 +438,8 @@ public class ScoreControllerTest {
               .contentType(MediaType.APPLICATION_JSON)
               .content(json))
           .andExpect(status().isBadRequest())
-          .andExpect(jsonPath("$.message").value("userId cannot be null!"));
+          .andExpect(
+              jsonPath("$.message").value(ValidationMsg.USER_ID_NULL_MSG));
     }
 
     @Test
@@ -477,7 +478,8 @@ public class ScoreControllerTest {
               .contentType(MediaType.APPLICATION_JSON)
               .content(json))
           .andExpect(status().isBadRequest())
-          .andExpect(jsonPath("$.message").value("userId cannot be null!"));
+          .andExpect(
+              jsonPath("$.message").value(ValidationMsg.USER_ID_NULL_MSG));
     }
   }
 }
