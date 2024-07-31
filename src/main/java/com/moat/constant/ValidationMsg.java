@@ -23,6 +23,12 @@ public class ValidationMsg {
   public final static String ERROR_GETTING_USER = "Unable to get user!";
   public final static String ERROR_POSTING_USER = "Unable to create user!";
 
+  public final static String ADMIN_ALREADY_EXISTS = "Admin already exists!";
+  public final static String ADMIN_DOES_NOT_EXIST = "Admin does not exist!";
+  public final static String ADMINS_NOT_FOUND = "No admins found!";
+  public final static String ERROR_GETTING_ADMIN = "Unable to get admin!";
+  public final static String ERROR_POSTING_ADMIN = "Unable to create admin!";
+
   public final static String EMAIL_ALREADY_EXISTS =
       "Email address already exists!";
 

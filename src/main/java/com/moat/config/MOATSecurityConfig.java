@@ -1,7 +1,7 @@
 package com.moat.config;
 
 import com.moat.security.MOATUserDetailsService;
-import com.moat.service.AdministratorService;
+import com.moat.service.AdminService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
@@ -17,9 +17,9 @@ public class MOATSecurityConfig extends WebSecurityConfigurerAdapter {
   private final Logger logger =
       LoggerFactory.getLogger(MOATSecurityConfig.class);
 
-  private final AdministratorService administratorService;
+  private final AdminService administratorService;
 
-  public MOATSecurityConfig(AdministratorService administratorService) {
+  public MOATSecurityConfig(AdminService administratorService) {
     logger.debug("Constructing MoatSecurityConfig.");
 
     this.administratorService = administratorService;
