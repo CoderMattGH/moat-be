@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Entity
@@ -30,18 +31,23 @@ public class MOATUser implements Serializable {
   @Column(name = "moat_user_id")
   private Long id;
 
+  @NotNull
   @Column(name = "username")
   private String username;
 
+  @NotNull
   @Column(name = "password")
   private String password;
 
+  @NotNull
   @Column(name = "email")
   private String email;
 
+  @NotNull
   @Column(name = "verified", columnDefinition = "boolean default false")
   private Boolean verified = false;
 
+  @NotNull
   @Column(name = "banned", columnDefinition = "boolean default false")
   private Boolean banned = false;
 

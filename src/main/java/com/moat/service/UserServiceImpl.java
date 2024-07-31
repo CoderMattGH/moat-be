@@ -44,6 +44,7 @@ public class UserServiceImpl implements UserService {
       throw new AlreadyExistsException(ValidationMsg.USER_ALREADY_EXISTS);
     }
 
+    // TODO: Check admin table too
     boolean emailExists = true;
     try {
       userDao.selectByEmail(user.getEmail());
