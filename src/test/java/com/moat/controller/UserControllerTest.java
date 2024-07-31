@@ -224,29 +224,6 @@ public class UserControllerTest {
     }
 
     @Test
-    @DisplayName("When request body contains id field returns bad request.")
-    public void when_id_field_exists_return_bad_request() throws Exception {
-      String email = "newuser@email.com";
-      String username = "NEWUSER";
-      String password = "mypassword";
-      int id = 1;
-
-      Map<String, Object> userMap = new HashMap<>();
-      userMap.put("email", email);
-      userMap.put("username", username);
-      userMap.put("password", password);
-      userMap.put("id", id);
-
-      String json = objectMapper.writeValueAsString(userMap);
-
-      mvc.perform(MockMvcRequestBuilders.post("/user/")
-              .contentType(MediaType.APPLICATION_JSON)
-              .content(json))
-          .andExpect(status().isBadRequest())
-          .andExpect(jsonPath("$.message").value("Id must be null!"));
-    }
-
-    @Test
     @DisplayName("When email field doesn't exist return bad request.")
     public void when_email_field_not_exist_return_bad_request()
         throws Exception {

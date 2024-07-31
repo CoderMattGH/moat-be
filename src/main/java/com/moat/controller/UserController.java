@@ -52,6 +52,9 @@ public class UserController {
           HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    // Remove sensitive fields
+    user.setPassword(null);
+
     return resFact.build("user", user, HttpStatus.OK);
   }
 
@@ -68,6 +71,9 @@ public class UserController {
       return resFact.build("message", ValidationMsg.ERROR_GETTING_USERS,
           HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    // Remove sensitive fields
+    users.forEach(user -> user.setPassword(null));
 
     return resFact.build("users", users, HttpStatus.OK);
   }
@@ -87,6 +93,8 @@ public class UserController {
       return resFact.build("message", ValidationMsg.ERROR_POSTING_USER,
           HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    newUser.setPassword(null);
 
     return resFact.build("user", newUser, HttpStatus.OK);
   }

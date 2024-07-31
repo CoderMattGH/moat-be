@@ -13,7 +13,6 @@ import javax.validation.groups.Default;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserDTO {
   @IdValid
-  @Null(groups = SaveUserGroup.class, message = "Id must be null!")
   private Long id;
 
   @UsernameValid(groups = {SaveUserGroup.class, Default.class})
@@ -25,17 +24,9 @@ public class UserDTO {
   @PasswordValid(groups = {SaveUserGroup.class, Default.class})
   private String password;
 
-  private boolean banned;
+  private Boolean banned;
 
-  private boolean verified;
-
-  public UserDTO() {}
-
-  public UserDTO(Long id, String username, String email) {
-    this.id = id;
-    this.username = username;
-    this.email = email;
-  }
+  private Boolean verified;
 
   public Long getId() {
     return id;
@@ -69,11 +60,11 @@ public class UserDTO {
     this.email = email;
   }
 
-  public boolean isBanned() {
+  public Boolean isBanned() {
     return banned;
   }
 
-  public void setBanned(boolean banned) {
+  public void setBanned(Boolean banned) {
     this.banned = banned;
   }
 
@@ -81,7 +72,7 @@ public class UserDTO {
     return verified;
   }
 
-  public void setVerified(boolean verified) {
+  public void setVerified(Boolean verified) {
     this.verified = verified;
   }
 }
