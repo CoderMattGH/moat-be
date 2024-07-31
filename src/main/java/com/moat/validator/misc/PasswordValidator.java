@@ -1,7 +1,7 @@
-package com.moat.validator.user;
+package com.moat.validator.misc;
 
+import com.moat.constant.Constants;
 import com.moat.constant.ValidationMsg;
-import com.moat.entity.MOATUser;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -21,15 +21,15 @@ public class PasswordValidator
     }
 
     int length = value.trim().length();
-    if (length < MOATUser.PASSWORD_MIN_LENGTH ||
-        length > MOATUser.PASSWORD_MAX_LENGTH) {
+    if (length < Constants.PASSWORD_MIN_LENGTH ||
+        length > Constants.PASSWORD_MAX_LENGTH) {
       context.buildConstraintViolationWithTemplate(
           ValidationMsg.PASSWORD_LENGTH_MSG).addConstraintViolation();
 
       return false;
     }
 
-    Pattern pattern = Pattern.compile(MOATUser.PASSWORD_PATTERN);
+    Pattern pattern = Pattern.compile(Constants.PASSWORD_PATTERN);
     if (!pattern.matcher(value).find()) {
       context.buildConstraintViolationWithTemplate(
           ValidationMsg.PASSWORD_PATTERN_MSG).addConstraintViolation();

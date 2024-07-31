@@ -43,7 +43,7 @@ public class AdminServiceImpl implements AdminService {
   }
 
   @Transactional(readOnly = true)
-  public AdminDTO selectById(int id) throws NoResultException {
+  public AdminDTO selectById(Long id) throws NoResultException {
     logger.debug("In selectById() in AdminServiceImpl.");
 
     MOATAdmin admin;
@@ -70,7 +70,7 @@ public class AdminServiceImpl implements AdminService {
   }
 
   public AdminDTO create(MOATAdmin admin) throws AlreadyExistsException {
-    logger.debug("In createAdministrator in AdminServiceImpl.");
+    logger.debug("In createAdministrator(MOATAdmin) in AdminServiceImpl.");
 
     boolean adminExists = true;
     try {
@@ -88,6 +88,17 @@ public class AdminServiceImpl implements AdminService {
     adminDao.saveOrUpdate(admin);
 
     return marshallIntoDTO(admin);
+  }
+
+  public AdminDTO create(AdminDTO admin) throws AlreadyExistsException {
+    logger.debug("In create(AdminDTO) in AdminServiceImpl.");
+
+    MOATAdmin newAdmin = new MOATAdmin();
+    newAdmin.setEmail(admin.getEmail());
+    newAdmin.setPassword(admin.getPassword());
+    newAdmin.setUsername(admin.getUsername());
+
+    return create(newAdmin);
   }
 
   @Transactional(propagation = Propagation.NOT_SUPPORTED)

@@ -1,7 +1,5 @@
 package com.moat.constant;
 
-import com.moat.entity.MOATUser;
-
 public class ValidationMsg {
   public final static String INCORRECT_PATH_VAR_DATA_TYPE =
       "Path variable was the incorrect data type!";
@@ -42,21 +40,21 @@ public class ValidationMsg {
   public final static String USERNAME_NULL_MSG = "username cannot be null!";
   public final static String USERNAME_LENGTH_MSG =
       String.format("username must be between %d and %d characters in length!",
-          MOATUser.USERNAME_MIN_LENGTH, MOATUser.USERNAME_MAX_LENGTH);
+          Constants.USERNAME_MIN_LENGTH, Constants.USERNAME_MAX_LENGTH);
   public final static String USERNAME_PATTERN_MSG =
       "username must only contain uppercase alpha-numeric characters!";
 
   public final static String EMAIL_NULL_MSG = "'email' cannot be null!";
   public final static String EMAIL_LENGTH_MSG =
       String.format("'email' must be between %d and %d characters in length!",
-          MOATUser.EMAIL_MIN_LENGTH, MOATUser.EMAIL_MAX_LENGTH);
+          Constants.EMAIL_MIN_LENGTH, Constants.EMAIL_MAX_LENGTH);
   public final static String EMAIL_PATTERN_MSG =
       "'email' is not a valid email address!";
 
   public final static String PASSWORD_NULL_MSG = "'password' cannot be null!";
   public final static String PASSWORD_LENGTH_MSG = String.format(
       "'password' must be between %d and %d characters in length!",
-      MOATUser.PASSWORD_MIN_LENGTH, MOATUser.PASSWORD_MAX_LENGTH);
+      Constants.PASSWORD_MIN_LENGTH, Constants.PASSWORD_MAX_LENGTH);
   public final static String PASSWORD_PATTERN_MSG =
       "'password' contains invalid symbols!";
 

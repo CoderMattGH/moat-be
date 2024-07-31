@@ -1,4 +1,4 @@
-package com.moat.validator.user;
+package com.moat.validator.misc;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

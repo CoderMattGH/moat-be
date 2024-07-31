@@ -1,7 +1,7 @@
-package com.moat.validator.user;
+package com.moat.validator.misc;
 
+import com.moat.constant.Constants;
 import com.moat.constant.ValidationMsg;
-import com.moat.entity.MOATUser;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -20,15 +20,15 @@ public class EmailValidator implements ConstraintValidator<EmailValid, String> {
     }
 
     int length = value.trim().length();
-    if (length < MOATUser.EMAIL_MIN_LENGTH ||
-        length > MOATUser.EMAIL_MAX_LENGTH) {
+    if (length < Constants.EMAIL_MIN_LENGTH ||
+        length > Constants.EMAIL_MAX_LENGTH) {
       context.buildConstraintViolationWithTemplate(
           ValidationMsg.EMAIL_LENGTH_MSG).addConstraintViolation();
 
       return false;
     }
 
-    Pattern pattern = Pattern.compile(MOATUser.EMAIL_PATTERN);
+    Pattern pattern = Pattern.compile(Constants.EMAIL_PATTERN);
     if (!pattern.matcher(value).find()) {
       context.buildConstraintViolationWithTemplate(
           ValidationMsg.EMAIL_PATTERN_MSG).addConstraintViolation();

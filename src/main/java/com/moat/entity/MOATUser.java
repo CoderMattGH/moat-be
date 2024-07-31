@@ -12,20 +12,6 @@ import java.io.Serializable;
 public class MOATUser implements Serializable {
   private final static Logger logger = LoggerFactory.getLogger(MOATUser.class);
 
-  public final static int USERNAME_MIN_LENGTH = 5;
-  public final static int USERNAME_MAX_LENGTH = 15;
-  public final static String USERNAME_PATTERN = "^[A-Z0-9]+$";
-
-  public final static int PASSWORD_MIN_LENGTH = 5;
-  public final static int PASSWORD_MAX_LENGTH = 15;
-  public final static String PASSWORD_PATTERN =
-      "^[*.!@#$%^&(){}\\[\\]:;,.,.?/~_+-=|A-Za-z0-9]+$";
-
-  public final static int EMAIL_MIN_LENGTH = 4;
-  public final static int EMAIL_MAX_LENGTH = 30;
-  public final static String EMAIL_PATTERN =
-      "^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
-
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "moat_user_id")

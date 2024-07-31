@@ -10,11 +10,13 @@ import java.util.List;
 public interface AdminService {
   List<AdminDTO> selectAll() throws NoResultException;
 
-  AdminDTO selectById(int id) throws NoResultException;
+  AdminDTO selectById(Long id) throws NoResultException;
 
   AdminDTO selectByUsername(String username) throws NoResultException;
 
   AdminDTO create(MOATAdmin admin) throws AlreadyExistsException;
+
+  AdminDTO create(AdminDTO admin) throws AlreadyExistsException;
 
   AdminDTO marshallIntoDTO(MOATAdmin admin);
 

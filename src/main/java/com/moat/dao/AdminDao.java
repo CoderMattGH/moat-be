@@ -8,7 +8,7 @@ import java.util.List;
 public interface AdminDao {
   List<MOATAdmin> selectAll();
 
-  MOATAdmin selectById(int id) throws NoResultException;
+  MOATAdmin selectById(Long id) throws NoResultException;
 
   MOATAdmin selectByUsername(String username) throws NoResultException;
 

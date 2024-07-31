@@ -2,12 +2,11 @@ package com.moat.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.moat.validator.misc.IdValid;
-import com.moat.validator.user.EmailValid;
-import com.moat.validator.user.PasswordValid;
-import com.moat.validator.user.UsernameValid;
-import com.moat.validator.user.group.SaveUserGroup;
+import com.moat.validator.misc.EmailValid;
+import com.moat.validator.misc.PasswordValid;
+import com.moat.validator.misc.UsernameValid;
+import com.moat.validator.group.SaveUserGroup;
 
-import javax.validation.constraints.Null;
 import javax.validation.groups.Default;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)

@@ -24,7 +24,7 @@ public class AdminDaoImpl implements AdminDao {
     logger.debug("Constructing AdministratorDaoImpl.");
   }
 
-  public MOATAdmin selectById(int id) throws NoResultException {
+  public MOATAdmin selectById(Long id) throws NoResultException {
     logger.debug("In selectById() in AdministratorDaoImpl");
     logger.info(format("Finding Administrator where id: %d.", id));
 
