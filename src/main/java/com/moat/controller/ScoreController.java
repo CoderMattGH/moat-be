@@ -4,6 +4,7 @@ import com.moat.constant.ValidationMsg;
 import com.moat.dto.ScoreDTO;
 import com.moat.responsewrapper.DynamicResponseWrapperFactory;
 import com.moat.service.ScoreService;
+import com.moat.validator.score.UserIdValid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -13,8 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.NoResultException;
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
 import java.util.List;
 
 import static java.lang.String.format;
@@ -54,7 +53,7 @@ public class ScoreController {
 
   @DeleteMapping("/{userId}")
   public ResponseEntity<?> deleteScoresByUserId(
-      @PathVariable("userId") @NotNull @Positive Long userId) {
+      @PathVariable @UserIdValid Long userId) {
     logger.debug("In deleteScoresByNickname() in ScoreController.");
     logger.info(format("Removing high scores where userId: %d.", userId));
 
@@ -90,7 +89,7 @@ public class ScoreController {
 
   @GetMapping("/{userId}")
   public ResponseEntity<?> getScoresByUserId(
-      @PathVariable("userId") @NotNull @Positive Long userId) {
+      @PathVariable @UserIdValid Long userId) {
     logger.debug("In getScoresByUserId() in ScoreController.");
     logger.info(format("Getting all scores where userId: %d.", userId));
 
