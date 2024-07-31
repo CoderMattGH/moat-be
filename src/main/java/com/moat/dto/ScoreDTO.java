@@ -1,31 +1,22 @@
 package com.moat.dto;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Null;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.moat.validator.score.ScoreValid;
+import com.moat.validator.score.UserIdValid;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ScoreDTO {
-  @Null
   private Long id;
 
-  @NotNull(message = "score cannot be null!")
-  @Min(value = 0, message = "Score must be bigger than 0!")
+  @ScoreValid
   private Integer score;
 
-  @NotNull(message = "userId cannot be null!")
-  @Min(value = 1, message = "userId cannot be less than 1!")
+  @UserIdValid
   private Long userId;
 
-  //  @NotNull(message = "username cannot be null!")
-  //  @Length(min = MOATUser.USERNAME_MIN_LENGTH,
-  //      max = MOATUser.USERNAME_MAX_LENGTH,
-  //      message = "user must be between " + MOATUser.USERNAME_MIN_LENGTH +
-  //          " and " + MOATUser.USERNAME_MAX_LENGTH + " characters in length!")
-  @Null
   private String username;
 
-  public ScoreDTO() {
-  }
+  public ScoreDTO() {}
 
   public ScoreDTO(Integer score, Long userId) {
     this.score = score;
