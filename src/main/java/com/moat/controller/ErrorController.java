@@ -1,6 +1,8 @@
 package com.moat.controller;
 
 import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import com.moat.constant.ValidationMsg;
 import com.moat.responsewrapper.DynamicResponseWrapperFactory;
@@ -8,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
@@ -31,11 +34,11 @@ public class ErrorController {
 
   @ExceptionHandler(MethodArgumentNotValidException.class)
   public ResponseEntity<?> handleValidationExceptions(
-      MethodArgumentNotValidException ex) {
+      MethodArgumentNotValidException e) {
     logger.info("In handleValidationException() in ErrorController.");
 
     // Note: Only return first validation error message
-    ObjectError firstError = ex.getBindingResult().getAllErrors().get(0);
+    ObjectError firstError = e.getBindingResult().getAllErrors().get(0);
 
     return resFact.build("message", firstError.getDefaultMessage(),
         HttpStatus.BAD_REQUEST);
@@ -54,20 +57,37 @@ public class ErrorController {
         HttpStatus.BAD_REQUEST);
   }
 
-  @ExceptionHandler(JsonParseException.class)
-  public ResponseEntity<?> handleJsonParseException(JsonParseException e) {
-    logger.info("In handleJsonParseException() in ErrorController.");
+  @ExceptionHandler(HttpMessageNotReadableException.class)
+  public ResponseEntity<?> handleHttpMessageNotReadableException(
+      HttpMessageNotReadableException e) {
+    logger.info(
+        "In handleHttpMessageNotReadableException() in ErrorController.");
 
-    return resFact.build("message", ValidationMsg.JSON_PARSE_ERROR,
-        HttpStatus.BAD_REQUEST);
-  }
+    Throwable cause = e.getCause();
+    // System.out.println(cause.getClass().getName());
 
-  @ExceptionHandler(MismatchedInputException.class)
-  public ResponseEntity<?> handleMismatchedInputException(
-      MismatchedInputException e) {
-    logger.info("In handleMisMatchedInputException() in ErrorController.");
+    if (cause instanceof MismatchedInputException) {
+      return resFact.build("message", ValidationMsg.INCORRECT_DATA_TYPE,
+          HttpStatus.BAD_REQUEST);
+    }
 
-    return resFact.build("message", ValidationMsg.INCORRECT_DATA_TYPE,
+    if (cause instanceof JsonMappingException) {
+      return resFact.build("message", ValidationMsg.INCORRECT_DATA_TYPE,
+          HttpStatus.BAD_REQUEST);
+    }
+
+    if (cause instanceof JsonParseException) {
+      return resFact.build("message", ValidationMsg.JSON_PARSE_ERROR,
+          HttpStatus.BAD_REQUEST);
+    }
+
+    // TODO: Check subtypes in docs
+    if (cause instanceof JsonProcessingException) {
+      return resFact.build("message", ValidationMsg.INCORRECT_DATA_TYPE,
+          HttpStatus.BAD_REQUEST);
+    }
+
+    return resFact.build("message", ValidationMsg.ERROR_PROCESSING_REQUEST,
         HttpStatus.BAD_REQUEST);
   }
 
@@ -81,5 +101,11 @@ public class ErrorController {
         HttpStatus.BAD_REQUEST);
   }
 
-  // TODO: Generic exception handler!
+  @ExceptionHandler(Exception.class)
+  public ResponseEntity<?> handleGenericException(Exception e) {
+    logger.info("In handleGenericException() in ErrorController.");
+
+    return resFact.build("message", ValidationMsg.UNKNOWN_SERVER_ERROR,
+        HttpStatus.INTERNAL_SERVER_ERROR);
+  }
 }

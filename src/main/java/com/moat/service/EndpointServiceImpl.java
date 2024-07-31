@@ -1,6 +1,8 @@
 package com.moat.service;
 
 import com.moat.constant.Constants;
+import com.moat.constant.ValidationMsg;
+import com.moat.exception.EndpointParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
@@ -14,10 +16,10 @@ public class EndpointServiceImpl implements EndpointService {
   private final static Logger logger =
       LoggerFactory.getLogger(EndpointServiceImpl.class);
 
-  public String getEndpoints() throws Exception {
+  public String getEndpoints() throws EndpointParseException {
     logger.info("In getEndpoints() in EndpointServiceImpl.");
 
-    String endpointsStr = "";
+    StringBuilder endpointsStr = new StringBuilder();
 
     try {
       InputStream bis = new BufferedInputStream(new ClassPathResource(
@@ -28,13 +30,12 @@ public class EndpointServiceImpl implements EndpointService {
 
       int c;
       while ((c = reader.read()) != -1) {
-        endpointsStr += (char) c;
+        endpointsStr.append((char) c);
       }
     } catch (Exception e) {
-      //TODO: Create custom exception
-      throw new Exception("ERROR: Cannot parse endpoints!");
+      throw new EndpointParseException(ValidationMsg.ERROR_GETTING_ENDPOINTS);
     }
 
-    return endpointsStr;
+    return endpointsStr.toString();
   }
 }

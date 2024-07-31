@@ -7,7 +7,14 @@ public class ValidationMsg {
       "Path variable was the incorrect data type!";
   public final static String INCORRECT_DATA_TYPE =
       "One or more fields was the incorrect data type!";
+  public final static String ERROR_PROCESSING_REQUEST =
+      "Error processing request!";
   public final static String JSON_PARSE_ERROR = "Error parsing JSON object!";
+  public final static String UNKNOWN_SERVER_ERROR =
+      "An unknown server error occurred!";
+
+  public final static String ERROR_GETTING_ENDPOINTS =
+      "Unable to get endpoints!";
 
   public final static String USER_ALREADY_EXISTS = "User already exists!";
   public final static String USER_DOES_NOT_EXIST = "User does not exist!";
