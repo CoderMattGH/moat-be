@@ -1,5 +1,7 @@
 package com.moat.jwt;
 
+import com.moat.constant.ValidationMsg;
+import com.moat.exception.JwtParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,42 +18,43 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-// TODO: Work for users as well as admins
+import static java.lang.String.format;
+
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
   private final static Logger logger =
       LoggerFactory.getLogger(JwtRequestFilter.class);
 
-  private final UserDetailsService moatAdminDetailsService;
+  private final UserDetailsService moatUserDetailsService;
   private final JwtUtil jwtUtil;
 
   public JwtRequestFilter(JwtUtil jwtUtil,
-      UserDetailsService moatAdminDetailsService) {
+      UserDetailsService moatUserDetailsService) {
     logger.debug("Constructing JwtRequestFilter.");
 
     this.jwtUtil = jwtUtil;
-    this.moatAdminDetailsService = moatAdminDetailsService;
+    this.moatUserDetailsService = moatUserDetailsService;
   }
 
   @Override
   protected void doFilterInternal(HttpServletRequest request,
-      HttpServletResponse response, FilterChain chain)
-      throws ServletException, IOException {
+      HttpServletResponse response, FilterChain chain) throws IOException {
+    logger.debug("In doFilterInternal() in JwtRequestFilter.");
+
     final String authorizationHeader = request.getHeader("Authorization");
 
     String username = null;
     String jwt = null;
-
     if (authorizationHeader != null &&
         authorizationHeader.startsWith("Bearer ")) {
       jwt = authorizationHeader.substring(7);
       username = jwtUtil.extractUsername(jwt);
     }
 
-    if (username != null &&
+    if (jwt != null &&
         SecurityContextHolder.getContext().getAuthentication() == null) {
       UserDetails userDetails =
-          this.moatAdminDetailsService.loadUserByUsername(username);
+          this.moatUserDetailsService.loadUserByUsername(username);
 
       if (jwtUtil.validateToken(jwt, userDetails)) {
         UsernamePasswordAuthenticationToken
@@ -67,6 +70,11 @@ public class JwtRequestFilter extends OncePerRequestFilter {
       }
     }
 
-    chain.doFilter(request, response);
+    try {
+      chain.doFilter(request, response);
+    } catch (ServletException e) {
+      // Send back response?
+      logger.error("Servlet exception!");
+    }
   }
 }

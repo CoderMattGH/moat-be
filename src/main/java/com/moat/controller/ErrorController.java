@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
@@ -107,6 +108,18 @@ public class ErrorController {
 
     return resFact.build("message", ValidationMsg.INCORRECT_PATH_VAR_DATA_TYPE,
         HttpStatus.BAD_REQUEST);
+  }
+
+  /**
+   * Thrown when method annotation authentication fails.
+   */
+  @ExceptionHandler(AccessDeniedException.class)
+  public ResponseEntity<?> handleAccessDeniedException(
+      AccessDeniedException e) {
+    logger.debug("In handleAccessDeniedException() in ErrorController.");
+
+    return resFact.build("message", ValidationMsg.ERROR_UNAUTHORISED,
+        HttpStatus.UNAUTHORIZED);
   }
 
   @ExceptionHandler(Exception.class)

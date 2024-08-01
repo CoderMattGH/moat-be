@@ -14,6 +14,17 @@ public class ValidationMsg {
   public final static String ERROR_GETTING_ENDPOINTS =
       "Unable to get endpoints!";
 
+  public final static String INVALID_CREDENTIALS = "Invalid credentials!";
+  public final static String DISABLED_EXCEPTION =
+      "User account has been disabled!";
+  public final static String ERROR_LOGGING_IN = "Unable to login!";
+  public final static String ERROR_UNAUTHORISED =
+      "You are not authorised to view this resource!";
+
+  public final static String JWT_NO_AUTH_HEADER =
+      "No authorization header set!";
+  public final static String JWT_PARSE_ERROR = "Unable to parse JWT token!";
+
   public final static String USER_ALREADY_EXISTS = "User already exists!";
   public final static String USER_DOES_NOT_EXIST = "User does not exist!";
   public final static String USERS_NOT_FOUND = "No users found!";

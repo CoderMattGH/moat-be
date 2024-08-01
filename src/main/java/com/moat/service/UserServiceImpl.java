@@ -73,6 +73,8 @@ public class UserServiceImpl implements UserService {
     moatUser.setUsername(user.getUsername());
     moatUser.setEmail(user.getEmail());
 
+    moatUser.setRole("USER");
+
     return create(moatUser);
   }
 
@@ -127,6 +129,7 @@ public class UserServiceImpl implements UserService {
     dto.setPassword(user.getPassword());
     dto.setBanned(user.isBanned());
     dto.setVerified(user.isVerified());
+    dto.setRole(user.getRole());
 
     return dto;
   }
