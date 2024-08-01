@@ -40,7 +40,7 @@ public class UserControllerTest {
 
   @Nested
   @Transactional
-  @DisplayName("GET /{username}")
+  @DisplayName("GET /{username}/")
   class getUserByUserNameTests {
     @Test
     @DisplayName("Successfully returns valid user.")

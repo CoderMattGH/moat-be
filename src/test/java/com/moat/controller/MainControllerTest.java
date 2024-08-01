@@ -26,9 +26,7 @@ public class MainControllerTest {
   private MockMvc mvc;
 
   @Test
-  public void getEndpointsTest() throws Exception {
-    logger.info("Test endpoints returned OK.");
-
+  public void valid_request_returns_endpoints() throws Exception {
     mvc.perform(
             MockMvcRequestBuilders.get("/").accept(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())

@@ -28,6 +28,10 @@ public class MOATAdmin {
   @Column(name = "email")
   private String email;
 
+  @NotNull
+  @Column(name = "verified", columnDefinition = "boolean default false")
+  private Boolean verified = false;
+
   public MOATAdmin() {}
 
   public MOATAdmin(String username, String password) {
@@ -65,5 +69,13 @@ public class MOATAdmin {
 
   public void setEmail(String email) {
     this.email = email;
+  }
+
+  public Boolean isVerified() {
+    return verified;
+  }
+
+  public void setVerified(Boolean verified) {
+    this.verified = verified;
   }
 }

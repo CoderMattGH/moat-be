@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,7 +37,7 @@ public class UserController {
     this.resFact = resFact;
   }
 
-  @GetMapping("/{username}")
+  @GetMapping("/{username}/")
   public ResponseEntity<?> getUserByUsername(
       @PathVariable @UsernameValid String username) {
     logger.debug("In getUserByUsername() in UserController.");

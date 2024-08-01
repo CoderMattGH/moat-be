@@ -14,7 +14,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.NoResultException;
-import javax.validation.Valid;
 import java.util.List;
 
 import static java.lang.String.format;
@@ -52,7 +51,7 @@ public class ScoreController {
     return ResponseEntity.status(HttpStatus.OK).build();
   }
 
-  @DeleteMapping("/{userId}")
+  @DeleteMapping("/{userId}/")
   public ResponseEntity<?> deleteScoresByUserId(
       @PathVariable @UserIdValid Long userId) {
     logger.debug("In deleteScoresByNickname() in ScoreController.");
@@ -88,7 +87,7 @@ public class ScoreController {
     return resFact.build("scores", scores, HttpStatus.OK);
   }
 
-  @GetMapping("/{userId}")
+  @GetMapping("/{userId}/")
   public ResponseEntity<?> getScoresByUserId(
       @PathVariable @UserIdValid Long userId) {
     logger.debug("In getScoresByUserId() in ScoreController.");

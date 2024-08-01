@@ -23,6 +23,8 @@ public class AdminDTO {
   @EmailValid(groups = {SaveAdminGroup.class, Default.class})
   private String email;
 
+  private Boolean verified;
+
   public AdminDTO() {}
 
   public Long getId() {
@@ -55,5 +57,13 @@ public class AdminDTO {
 
   public void setEmail(String email) {
     this.email = email;
+  }
+
+  public Boolean isVerified() {
+    return verified;
+  }
+
+  public void setVerified(Boolean verified) {
+    this.verified = verified;
   }
 }
