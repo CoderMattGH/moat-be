@@ -37,6 +37,10 @@ public class MOATUser implements Serializable {
   @Column(name = "banned", columnDefinition = "boolean default false")
   private Boolean banned = false;
 
+  @NotNull
+  @Column(name = "role")
+  private String role;
+
   public Long getId() {
     return id;
   }
@@ -83,5 +87,13 @@ public class MOATUser implements Serializable {
 
   public void setBanned(Boolean banned) {
     this.banned = banned;
+  }
+
+  public void setRole(String role) {
+    this.role = role;
+  }
+
+  public String getRole() {
+    return role;
   }
 }

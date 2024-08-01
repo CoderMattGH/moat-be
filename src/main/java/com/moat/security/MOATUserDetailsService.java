@@ -46,6 +46,7 @@ public class MOATUserDetailsService implements UserDetailsService {
     loggedUser.setEmail(user.getEmail());
     loggedUser.setBanned(user.isBanned());
     loggedUser.setVerified(user.isVerified());
+    loggedUser.setRole(user.getRole());
 
     return new SecMOATUserDetails(loggedUser);
   }

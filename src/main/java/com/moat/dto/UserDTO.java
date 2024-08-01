@@ -9,6 +9,7 @@ import com.moat.validator.group.SaveUserGroup;
 
 import javax.validation.groups.Default;
 
+// TODO: Validate
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserDTO {
   @IdValid
@@ -26,6 +27,8 @@ public class UserDTO {
   private Boolean banned;
 
   private Boolean verified;
+
+  private String role;
 
   public Long getId() {
     return id;
@@ -73,5 +76,13 @@ public class UserDTO {
 
   public void setVerified(Boolean verified) {
     this.verified = verified;
+  }
+
+  public String getRole() {
+    return role;
+  }
+
+  public void setRole(String role) {
+    this.role = role;
   }
 }
