@@ -7,6 +7,7 @@ import com.moat.entity.MOATAdmin;
 import com.moat.exception.AlreadyExistsException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,11 +23,13 @@ public class AdminServiceImpl implements AdminService {
       LoggerFactory.getLogger(AdminServiceImpl.class);
 
   private final AdminDao adminDao;
+  private final PasswordEncoder passwordEncoder;
 
-  public AdminServiceImpl(AdminDao adminDao) {
+  public AdminServiceImpl(AdminDao adminDao, PasswordEncoder passwordEncoder) {
     logger.debug("Constructing AdminServiceImpl.");
 
     this.adminDao = adminDao;
+    this.passwordEncoder = passwordEncoder;
   }
 
   @Transactional(readOnly = true)
@@ -60,6 +63,7 @@ public class AdminServiceImpl implements AdminService {
     logger.debug("In selectByUsername() in AdminServiceImpl.");
 
     MOATAdmin admin;
+
     try {
       admin = adminDao.selectByUsername(username);
     } catch (NoResultException e) {
@@ -102,9 +106,11 @@ public class AdminServiceImpl implements AdminService {
   public AdminDTO create(AdminDTO admin) throws AlreadyExistsException {
     logger.debug("In create(AdminDTO) in AdminServiceImpl.");
 
+    String encodedPassword = passwordEncoder.encode(admin.getPassword());
+
     MOATAdmin newAdmin = new MOATAdmin();
     newAdmin.setEmail(admin.getEmail());
-    newAdmin.setPassword(admin.getPassword());
+    newAdmin.setPassword(encodedPassword);
     newAdmin.setUsername(admin.getUsername());
 
     return create(newAdmin);
@@ -116,7 +122,8 @@ public class AdminServiceImpl implements AdminService {
     dto.setId(admin.getId());
     dto.setUsername(admin.getUsername());
     dto.setEmail(admin.getEmail());
-    admin.setPassword(admin.getPassword());
+    dto.setPassword(admin.getPassword());
+    dto.setVerified(admin.isVerified());
 
     return dto;
   }

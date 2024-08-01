@@ -7,6 +7,7 @@ import com.moat.entity.MOATUser;
 import com.moat.exception.AlreadyExistsException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,11 +23,13 @@ public class UserServiceImpl implements UserService {
       LoggerFactory.getLogger(UserServiceImpl.class);
 
   private final UserDao userDao;
+  private final PasswordEncoder passwordEncoder;
 
-  public UserServiceImpl(UserDao userDao) {
+  public UserServiceImpl(UserDao userDao, PasswordEncoder passwordEncoder) {
     logger.debug("Constructing UserServiceImpl.");
 
     this.userDao = userDao;
+    this.passwordEncoder = passwordEncoder;
   }
 
   public UserDTO create(MOATUser user) throws AlreadyExistsException {
@@ -44,7 +47,6 @@ public class UserServiceImpl implements UserService {
       throw new AlreadyExistsException(ValidationMsg.USER_ALREADY_EXISTS);
     }
 
-    // TODO: Check admin table too
     boolean emailExists = true;
     try {
       userDao.selectByEmail(user.getEmail());
@@ -64,8 +66,10 @@ public class UserServiceImpl implements UserService {
   public UserDTO create(UserDTO user) throws AlreadyExistsException {
     logger.debug("In create(UserDTO) in userServiceImpl.");
 
+    String encodedPassword = passwordEncoder.encode(user.getPassword());
+
     MOATUser moatUser = new MOATUser();
-    moatUser.setPassword(user.getPassword());
+    moatUser.setPassword(encodedPassword);
     moatUser.setUsername(user.getUsername());
     moatUser.setEmail(user.getEmail());
 

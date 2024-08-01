@@ -113,6 +113,9 @@ public class ErrorController {
   public ResponseEntity<?> handleGenericException(Exception e) {
     logger.debug("In handleGenericException() in ErrorController.");
 
+    // TODO: Remove in prod
+    e.printStackTrace();
+
     return resFact.build("message", ValidationMsg.UNKNOWN_SERVER_ERROR,
         HttpStatus.INTERNAL_SERVER_ERROR);
   }

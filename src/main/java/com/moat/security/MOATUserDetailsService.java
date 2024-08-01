@@ -1,27 +1,29 @@
 package com.moat.security;
 
-import com.moat.dto.AdminDTO;
-import com.moat.service.AdminService;
+import com.moat.constant.ValidationMsg;
+import com.moat.dto.UserDTO;
+import com.moat.entity.MOATUser;
+import com.moat.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
 
 import javax.persistence.NoResultException;
 
-// TODO: Fix
+@Service("moatUserDetailsService")
 public class MOATUserDetailsService implements UserDetailsService {
   private final static Logger logger =
       LoggerFactory.getLogger(MOATUserDetailsService.class);
 
-  private final AdminService adminService;
+  private final UserService userService;
 
-  public MOATUserDetailsService(AdminService adminService) {
+  public MOATUserDetailsService(UserService userService) {
     logger.debug("Constructing MOATUserDetailsService.");
 
-    this.adminService = adminService;
+    this.userService = userService;
   }
 
   @Override
@@ -29,21 +31,22 @@ public class MOATUserDetailsService implements UserDetailsService {
       throws UsernameNotFoundException {
     logger.debug("In loadUserByUsername() in MOATUserDetailsService.");
 
+    final UserDTO user;
+
     try {
-      final AdminDTO admin = adminService.selectByUsername(username);
-
-      String password = admin.getPassword();
-
-      return User.withUsername(username)
-          .password(password)
-          .roles("ADMIN", "USER")
-          .build();
+      user = userService.selectByUsername(username);
     } catch (NoResultException e) {
-      logger.error("Admin username not found!");
-    } catch (Exception e) {
-      logger.error("An unknown error occurred trying to login!");
+      throw new UsernameNotFoundException(ValidationMsg.USER_DOES_NOT_EXIST);
     }
 
-    throw new UsernameNotFoundException(username);
+    MOATUser loggedUser = new MOATUser();
+    loggedUser.setId(user.getId());
+    loggedUser.setUsername(user.getUsername());
+    loggedUser.setPassword(user.getPassword());
+    loggedUser.setEmail(user.getEmail());
+    loggedUser.setBanned(user.isBanned());
+    loggedUser.setVerified(user.isVerified());
+
+    return new SecMOATUserDetails(loggedUser);
   }
 }
