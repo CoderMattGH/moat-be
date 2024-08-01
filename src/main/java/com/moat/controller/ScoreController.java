@@ -4,6 +4,7 @@ import com.moat.constant.ValidationMsg;
 import com.moat.dto.ScoreDTO;
 import com.moat.responsewrapper.DynamicResponseWrapperFactory;
 import com.moat.service.ScoreService;
+import com.moat.validator.group.SaveScoreGroup;
 import com.moat.validator.score.UserIdValid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -107,7 +108,8 @@ public class ScoreController {
   }
 
   @PostMapping("/")
-  public ResponseEntity<?> postScore(@RequestBody @Valid ScoreDTO scoreDTO) {
+  public ResponseEntity<?> postScore(
+      @RequestBody @Validated(SaveScoreGroup.class) ScoreDTO scoreDTO) {
     logger.debug("In postScore() in ScoreController.");
 
     ScoreDTO savedScore;

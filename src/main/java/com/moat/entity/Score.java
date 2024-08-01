@@ -1,6 +1,7 @@
 package com.moat.entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,9 +18,11 @@ public class Score implements Serializable {
   @Column(name = "score_id")
   private Long id;
 
+  @NotNull
   @Column(name = "score")
   private int score;
 
+  @NotNull
   @OneToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "moat_user_id", referencedColumnName = "moat_user_id")
   private MOATUser moatUserId;

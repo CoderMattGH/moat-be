@@ -32,8 +32,16 @@ public class AdminDaoImpl implements AdminDao {
         MOATAdmin.class).setParameter("id", id).getSingleResult();
   }
 
+  public MOATAdmin selectByEmail(String email) throws NoResultException {
+    logger.debug("In selectByEmail() in AdminDaoImpl.");
+    logger.info(format("Finding Administrator where email: %s.", email));
+
+    return em.createQuery("SELECT a FROM MOATAdmin a WHERE a.email = :email",
+        MOATAdmin.class).setParameter("email", email).getSingleResult();
+  }
+
   public MOATAdmin selectByUsername(String username) throws NoResultException {
-    logger.info("In selectByUsername() in AdministratorDaoImpl.");
+    logger.debug("In selectByUsername() in AdministratorDaoImpl.");
     logger.info(format("Finding Administrator where username: %s.", username));
 
     return em.createQuery(

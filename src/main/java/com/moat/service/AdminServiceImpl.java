@@ -83,7 +83,16 @@ public class AdminServiceImpl implements AdminService {
       throw new AlreadyExistsException(ValidationMsg.ADMIN_ALREADY_EXISTS);
     }
 
-    // TODO: Check email
+    boolean emailExists = true;
+    try {
+      adminDao.selectByEmail(admin.getEmail());
+    } catch (NoResultException e) {
+      emailExists = false;
+    }
+
+    if (emailExists) {
+      throw new AlreadyExistsException(ValidationMsg.EMAIL_ALREADY_EXISTS);
+    }
 
     adminDao.saveOrUpdate(admin);
 

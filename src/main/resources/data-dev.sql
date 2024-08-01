@@ -10,5 +10,5 @@ VALUES (100, 1),
 
 INSERT INTO moat_admin (username, password, email)
 -- password: 'password' hashed bcrypt strength 10.
-VALUES ('admin', '$2a$10$iqRvPqnXnmpsMChjx9RFReFwm9RcnSZFQQvdlqWTToFrQtOYGreFO',
+VALUES ('ADMIN', '$2a$10$iqRvPqnXnmpsMChjx9RFReFwm9RcnSZFQQvdlqWTToFrQtOYGreFO',
         'admin@email.com');

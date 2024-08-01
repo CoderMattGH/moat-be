@@ -10,6 +10,8 @@ public interface AdminDao {
 
   MOATAdmin selectById(Long id) throws NoResultException;
 
+  MOATAdmin selectByEmail(String email) throws NoResultException;
+
   MOATAdmin selectByUsername(String username) throws NoResultException;
 
   void saveOrUpdate(MOATAdmin admin);

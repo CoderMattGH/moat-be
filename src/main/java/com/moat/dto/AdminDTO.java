@@ -9,7 +9,6 @@ import com.moat.validator.misc.UsernameValid;
 
 import javax.validation.groups.Default;
 
-// TODO: Add validation
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class AdminDTO {
   @IdValid
