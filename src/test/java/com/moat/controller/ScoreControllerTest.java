@@ -1,6 +1,7 @@
 package com.moat.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jayway.jsonpath.JsonPath;
 import com.moat.constant.ValidationMsg;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -14,6 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,15 +40,35 @@ public class ScoreControllerTest {
   @Autowired
   private ObjectMapper objectMapper;
 
+  public String getJwtToken(String username, String password) throws Exception {
+    Map<String, Object> user = new HashMap<>();
+    user.put("username", username);
+    user.put("password", password);
+
+    String json = objectMapper.writeValueAsString(user);
+
+    MvcResult result = mvc.perform(MockMvcRequestBuilders.post("/authenticate/")
+            .content(json)
+            .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andReturn();
+
+    String response = result.getResponse().getContentAsString();
+
+    return JsonPath.parse(response).read("$.token");
+  }
+
   @Nested
   @Transactional
   @DisplayName("DELETE /score/")
-  class deleteScoreTests {
+  class DeleteScoreTests {
     @Test
-    @DisplayName("Successfully deletes all scores.")
-    public void delete_score_valid_request_all_scores_deleted()
-        throws Exception {
-      mvc.perform(MockMvcRequestBuilders.delete("/score/"))
+    @DisplayName("Admin deletes all scores successfully.")
+    public void admin_request_all_scores_deleted() throws Exception {
+      String token = getJwtToken("ADMIN", "password");
+
+      mvc.perform(MockMvcRequestBuilders.delete("/score/")
+              .header("Authorization", "Bearer " + token))
           .andExpect(status().isOk());
 
       // Verify scores have been deleted
@@ -55,20 +77,43 @@ public class ScoreControllerTest {
           .andExpect(
               jsonPath("$.message").value(ValidationMsg.SCORES_NOT_FOUND));
     }
+
+    @Test
+    @DisplayName("When user returns not forbidden.")
+    public void user_request_forbidden() throws Exception {
+      String token = getJwtToken("MATTD", "passw");
+
+      mvc.perform(MockMvcRequestBuilders.delete("/score/")
+              .header("Authorization", "Bearer " + token))
+          .andExpect(status().isForbidden())
+          .andExpect(
+              jsonPath("$.message").value(ValidationMsg.ERROR_UNAUTHORISED));
+    }
+
+    @Test
+    @DisplayName("When guest returns not authorized.")
+    public void guest_request_not_authorized() throws Exception {
+      mvc.perform(MockMvcRequestBuilders.delete("/score/"))
+          .andExpect(status().isUnauthorized())
+          .andExpect(
+              jsonPath("$.message").value(ValidationMsg.ERROR_UNAUTHORISED));
+    }
   }
 
   @Nested
   @Transactional
-  @DisplayName("DELETE /score/{userId}")
-  class deleteScoreUserId {
+  @DisplayName("DELETE /score/{userId}/")
+  class DeleteScoreUserId {
     @Test
     @DisplayName(
-        "When given a valid userId successfully deletes all their scores.")
-    public void by_user_id_valid_request_user_scores_deleted()
-        throws Exception {
+        "Admin given a valid userId successfully deletes all their scores.")
+    public void admin_valid_request_user_scores_deleted() throws Exception {
+      String token = getJwtToken("ADMIN", "password");
+
       int userId = 1;
 
-      mvc.perform(MockMvcRequestBuilders.delete("/score/" + userId + "/"))
+      mvc.perform(MockMvcRequestBuilders.delete("/score/" + userId + "/")
+              .header("Authorization", "Bearer " + token))
           .andExpect(status().isOk());
 
       // Verify scores have been deleted
@@ -79,11 +124,39 @@ public class ScoreControllerTest {
     }
 
     @Test
-    @DisplayName("When given a non extant userId returns 404 not found.")
-    public void non_extant_user_return_not_found() throws Exception {
-      int userId = 999;
+    @DisplayName("User given a valid userId returns forbidden.")
+    public void user_request_returns_forbidden() throws Exception {
+      String token = getJwtToken("MATTD", "passw");
+
+      int userId = 1;
+
+      mvc.perform(MockMvcRequestBuilders.delete("/score/" + userId + "/")
+              .header("Authorization", "Bearer " + token))
+          .andExpect(status().isForbidden())
+          .andExpect(
+              jsonPath("$.message").value(ValidationMsg.ERROR_UNAUTHORISED));
+    }
+
+    @Test
+    @DisplayName("Guest returns unauthorized.")
+    public void guest_request_returns_unauthorized() throws Exception {
+      int userId = 1;
 
       mvc.perform(MockMvcRequestBuilders.delete("/score/" + userId + "/"))
+          .andExpect(status().isUnauthorized())
+          .andExpect(
+              jsonPath("$.message").value(ValidationMsg.ERROR_UNAUTHORISED));
+    }
+
+    @Test
+    @DisplayName("When given a non extant userId returns 404 not found.")
+    public void non_extant_user_return_not_found() throws Exception {
+      String token = getJwtToken("ADMIN", "password");
+
+      int userId = 999;
+
+      mvc.perform(MockMvcRequestBuilders.delete("/score/" + userId + "/")
+              .header("Authorization", "Bearer " + token))
           .andExpect(status().isNotFound())
           .andExpect(
               jsonPath("$.message").value(ValidationMsg.USER_DOES_NOT_EXIST));
@@ -93,9 +166,12 @@ public class ScoreControllerTest {
     @DisplayName("When userId is decimal returns bad request.")
     public void when_userid_decimal_number_return_bad_request()
         throws Exception {
+      String token = getJwtToken("ADMIN", "password");
+
       double userId = 1.1;
 
-      mvc.perform(MockMvcRequestBuilders.delete("/score/" + userId + "/"))
+      mvc.perform(MockMvcRequestBuilders.delete("/score/" + userId + "/")
+              .header("Authorization", "Bearer " + token))
           .andExpect(status().isBadRequest())
           .andExpect(jsonPath("$.message").value(
               ValidationMsg.INCORRECT_PATH_VAR_DATA_TYPE));
@@ -104,9 +180,12 @@ public class ScoreControllerTest {
     @Test
     @DisplayName("When userId is not a number returns bad request.")
     public void when_userid_not_number_return_bad_request() throws Exception {
+      String token = getJwtToken("ADMIN", "password");
+
       String userId = "banana";
 
-      mvc.perform(MockMvcRequestBuilders.delete("/score/" + userId + "/"))
+      mvc.perform(MockMvcRequestBuilders.delete("/score/" + userId + "/")
+              .header("Authorization", "Bearer " + token))
           .andExpect(status().isBadRequest())
           .andExpect(jsonPath("$.message").value(
               ValidationMsg.INCORRECT_PATH_VAR_DATA_TYPE));
@@ -115,9 +194,12 @@ public class ScoreControllerTest {
     @Test
     @DisplayName("When user has no scores returns 404 not found.")
     public void when_user_has_no_scores_return_bad_request() throws Exception {
+      String token = getJwtToken("ADMIN", "password");
+
       int userId = 3;
 
-      mvc.perform(MockMvcRequestBuilders.delete("/score/" + userId + "/"))
+      mvc.perform(MockMvcRequestBuilders.delete("/score/" + userId + "/")
+              .header("Authorization", "Bearer " + token))
           .andExpect(status().isNotFound())
           .andExpect(
               jsonPath("$.message").value(ValidationMsg.SCORES_NOT_FOUND));
@@ -152,7 +234,7 @@ public class ScoreControllerTest {
   @Nested
   @Transactional
   @DisplayName("GET /score/{userId}/")
-  class getScoreByUserIdTests {
+  class GetScoreByUserIdTests {
     @Test
     @DisplayName("Valid userId returns all user's scores.")
     public void valid_userid_returns_users_scores() throws Exception {
@@ -231,220 +313,12 @@ public class ScoreControllerTest {
   @Nested
   @Transactional
   @DisplayName("POST /score/")
-  class postScoreTests {
+  class PostScoreTests {
     @Test
-    @DisplayName("When score is below 0 return bad request.")
-    public void below_zero_score_returns_bad_request() throws Exception {
-      Long userId = 1L;
-      int score = -1;
+    @DisplayName("Admin valid score is returned OK.")
+    public void admin_returns_valid_score_object() throws Exception {
+      String token = getJwtToken("ADMIN", "password");
 
-      Map<String, Object> scoreMap = new HashMap<>();
-      scoreMap.put("userId", userId);
-      scoreMap.put("score", score);
-
-      String json = objectMapper.writeValueAsString(scoreMap);
-
-      mvc.perform(MockMvcRequestBuilders.post("/score/")
-              .contentType(MediaType.APPLICATION_JSON)
-              .content(json))
-          .andExpect((status().isBadRequest()))
-          .andExpect(jsonPath("$.message").value(
-              ValidationMsg.SCORE_POSITIVE_INT_MSG));
-    }
-
-    @Test
-    @DisplayName("When score is decimal return bad request.")
-    public void decimal_score_returns_bad_request() throws Exception {
-      int userId = 2;
-      double score = 100.3;
-
-      Map<String, Object> scoreMap = new HashMap<>();
-      scoreMap.put("userId", userId);
-      scoreMap.put("score", score);
-
-      String json = objectMapper.writeValueAsString(scoreMap);
-
-      mvc.perform(MockMvcRequestBuilders.post("/score/")
-              .contentType(MediaType.APPLICATION_JSON)
-              .content(json))
-          .andExpect((status().isBadRequest()))
-          .andExpect(
-              jsonPath("$.message").value(ValidationMsg.INCORRECT_DATA_TYPE));
-    }
-
-    @Test
-    @DisplayName("When userId is a decimal return bad request.")
-    public void decimal_userId_returns_bad_request() throws Exception {
-      int score = 100;
-      double userId = 1.2;
-
-      Map<String, Object> scoreMap = new HashMap<>();
-      scoreMap.put("score", score);
-      scoreMap.put("userId", userId);
-
-      String json = objectMapper.writeValueAsString(scoreMap);
-
-      mvc.perform(MockMvcRequestBuilders.post("/score/")
-              .contentType(MediaType.APPLICATION_JSON)
-              .content(json))
-          .andExpect(status().isBadRequest())
-          .andExpect(
-              jsonPath("$.message").value(ValidationMsg.INCORRECT_DATA_TYPE));
-    }
-
-    @Test
-    @DisplayName("When given a malformed JSON object then return bad request.")
-    public void malformed_json_returns_bad_request() throws Exception {
-      // Missing closing brace
-      String json = "{\"userId\": 1, \"score\": 200";
-
-      mvc.perform(MockMvcRequestBuilders.post("/score/")
-              .contentType(MediaType.APPLICATION_JSON)
-              .content(json))
-          .andExpect(status().isBadRequest())
-          .andExpect(
-              jsonPath("$.message").value(ValidationMsg.JSON_PARSE_ERROR));
-    }
-
-    @Test
-    @DisplayName("When score is not a number return bad request.")
-    public void nan_score_returns_bad_request() throws Exception {
-      Long userId = 1L;
-      String score = "Banana";
-
-      Map<String, Object> scoreMap = new HashMap<>();
-      scoreMap.put("userId", userId);
-      scoreMap.put("score", score);
-
-      String json = objectMapper.writeValueAsString(scoreMap);
-
-      mvc.perform(MockMvcRequestBuilders.post("/score/")
-              .contentType(MediaType.APPLICATION_JSON)
-              .content(json))
-          .andExpect((status().isBadRequest()))
-          .andExpect(
-              jsonPath("$.message").value(ValidationMsg.INCORRECT_DATA_TYPE));
-    }
-
-    @Test
-    @DisplayName("When userId is not a number return bad request.")
-    public void nan_userId_returns_bad_request() throws Exception {
-      int score = 100;
-      String userId = "banana";
-
-      Map<String, Object> scoreMap = new HashMap<>();
-      scoreMap.put("score", score);
-      scoreMap.put("userId", userId);
-
-      String json = objectMapper.writeValueAsString(scoreMap);
-
-      mvc.perform(MockMvcRequestBuilders.post("/score/")
-              .contentType(MediaType.APPLICATION_JSON)
-              .content(json))
-          .andExpect(status().isBadRequest())
-          .andExpect(
-              jsonPath("$.message").value(ValidationMsg.INCORRECT_DATA_TYPE));
-    }
-
-    @Test
-    @DisplayName("When userId is negative return bad request.")
-    public void negative_userId_returns_bad_request() throws Exception {
-      int score = 100;
-      int userId = -100;
-
-      Map<String, Object> scoreMap = new HashMap<>();
-      scoreMap.put("score", score);
-      scoreMap.put("userId", userId);
-
-      String json = objectMapper.writeValueAsString(scoreMap);
-
-      mvc.perform(MockMvcRequestBuilders.post("/score/")
-              .contentType(MediaType.APPLICATION_JSON)
-              .content(json))
-          .andExpect(status().isBadRequest())
-          .andExpect(
-              jsonPath("$.message").value(ValidationMsg.USER_ID_VALUE_MSG));
-    }
-
-    @Test
-    @DisplayName("When userId does not exist return 404 not found.")
-    public void non_extant_userId_returns_bad_request() throws Exception {
-      int score = 100;
-      int userId = 9999;
-
-      Map<String, Object> scoreMap = new HashMap<>();
-      scoreMap.put("score", score);
-      scoreMap.put("userId", userId);
-
-      String json = objectMapper.writeValueAsString(scoreMap);
-
-      mvc.perform(MockMvcRequestBuilders.post("/score/")
-              .contentType(MediaType.APPLICATION_JSON)
-              .content(json))
-          .andExpect(status().isNotFound())
-          .andExpect(
-              jsonPath("$.message").value(ValidationMsg.USER_DOES_NOT_EXIST));
-    }
-
-    @Test
-    @DisplayName("When score is not defined return bad request.")
-    public void not_defined_score_returns_bad_request() throws Exception {
-      int userId = 1;
-
-      Map<String, Object> scoreMap = new HashMap<>();
-      scoreMap.put("userId", userId);
-
-      String json = objectMapper.writeValueAsString(scoreMap);
-
-      mvc.perform(MockMvcRequestBuilders.post("/score/")
-              .contentType(MediaType.APPLICATION_JSON)
-              .content(json))
-          .andExpect(status().isBadRequest())
-          .andExpect(jsonPath("$.message").value(ValidationMsg.SCORE_NULL_MSG));
-    }
-
-    @Test
-    @DisplayName("When score is null return bad request.")
-    public void null_score_returns_bad_request() throws Exception {
-      Long userId = 1L;
-      Integer score = null;
-
-      Map<String, Object> scoreMap = new HashMap<>();
-      scoreMap.put("userId", userId);
-      scoreMap.put("score", score);
-
-      String json = objectMapper.writeValueAsString(scoreMap);
-
-      mvc.perform(MockMvcRequestBuilders.post("/score/")
-              .contentType(MediaType.APPLICATION_JSON)
-              .content(json))
-          .andExpect((status().isBadRequest()))
-          .andExpect(jsonPath("$.message").value(ValidationMsg.SCORE_NULL_MSG));
-    }
-
-    @Test
-    @DisplayName("When userId is null return bad request.")
-    public void null_userId_returns_bad_request() throws Exception {
-      Long userId = null;
-      int score = 100;
-
-      Map<String, Object> scoreMap = new HashMap<>();
-      scoreMap.put("userId", userId);
-      scoreMap.put("score", score);
-
-      String json = objectMapper.writeValueAsString(scoreMap);
-
-      mvc.perform(MockMvcRequestBuilders.post("/score/")
-              .contentType(MediaType.APPLICATION_JSON)
-              .content(json))
-          .andExpect(status().isBadRequest())
-          .andExpect(
-              jsonPath("$.message").value(ValidationMsg.USER_ID_NULL_MSG));
-    }
-
-    @Test
-    @DisplayName("Valid scores are returned OK.")
-    public void returns_valid_score_object() throws Exception {
       int score = 100;
       Long userId = 1L;
 
@@ -455,6 +329,7 @@ public class ScoreControllerTest {
       String json = objectMapper.writeValueAsString(scoreMap);
 
       mvc.perform(MockMvcRequestBuilders.post("/score/")
+              .header("Authorization", "Bearer " + token)
               .contentType(MediaType.APPLICATION_JSON)
               .content(json))
           .andExpect(status().isCreated())
@@ -465,8 +340,321 @@ public class ScoreControllerTest {
     }
 
     @Test
+    @DisplayName("Matching user id with valid score is returned OK.")
+    public void match_user_id_returns_valid_score_object() throws Exception {
+      String token = getJwtToken("MATTD", "passw");
+
+      int score = 100;
+      Long userId = 1L;
+
+      Map<String, Object> scoreMap = new HashMap<>();
+      scoreMap.put("userId", userId);
+      scoreMap.put("score", score);
+
+      String json = objectMapper.writeValueAsString(scoreMap);
+
+      mvc.perform(MockMvcRequestBuilders.post("/score/")
+              .header("Authorization", "Bearer " + token)
+              .contentType(MediaType.APPLICATION_JSON)
+              .content(json))
+          .andExpect(status().isCreated())
+          .andExpect(jsonPath("$.score.id").value(greaterThan(0)))
+          .andExpect(jsonPath("$.score.score").value(greaterThanOrEqualTo(0)))
+          .andExpect(jsonPath("$.score.userId").value(userId))
+          .andExpect(jsonPath("$.score.username").value(not(emptyString())));
+    }
+
+    @Test
+    @DisplayName("Not matching user id with valid score returns forbidden.")
+    public void not_match_user_id_returns_forbidden() throws Exception {
+      String token = getJwtToken("MATTD", "passw");
+
+      int score = 100;
+      Long userId = 2L;
+
+      Map<String, Object> scoreMap = new HashMap<>();
+      scoreMap.put("userId", userId);
+      scoreMap.put("score", score);
+
+      String json = objectMapper.writeValueAsString(scoreMap);
+
+      mvc.perform(MockMvcRequestBuilders.post("/score/")
+              .header("Authorization", "Bearer " + token)
+              .contentType(MediaType.APPLICATION_JSON)
+              .content(json))
+          .andExpect(status().isForbidden())
+          .andExpect(
+              jsonPath("$.message").value(ValidationMsg.ERROR_UNAUTHORISED));
+    }
+
+    @Test
+    @DisplayName("Guest with valid score returns not authorised.")
+    public void guest_returns_unauthorised() throws Exception {
+      int score = 100;
+      Long userId = 1L;
+
+      Map<String, Object> scoreMap = new HashMap<>();
+      scoreMap.put("userId", userId);
+      scoreMap.put("score", score);
+
+      String json = objectMapper.writeValueAsString(scoreMap);
+
+      mvc.perform(MockMvcRequestBuilders.post("/score/")
+              .contentType(MediaType.APPLICATION_JSON)
+              .content(json))
+          .andExpect(status().isUnauthorized())
+          .andExpect(
+              jsonPath("$.message").value(ValidationMsg.ERROR_UNAUTHORISED));
+    }
+
+    @Test
+    @DisplayName("When score is below 0 return bad request.")
+    public void below_zero_score_returns_bad_request() throws Exception {
+      String token = getJwtToken("MATTD", "passw");
+
+      Long userId = 1L;
+      int score = -1;
+
+      Map<String, Object> scoreMap = new HashMap<>();
+      scoreMap.put("userId", userId);
+      scoreMap.put("score", score);
+
+      String json = objectMapper.writeValueAsString(scoreMap);
+
+      mvc.perform(MockMvcRequestBuilders.post("/score/")
+              .header("Authorization", "Bearer " + token)
+              .contentType(MediaType.APPLICATION_JSON)
+              .content(json))
+          .andExpect((status().isBadRequest()))
+          .andExpect(jsonPath("$.message").value(
+              ValidationMsg.SCORE_POSITIVE_INT_MSG));
+    }
+
+    @Test
+    @DisplayName("When score is decimal return bad request.")
+    public void decimal_score_returns_bad_request() throws Exception {
+      String token = getJwtToken("MATTD", "passw");
+
+      int userId = 2;
+      double score = 100.3;
+
+      Map<String, Object> scoreMap = new HashMap<>();
+      scoreMap.put("userId", userId);
+      scoreMap.put("score", score);
+
+      String json = objectMapper.writeValueAsString(scoreMap);
+
+      mvc.perform(MockMvcRequestBuilders.post("/score/")
+              .header("Authorization", "Bearer " + token)
+              .contentType(MediaType.APPLICATION_JSON)
+              .content(json))
+          .andExpect((status().isBadRequest()))
+          .andExpect(
+              jsonPath("$.message").value(ValidationMsg.INCORRECT_DATA_TYPE));
+    }
+
+    @Test
+    @DisplayName("When userId is a decimal return bad request.")
+    public void decimal_userId_returns_bad_request() throws Exception {
+      String token = getJwtToken("MATTD", "passw");
+
+      int score = 100;
+      double userId = 1.2;
+
+      Map<String, Object> scoreMap = new HashMap<>();
+      scoreMap.put("score", score);
+      scoreMap.put("userId", userId);
+
+      String json = objectMapper.writeValueAsString(scoreMap);
+
+      mvc.perform(MockMvcRequestBuilders.post("/score/")
+              .header("Authorization", "Bearer " + token)
+              .contentType(MediaType.APPLICATION_JSON)
+              .content(json))
+          .andExpect(status().isBadRequest())
+          .andExpect(
+              jsonPath("$.message").value(ValidationMsg.INCORRECT_DATA_TYPE));
+    }
+
+    @Test
+    @DisplayName("When given a malformed JSON object then return bad request.")
+    public void malformed_json_returns_bad_request() throws Exception {
+      String token = getJwtToken("MATTD", "passw");
+
+      // Missing closing brace
+      String json = "{\"userId\": 1, \"score\": 200";
+
+      mvc.perform(MockMvcRequestBuilders.post("/score/")
+              .header("Authorization", "Bearer " + token)
+              .contentType(MediaType.APPLICATION_JSON)
+              .content(json))
+          .andExpect(status().isBadRequest())
+          .andExpect(
+              jsonPath("$.message").value(ValidationMsg.JSON_PARSE_ERROR));
+    }
+
+    @Test
+    @DisplayName("When score is not a number return bad request.")
+    public void nan_score_returns_bad_request() throws Exception {
+      String token = getJwtToken("MATTD", "passw");
+
+      Long userId = 1L;
+      String score = "Banana";
+
+      Map<String, Object> scoreMap = new HashMap<>();
+      scoreMap.put("userId", userId);
+      scoreMap.put("score", score);
+
+      String json = objectMapper.writeValueAsString(scoreMap);
+
+      mvc.perform(MockMvcRequestBuilders.post("/score/")
+              .header("Authorization", "Bearer " + token)
+              .contentType(MediaType.APPLICATION_JSON)
+              .content(json))
+          .andExpect((status().isBadRequest()))
+          .andExpect(
+              jsonPath("$.message").value(ValidationMsg.INCORRECT_DATA_TYPE));
+    }
+
+    @Test
+    @DisplayName("When userId is not a number return bad request.")
+    public void nan_userId_returns_bad_request() throws Exception {
+      String token = getJwtToken("MATTD", "passw");
+
+      int score = 100;
+      String userId = "banana";
+
+      Map<String, Object> scoreMap = new HashMap<>();
+      scoreMap.put("score", score);
+      scoreMap.put("userId", userId);
+
+      String json = objectMapper.writeValueAsString(scoreMap);
+
+      mvc.perform(MockMvcRequestBuilders.post("/score/")
+              .header("Authorization", "Bearer " + token)
+              .contentType(MediaType.APPLICATION_JSON)
+              .content(json))
+          .andExpect(status().isBadRequest())
+          .andExpect(
+              jsonPath("$.message").value(ValidationMsg.INCORRECT_DATA_TYPE));
+    }
+
+    @Test
+    @DisplayName("When userId is negative return bad request.")
+    public void negative_userId_returns_bad_request() throws Exception {
+      String token = getJwtToken("MATTD", "passw");
+
+      int score = 100;
+      int userId = -100;
+
+      Map<String, Object> scoreMap = new HashMap<>();
+      scoreMap.put("score", score);
+      scoreMap.put("userId", userId);
+
+      String json = objectMapper.writeValueAsString(scoreMap);
+
+      mvc.perform(MockMvcRequestBuilders.post("/score/")
+              .header("Authorization", "Bearer " + token)
+              .contentType(MediaType.APPLICATION_JSON)
+              .content(json))
+          .andExpect(status().isBadRequest())
+          .andExpect(
+              jsonPath("$.message").value(ValidationMsg.USER_ID_VALUE_MSG));
+    }
+
+    @Test
+    @DisplayName("When userId does not exist returns 404 not found.")
+    public void non_extant_userId_returns_not_found() throws Exception {
+      String token = getJwtToken("ADMIN", "password");
+
+      int score = 100;
+      int userId = 9999;
+
+      Map<String, Object> scoreMap = new HashMap<>();
+      scoreMap.put("score", score);
+      scoreMap.put("userId", userId);
+
+      String json = objectMapper.writeValueAsString(scoreMap);
+
+      mvc.perform(MockMvcRequestBuilders.post("/score/")
+              .header("Authorization", "Bearer " + token)
+              .contentType(MediaType.APPLICATION_JSON)
+              .content(json))
+          .andExpect(status().isNotFound())
+          .andExpect(
+              jsonPath("$.message").value(ValidationMsg.USER_DOES_NOT_EXIST));
+    }
+
+    @Test
+    @DisplayName("When score is not defined return bad request.")
+    public void not_defined_score_returns_bad_request() throws Exception {
+      String token = getJwtToken("MATTD", "passw");
+
+      int userId = 1;
+
+      Map<String, Object> scoreMap = new HashMap<>();
+      scoreMap.put("userId", userId);
+
+      String json = objectMapper.writeValueAsString(scoreMap);
+
+      mvc.perform(MockMvcRequestBuilders.post("/score/")
+              .header("Authorization", "Bearer " + token)
+              .contentType(MediaType.APPLICATION_JSON)
+              .content(json))
+          .andExpect(status().isBadRequest())
+          .andExpect(jsonPath("$.message").value(ValidationMsg.SCORE_NULL_MSG));
+    }
+
+    @Test
+    @DisplayName("When score is null return bad request.")
+    public void null_score_returns_bad_request() throws Exception {
+      String token = getJwtToken("MATTD", "passw");
+
+      Long userId = 1L;
+      Integer score = null;
+
+      Map<String, Object> scoreMap = new HashMap<>();
+      scoreMap.put("userId", userId);
+      scoreMap.put("score", score);
+
+      String json = objectMapper.writeValueAsString(scoreMap);
+
+      mvc.perform(MockMvcRequestBuilders.post("/score/")
+              .header("Authorization", "Bearer " + token)
+              .contentType(MediaType.APPLICATION_JSON)
+              .content(json))
+          .andExpect((status().isBadRequest()))
+          .andExpect(jsonPath("$.message").value(ValidationMsg.SCORE_NULL_MSG));
+    }
+
+    @Test
+    @DisplayName("When userId is null return bad request.")
+    public void null_userId_returns_bad_request() throws Exception {
+      String token = getJwtToken("MATTD", "passw");
+
+      Long userId = null;
+      int score = 100;
+
+      Map<String, Object> scoreMap = new HashMap<>();
+      scoreMap.put("userId", userId);
+      scoreMap.put("score", score);
+
+      String json = objectMapper.writeValueAsString(scoreMap);
+
+      mvc.perform(MockMvcRequestBuilders.post("/score/")
+              .header("Authorization", "Bearer " + token)
+              .contentType(MediaType.APPLICATION_JSON)
+              .content(json))
+          .andExpect(status().isBadRequest())
+          .andExpect(
+              jsonPath("$.message").value(ValidationMsg.USER_ID_NULL_MSG));
+    }
+
+    @Test
     @DisplayName("When userId is undefined return bad request.")
     public void undefined_userId_returns_bad_request() throws Exception {
+      String token = getJwtToken("MATTD", "passw");
+
       int score = 100;
 
       Map<String, Object> scoreMap = new HashMap<>();
@@ -475,6 +663,7 @@ public class ScoreControllerTest {
       String json = objectMapper.writeValueAsString(scoreMap);
 
       mvc.perform(MockMvcRequestBuilders.post("/score/")
+              .header("Authorization", "Bearer " + token)
               .contentType(MediaType.APPLICATION_JSON)
               .content(json))
           .andExpect(status().isBadRequest())

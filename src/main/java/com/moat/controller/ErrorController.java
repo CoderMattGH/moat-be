@@ -119,7 +119,7 @@ public class ErrorController {
     logger.debug("In handleAccessDeniedException() in ErrorController.");
 
     return resFact.build("message", ValidationMsg.ERROR_UNAUTHORISED,
-        HttpStatus.UNAUTHORIZED);
+        HttpStatus.FORBIDDEN);
   }
 
   @ExceptionHandler(Exception.class)

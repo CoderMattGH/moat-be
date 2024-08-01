@@ -1,6 +1,7 @@
 package com.moat.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jayway.jsonpath.JsonPath;
 import com.moat.constant.ValidationMsg;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -14,6 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,16 +40,37 @@ public class UserControllerTest {
   @Autowired
   private ObjectMapper objectMapper;
 
+  public String getJwtToken(String username, String password) throws Exception {
+    Map<String, Object> user = new HashMap<>();
+    user.put("username", username);
+    user.put("password", password);
+
+    String json = objectMapper.writeValueAsString(user);
+
+    MvcResult result = mvc.perform(MockMvcRequestBuilders.post("/authenticate/")
+            .content(json)
+            .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andReturn();
+
+    String response = result.getResponse().getContentAsString();
+
+    return JsonPath.parse(response).read("$.token");
+  }
+
   @Nested
   @Transactional
   @DisplayName("GET /{username}/")
-  class getUserByUserNameTests {
+  class GetUserByUserNameTests {
     @Test
-    @DisplayName("Successfully returns valid user.")
-    public void valid_request_returns_valid_user() throws Exception {
+    @DisplayName("When admin returns valid user.")
+    public void when_admin_returns_valid_user() throws Exception {
+      String token = getJwtToken("ADMIN", "password");
+
       String username = "MATTD";
 
-      mvc.perform(MockMvcRequestBuilders.get("/user/" + username + "/"))
+      mvc.perform(MockMvcRequestBuilders.get("/user/" + username + "/")
+              .header("Authorization", "Bearer " + token))
           .andExpect(status().isOk())
           .andExpect(jsonPath("$.user.id").isNotEmpty())
           .andExpect(jsonPath("$.user.id").isNumber())
@@ -60,11 +83,62 @@ public class UserControllerTest {
     }
 
     @Test
+    @DisplayName("When user is the requested user return valid user.")
+    public void when_user_is_requested_user_return_valid_user()
+        throws Exception {
+      String username = "MATTD";
+
+      String token = getJwtToken(username, "passw");
+
+      mvc.perform(MockMvcRequestBuilders.get("/user/" + username + "/")
+              .header("Authorization", "Bearer " + token))
+          .andExpect(status().isOk())
+          .andExpect(jsonPath("$.user.id").isNotEmpty())
+          .andExpect(jsonPath("$.user.id").isNumber())
+          .andExpect(jsonPath("$.user.id").value(greaterThan(0)))
+          .andExpect(jsonPath("$.user.id").isNotEmpty())
+          .andExpect(jsonPath("$.user.username").isNotEmpty())
+          .andExpect(jsonPath("$.user.username").value(username))
+          .andExpect(jsonPath("$.user.email").isNotEmpty())
+          .andExpect(jsonPath("$.user.email").isString());
+    }
+
+    @Test
+    @DisplayName("When user is not requested user return forbidden.")
+    public void when_user_is_not_requested_user_return_forbidden()
+        throws Exception {
+      String username = "MATTD";
+
+      String token = getJwtToken(username, "passw");
+
+      mvc.perform(MockMvcRequestBuilders.get("/user/BOBBY/")
+              .header("Authorization", "Bearer " + token))
+          .andExpect(status().isForbidden())
+          .andExpect(
+              jsonPath("$.message").value(ValidationMsg.ERROR_UNAUTHORISED));
+    }
+
+    @Test
+    @DisplayName("When user is not logged in return unauthorised.")
+    public void when_user_is_not_logged_in_return_unauthorised()
+        throws Exception {
+      String username = "MATTD";
+
+      mvc.perform(MockMvcRequestBuilders.get("/user/BOBBY/"))
+          .andExpect(status().isUnauthorized())
+          .andExpect(
+              jsonPath("$.message").value(ValidationMsg.ERROR_UNAUTHORISED));
+    }
+
+    @Test
     @DisplayName("When user doesn't exist return 404 not found.")
     public void user_doesnt_exist_return_not_found() throws Exception {
+      String token = getJwtToken("ADMIN", "password");
+
       String username = "NOUSER";
 
-      mvc.perform(MockMvcRequestBuilders.get("/user/" + username + "/"))
+      mvc.perform(MockMvcRequestBuilders.get("/user/" + username + "/")
+              .header("Authorization", "Bearer " + token))
           .andExpect(status().isNotFound())
           .andExpect(
               jsonPath("$.message").value(ValidationMsg.USER_DOES_NOT_EXIST));
@@ -75,9 +149,12 @@ public class UserControllerTest {
         "When username contains invalid characters return 400 bad request.")
     public void username_contains_invalid_characters_return_bad_request()
         throws Exception {
+      String token = getJwtToken("ADMIN", "password");
+
       String username = "7*&*2";
 
-      mvc.perform(MockMvcRequestBuilders.get("/user/" + username + "/"))
+      mvc.perform(MockMvcRequestBuilders.get("/user/" + username + "/")
+              .header("Authorization", "Bearer " + token))
           .andExpect(status().isBadRequest())
           .andExpect(
               jsonPath("$.message").value(ValidationMsg.USERNAME_PATTERN_MSG));
@@ -86,9 +163,12 @@ public class UserControllerTest {
     @Test
     @DisplayName("When username is too short return 400 bad request.")
     public void username_is_too_short_return_bad_request() throws Exception {
+      String token = getJwtToken("ADMIN", "password");
+
       String username = "W";
 
-      mvc.perform(MockMvcRequestBuilders.get("/user/" + username + "/"))
+      mvc.perform(MockMvcRequestBuilders.get("/user/" + username + "/")
+              .header("Authorization", "Bearer " + token))
           .andExpect(status().isBadRequest())
           .andExpect(
               jsonPath("$.message").value(ValidationMsg.USERNAME_LENGTH_MSG));
@@ -97,9 +177,12 @@ public class UserControllerTest {
     @Test
     @DisplayName("When username is too long return 400 bad request.")
     public void username_is_too_long_return_bad_request() throws Exception {
+      String token = getJwtToken("ADMIN", "password");
+
       String username = "TOOOOOOOOOOOOOOLOOOOOOOOOOOOOOOOOOOOOOOOOOONG";
 
-      mvc.perform(MockMvcRequestBuilders.get("/user/" + username + "/"))
+      mvc.perform(MockMvcRequestBuilders.get("/user/" + username + "/")
+              .header("Authorization", "Bearer " + token))
           .andExpect(status().isBadRequest())
           .andExpect(
               jsonPath("$.message").value(ValidationMsg.USERNAME_LENGTH_MSG));
@@ -110,9 +193,12 @@ public class UserControllerTest {
         "When username contains lowercase characters return 400 bad request.")
     public void username_has_lower_case_chars_return_bad_request()
         throws Exception {
+      String token = getJwtToken("ADMIN", "password");
+
       String username = "WsdsdsdW";
 
-      mvc.perform(MockMvcRequestBuilders.get("/user/" + username + "/"))
+      mvc.perform(MockMvcRequestBuilders.get("/user/" + username + "/")
+              .header("Authorization", "Bearer " + token))
           .andExpect(status().isBadRequest())
           .andExpect(
               jsonPath("$.message").value(ValidationMsg.USERNAME_PATTERN_MSG));
@@ -122,11 +208,14 @@ public class UserControllerTest {
   @Nested
   @Transactional
   @DisplayName("GET /user/")
-  class getUsersTests {
+  class GetUsersTests {
     @Test
-    @DisplayName("Valid request returns all users.")
-    public void valid_request_returns_all_users() throws Exception {
-      mvc.perform(MockMvcRequestBuilders.get("/user/"))
+    @DisplayName("Admin request returns all users.")
+    public void admin_request_returns_all_users() throws Exception {
+      String token = getJwtToken("ADMIN", "password");
+
+      mvc.perform(MockMvcRequestBuilders.get("/user/")
+              .header("Authorization", "Bearer " + token))
           .andExpect(status().isOk())
           .andExpect(jsonPath("$.users").exists())
           .andExpect(jsonPath("$.users").isArray())
@@ -147,12 +236,33 @@ public class UserControllerTest {
           .andExpect(jsonPath("$.users[*].email").value(
               everyItem(is(not(emptyOrNullString())))));
     }
+
+    @Test
+    @DisplayName("User request returns not authorized.")
+    public void user_request_returns_not_authorized() throws Exception {
+      String token = getJwtToken("MATTD", "passw");
+
+      mvc.perform(MockMvcRequestBuilders.get("/user/")
+              .header("Authorization", "Bearer " + token))
+          .andExpect(status().isForbidden())
+          .andExpect(
+              jsonPath("$.message").value(ValidationMsg.ERROR_UNAUTHORISED));
+    }
+
+    @Test
+    @DisplayName("Guest returns not authorized.")
+    public void guest_request_returns_not_authorized() throws Exception {
+      mvc.perform(MockMvcRequestBuilders.get("/user/"))
+          .andExpect(status().isUnauthorized())
+          .andExpect(
+              jsonPath("$.message").value(ValidationMsg.ERROR_UNAUTHORISED));
+    }
   }
 
   @Nested
   @Transactional
   @DisplayName("POST /user/")
-  class postUserTests {
+  class PostUserTests {
     @Test
     @DisplayName("Valid request creates a users.")
     public void valid_request_creates_a_user() throws Exception {

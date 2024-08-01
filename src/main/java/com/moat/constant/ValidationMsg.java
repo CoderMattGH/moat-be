@@ -19,7 +19,7 @@ public class ValidationMsg {
       "User account has been disabled!";
   public final static String ERROR_LOGGING_IN = "Unable to login!";
   public final static String ERROR_UNAUTHORISED =
-      "You are not authorised to view this resource!";
+      "You are not authorised to perform this action!";
 
   public final static String JWT_NO_AUTH_HEADER =
       "No authorization header set!";

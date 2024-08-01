@@ -3,6 +3,7 @@ package com.moat.config;
 import com.moat.jwt.JwtAuthenticationEntryPoint;
 import com.moat.jwt.JwtRequestFilter;
 import com.moat.security.MOATUserDetailsService;
+import com.moat.security.handler.CustomAccessDeniedHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
@@ -16,6 +17,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
@@ -30,16 +32,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
   private final JwtRequestFilter jwtRequestFilter;
 
+  private final AccessDeniedHandler customAccessDeniedHandler;
+
   public SecurityConfig(MOATUserDetailsService moatUserDetailsService,
       PasswordEncoder passwordEncoder,
       JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint,
-      JwtRequestFilter jwtRequestFilter) {
+      JwtRequestFilter jwtRequestFilter,
+      CustomAccessDeniedHandler customAccessDeniedHandler) {
     logger.debug("Constructing MoatSecurityConfig.");
 
     this.moatUserDetailsService = moatUserDetailsService;
     this.passwordEncoder = passwordEncoder;
     this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
     this.jwtRequestFilter = jwtRequestFilter;
+    this.customAccessDeniedHandler = customAccessDeniedHandler;
   }
 
   @Override
@@ -88,6 +94,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .and()
         .exceptionHandling()
         .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+        .accessDeniedHandler(customAccessDeniedHandler)
         .and()
         .sessionManagement()
         .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
