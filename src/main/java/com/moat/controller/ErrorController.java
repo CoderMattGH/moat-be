@@ -65,6 +65,15 @@ public class ErrorController {
         "In handleHttpMessageNotReadableException() in ErrorController.");
 
     Throwable cause = e.getCause();
+
+    // TODO: Change from JSON_PARSE_ERROR?
+    if (cause == null) {
+      logger.debug("Unknown error parsing JSON.");
+
+      return resFact.build("message", ValidationMsg.JSON_PARSE_ERROR,
+          HttpStatus.BAD_REQUEST);
+    }
+
     logger.info("Handling " + cause.getClass().getName() + " exception.");
 
     if (cause instanceof MismatchedInputException) {

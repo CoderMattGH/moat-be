@@ -897,7 +897,7 @@ public class UserControllerTest {
     }
 
     @Test
-    @DisplayName("Invalid new email return bad request")
+    @DisplayName("Invalid new email return bad request.")
     public void when_invalid_new_email_return_bad_request() throws Exception {
       String username = "MATTD";
       String password = "passw";
@@ -923,7 +923,115 @@ public class UserControllerTest {
               jsonPath("$.message").value(ValidationMsg.EMAIL_PATTERN_MSG));
     }
 
-    // TODO: More comprehensive email tests
+    @Test
+    @DisplayName("When email too short return bad request.")
+    public void when_email_too_short_bad_request() throws Exception {
+      String username = "MATTD";
+      String password = "passw";
+
+      String token = getJwtToken(username, password);
+
+      int userId = 1;
+      String newEmail = "m@m";
+
+      Map<String, Object> userMap = new HashMap<>();
+      userMap.put("id", userId);
+      userMap.put("username", username);
+      userMap.put("email", newEmail);
+
+      String json = objectMapper.writeValueAsString(userMap);
+
+      mvc.perform(MockMvcRequestBuilders.patch("/user/")
+              .contentType(MediaType.APPLICATION_JSON)
+              .content(json)
+              .header("Authorization", "Bearer " + token))
+          .andExpect(status().isBadRequest())
+          .andExpect(
+              jsonPath("$.message").value(ValidationMsg.EMAIL_LENGTH_MSG));
+    }
+
+    @Test
+    @DisplayName("When email too long return bad request.")
+    public void when_email_too_long_bad_request() throws Exception {
+      String username = "MATTD";
+      String password = "passw";
+
+      String token = getJwtToken(username, password);
+
+      int userId = 1;
+      String newEmail =
+          "m@tooooooooooooooooooooooooooooooooooooooooooooolong.com";
+
+      Map<String, Object> userMap = new HashMap<>();
+      userMap.put("id", userId);
+      userMap.put("username", username);
+      userMap.put("email", newEmail);
+
+      String json = objectMapper.writeValueAsString(userMap);
+
+      mvc.perform(MockMvcRequestBuilders.patch("/user/")
+              .contentType(MediaType.APPLICATION_JSON)
+              .content(json)
+              .header("Authorization", "Bearer " + token))
+          .andExpect(status().isBadRequest())
+          .andExpect(
+              jsonPath("$.message").value(ValidationMsg.EMAIL_LENGTH_MSG));
+    }
+
+    @Test
+    @DisplayName("When email is null return bad request")
+    public void when_email_null_return_bad_request() throws Exception {
+      String username = "MATTD";
+      String password = "passw";
+
+      String token = getJwtToken(username, password);
+
+      int userId = 1;
+      String newEmail = null;
+
+      Map<String, Object> userMap = new HashMap<>();
+      userMap.put("id", userId);
+      userMap.put("username", username);
+      userMap.put("email", newEmail);
+
+      String json = objectMapper.writeValueAsString(userMap);
+
+      mvc.perform(MockMvcRequestBuilders.patch("/user/")
+              .contentType(MediaType.APPLICATION_JSON)
+              .content(json)
+              .header("Authorization", "Bearer " + token))
+          .andExpect(status().isBadRequest())
+          .andExpect(jsonPath("$.message").value(ValidationMsg.EMAIL_NULL_MSG));
+    }
+
+    @Test
+    @DisplayName(
+        "When new email already belongs to another user return bad request")
+    public void when_new_email_belongs_to_another_user_return_bad_request()
+        throws Exception {
+      String username = "MATTD";
+      String password = "passw";
+
+      String token = getJwtToken(username, password);
+
+      int userId = 1;
+      String newEmail = "bobby@email.com";
+
+      Map<String, Object> userMap = new HashMap<>();
+      userMap.put("id", userId);
+      userMap.put("username", username);
+      userMap.put("email", newEmail);
+
+      String json = objectMapper.writeValueAsString(userMap);
+
+      mvc.perform(MockMvcRequestBuilders.patch("/user/")
+              .contentType(MediaType.APPLICATION_JSON)
+              .content(json)
+              .header("Authorization", "Bearer " + token))
+          .andExpect(status().isBadRequest())
+          .andExpect(
+              jsonPath("$.message").value(ValidationMsg.EMAIL_ALREADY_EXISTS));
+    }
 
     @Test
     @DisplayName("Invalid new username return bad request.")
@@ -954,7 +1062,149 @@ public class UserControllerTest {
               jsonPath("$.message").value(ValidationMsg.USERNAME_PATTERN_MSG));
     }
 
-    // TODO: More comprehensive user tests
+    @Test
+    @DisplayName("When username is too short return bad request.")
+    public void when_new_username_too_short_return_bad_request()
+        throws Exception {
+      String username = "MATTD";
+      String password = "passw";
+
+      String token = getJwtToken(username, password);
+
+      int userId = 1;
+      String newEmail = "valid@valid.com";
+      String newUsername = "SD";
+
+      Map<String, Object> userMap = new HashMap<>();
+      userMap.put("id", userId);
+      userMap.put("username", newUsername);
+      userMap.put("email", newEmail);
+
+      String json = objectMapper.writeValueAsString(userMap);
+
+      mvc.perform(MockMvcRequestBuilders.patch("/user/")
+              .contentType(MediaType.APPLICATION_JSON)
+              .content(json)
+              .header("Authorization", "Bearer " + token))
+          .andExpect(status().isBadRequest())
+          .andExpect(
+              jsonPath("$.message").value(ValidationMsg.USERNAME_LENGTH_MSG));
+    }
+
+    @Test
+    @DisplayName("When username is too long return bad request.")
+    public void when_new_username_too_long_return_bad_request()
+        throws Exception {
+      String username = "MATTD";
+      String password = "passw";
+
+      String token = getJwtToken(username, password);
+
+      int userId = 1;
+      String newEmail = "valid@valid.com";
+      String newUsername = "SDASDASDASDASDDASSADSDASDAASDASDASDASDDASSD";
+
+      Map<String, Object> userMap = new HashMap<>();
+      userMap.put("id", userId);
+      userMap.put("username", newUsername);
+      userMap.put("email", newEmail);
+
+      String json = objectMapper.writeValueAsString(userMap);
+
+      mvc.perform(MockMvcRequestBuilders.patch("/user/")
+              .contentType(MediaType.APPLICATION_JSON)
+              .content(json)
+              .header("Authorization", "Bearer " + token))
+          .andExpect(status().isBadRequest())
+          .andExpect(
+              jsonPath("$.message").value(ValidationMsg.USERNAME_LENGTH_MSG));
+    }
+
+    @Test
+    @DisplayName("When username is null return bad request.")
+    public void when_new_username_null_return_bad_request() throws Exception {
+      String username = "MATTD";
+      String password = "passw";
+
+      String token = getJwtToken(username, password);
+
+      int userId = 1;
+      String newEmail = "valid@valid.com";
+      String newUsername = null;
+
+      Map<String, Object> userMap = new HashMap<>();
+      userMap.put("id", userId);
+      userMap.put("username", newUsername);
+      userMap.put("email", newEmail);
+
+      String json = objectMapper.writeValueAsString(userMap);
+
+      mvc.perform(MockMvcRequestBuilders.patch("/user/")
+              .contentType(MediaType.APPLICATION_JSON)
+              .content(json)
+              .header("Authorization", "Bearer " + token))
+          .andExpect(status().isBadRequest())
+          .andExpect(
+              jsonPath("$.message").value(ValidationMsg.USERNAME_NULL_MSG));
+    }
+
+    @Test
+    @DisplayName("When username is lowercase return bad request.")
+    public void when_new_username_lowercase_return_bad_request()
+        throws Exception {
+      String username = "MATTD";
+      String password = "passw";
+
+      String token = getJwtToken(username, password);
+
+      int userId = 1;
+      String newEmail = "valid@valid.com";
+      String newUsername = "lowercasename";
+
+      Map<String, Object> userMap = new HashMap<>();
+      userMap.put("id", userId);
+      userMap.put("username", newUsername);
+      userMap.put("email", newEmail);
+
+      String json = objectMapper.writeValueAsString(userMap);
+
+      mvc.perform(MockMvcRequestBuilders.patch("/user/")
+              .contentType(MediaType.APPLICATION_JSON)
+              .content(json)
+              .header("Authorization", "Bearer " + token))
+          .andExpect(status().isBadRequest())
+          .andExpect(
+              jsonPath("$.message").value(ValidationMsg.USERNAME_PATTERN_MSG));
+    }
+
+    @Test
+    @DisplayName("When username belongs to another user return bad request.")
+    public void when_new_username_belongs_to_another_user_return_bad_request()
+        throws Exception {
+      String username = "MATTD";
+      String password = "passw";
+
+      String token = getJwtToken(username, password);
+
+      int userId = 1;
+      String newEmail = "valid@valid.com";
+      String newUsername = "BOBBY";
+
+      Map<String, Object> userMap = new HashMap<>();
+      userMap.put("id", userId);
+      userMap.put("username", newUsername);
+      userMap.put("email", newEmail);
+
+      String json = objectMapper.writeValueAsString(userMap);
+
+      mvc.perform(MockMvcRequestBuilders.patch("/user/")
+              .contentType(MediaType.APPLICATION_JSON)
+              .content(json)
+              .header("Authorization", "Bearer " + token))
+          .andExpect(status().isBadRequest())
+          .andExpect(jsonPath("$.message").value(
+              ValidationMsg.USERNAME_ALREADY_EXISTS));
+    }
 
     @Test
     @DisplayName("When admin invalid id return bad request")
@@ -983,6 +1233,107 @@ public class UserControllerTest {
           .andExpect(jsonPath("$.message").value(ValidationMsg.ID_VALUE_MSG));
     }
 
-    // TODO: More comprehensive ID tests
+    @Test
+    @DisplayName("When admin id is a decimal return bad request")
+    public void when_admin_id_is_decimal_return_bad_request() throws Exception {
+      String username = "ADMIN";
+      String password = "password";
+
+      String token = getJwtToken(username, password);
+
+      double userId = 1.1;
+      String newEmail = "valid@valid.com";
+      String newUsername = "VALIDNICK";
+
+      Map<String, Object> userMap = new HashMap<>();
+      userMap.put("id", userId);
+      userMap.put("username", newUsername);
+      userMap.put("email", newEmail);
+
+      String json = objectMapper.writeValueAsString(userMap);
+
+      mvc.perform(MockMvcRequestBuilders.patch("/user/")
+              .contentType(MediaType.APPLICATION_JSON)
+              .content(json)
+              .header("Authorization", "Bearer " + token))
+          .andExpect(status().isBadRequest())
+          .andExpect(
+              jsonPath("$.message").value(ValidationMsg.INCORRECT_DATA_TYPE));
+    }
+
+    @Test
+    @DisplayName("When admin id is a string return bad request")
+    public void when_admin_id_is_a_string_return_bad_request()
+        throws Exception {
+      String username = "ADMIN";
+      String password = "password";
+
+      String token = getJwtToken(username, password);
+
+      String userId = "banana";
+      String newEmail = "valid@valid.com";
+      String newUsername = "VALIDNICK";
+
+      Map<String, Object> userMap = new HashMap<>();
+      userMap.put("id", userId);
+      userMap.put("username", newUsername);
+      userMap.put("email", newEmail);
+
+      String json = objectMapper.writeValueAsString(userMap);
+
+      mvc.perform(MockMvcRequestBuilders.patch("/user/")
+              .contentType(MediaType.APPLICATION_JSON)
+              .content(json)
+              .header("Authorization", "Bearer " + token))
+          .andExpect(status().isBadRequest())
+          .andExpect(
+              jsonPath("$.message").value(ValidationMsg.INCORRECT_DATA_TYPE));
+    }
+
+    @Test
+    @DisplayName("When admin and id is non extant return not found.")
+    public void when_admin_id_is_non_extant_return_not_found()
+        throws Exception {
+      String username = "ADMIN";
+      String password = "password";
+
+      String token = getJwtToken(username, password);
+
+      int userId = 9999;
+      String newEmail = "valid@valid.com";
+      String newUsername = "VALIDNICK";
+
+      Map<String, Object> userMap = new HashMap<>();
+      userMap.put("id", userId);
+      userMap.put("username", newUsername);
+      userMap.put("email", newEmail);
+
+      String json = objectMapper.writeValueAsString(userMap);
+
+      mvc.perform(MockMvcRequestBuilders.patch("/user/")
+              .contentType(MediaType.APPLICATION_JSON)
+              .content(json)
+              .header("Authorization", "Bearer " + token))
+          .andExpect(status().isNotFound())
+          .andExpect(
+              jsonPath("$.message").value(ValidationMsg.USER_DOES_NOT_EXIST));
+    }
+
+    @Test
+    @DisplayName("When request body is null return bad request.")
+    public void when_request_body_is_null_return_bad_request()
+        throws Exception {
+      String username = "ADMIN";
+      String password = "password";
+
+      String token = getJwtToken(username, password);
+
+      mvc.perform(MockMvcRequestBuilders.patch("/user/")
+              .header("Authorization", "Bearer " + token))
+          .andExpect(status().isBadRequest())
+          .andExpect(
+              jsonPath("$.message").value(ValidationMsg.JSON_PARSE_ERROR));
+    }
   }
 }
+
