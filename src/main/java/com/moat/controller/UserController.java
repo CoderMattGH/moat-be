@@ -5,6 +5,7 @@ import com.moat.dto.UserDTO;
 import com.moat.exception.AlreadyExistsException;
 import com.moat.responsewrapper.DynamicResponseWrapperFactory;
 import com.moat.service.UserService;
+import com.moat.validator.group.PatchUserDetailsGroup;
 import com.moat.validator.misc.UsernameValid;
 import com.moat.validator.group.SaveUserGroup;
 import org.slf4j.Logger;
@@ -100,5 +101,29 @@ public class UserController {
     newUser.setPassword(null);
 
     return resFact.build("user", newUser, HttpStatus.OK);
+  }
+
+  @PatchMapping("/")
+  @PreAuthorize("#user.id == authentication.principal.id or hasRole('ADMIN')")
+  public ResponseEntity<?> patchUserDetails(
+      @RequestBody @Validated(PatchUserDetailsGroup.class) UserDTO user) {
+    logger.debug("In patchUserDetails() in UserController.");
+
+    UserDTO updatedUser;
+    try {
+      updatedUser = userService.updateUserDetails(user);
+    } catch (NoResultException e) {
+      return resFact.build("message", e.getMessage(), HttpStatus.NOT_FOUND);
+    } catch (AlreadyExistsException e) {
+      return resFact.build("message", e.getMessage(), HttpStatus.BAD_REQUEST);
+    } catch (Exception e) {
+      return resFact.build("message", ValidationMsg.ERROR_UPDATING_USER,
+          HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    // Remove sensitive fields
+    updatedUser.setPassword(null);
+
+    return resFact.build("user", updatedUser, HttpStatus.OK);
   }
 }

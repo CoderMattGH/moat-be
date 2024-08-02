@@ -1,6 +1,6 @@
 package com.moat.config;
 
-import com.moat.jwt.JwtAuthenticationEntryPoint;
+import com.moat.security.handler.JwtAuthenticationEntryPoint;
 import com.moat.jwt.JwtRequestFilter;
 import com.moat.security.MOATUserDetailsService;
 import com.moat.security.handler.CustomAccessDeniedHandler;
@@ -85,6 +85,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .hasRole("ADMIN")
         .antMatchers(HttpMethod.POST, "/user/")
         .permitAll()
+        .antMatchers(HttpMethod.PATCH, "/user/")
+        .hasRole("USER")
         .antMatchers(HttpMethod.GET, "/user/*/")
         .hasRole("USER")
         .anyRequest()

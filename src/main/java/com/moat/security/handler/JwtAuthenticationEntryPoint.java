@@ -1,4 +1,4 @@
-package com.moat.jwt;
+package com.moat.security.handler;
 
 import com.moat.constant.ValidationMsg;
 import org.slf4j.Logger;

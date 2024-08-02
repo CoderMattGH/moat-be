@@ -25,12 +25,15 @@ public class ValidationMsg {
       "No authorization header set!";
   public final static String JWT_PARSE_ERROR = "Unable to parse JWT token!";
 
+  public final static String USERNAME_ALREADY_EXISTS =
+      "Username already exists!";
   public final static String USER_ALREADY_EXISTS = "User already exists!";
   public final static String USER_DOES_NOT_EXIST = "User does not exist!";
   public final static String USERS_NOT_FOUND = "No users found!";
   public final static String ERROR_GETTING_USERS = "Unable to get users!";
   public final static String ERROR_GETTING_USER = "Unable to get user!";
   public final static String ERROR_POSTING_USER = "Unable to create user!";
+  public final static String ERROR_UPDATING_USER = "Unable to update user!";
 
   public final static String ADMIN_ALREADY_EXISTS = "Admin already exists!";
   public final static String ADMIN_DOES_NOT_EXIST = "Admin does not exist!";
@@ -48,12 +51,12 @@ public class ValidationMsg {
   public final static String ERROR_GETTING_SCORE = "Unable to get score!";
   public final static String ERROR_POSTING_SCORE = "Unable to save score!";
 
-  public final static String USERNAME_NULL_MSG = "username cannot be null!";
-  public final static String USERNAME_LENGTH_MSG =
-      String.format("username must be between %d and %d characters in length!",
-          Constants.USERNAME_MIN_LENGTH, Constants.USERNAME_MAX_LENGTH);
+  public final static String USERNAME_NULL_MSG = "'username' cannot be null!";
+  public final static String USERNAME_LENGTH_MSG = String.format(
+      "'username' must be between %d and %d characters in length!",
+      Constants.USERNAME_MIN_LENGTH, Constants.USERNAME_MAX_LENGTH);
   public final static String USERNAME_PATTERN_MSG =
-      "username must only contain uppercase alpha-numeric characters!";
+      "'username' must only contain uppercase alpha-numeric characters!";
 
   public final static String EMAIL_NULL_MSG = "'email' cannot be null!";
   public final static String EMAIL_LENGTH_MSG =
