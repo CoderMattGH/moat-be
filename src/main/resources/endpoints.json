@@ -47,22 +47,22 @@
     {
       "path": "DELETE /score/",
       "authRequired": true,
-      "requiredRole": "admin",
+      "requiredRole": "ADMIN",
       "description": "Deletes all scores."
     },
     {
       "path": "DELETE /score/{userId}/",
       "authRequired": true,
-      "requiredRole": "admin",
+      "requiredRole": "ADMIN",
       "description": "Deletes all of the user's scores."
     },
     {
       "path": "POST /score/",
       "description": "Saves the user's score.",
       "authRequired": true,
-      "requiredRole": "user",
+      "requiredRole": "USER",
       "requestBody": {
-        "userId": "user's nickname",
+        "userId": 2,
         "score": 40
       },
       "exampleResponse": {
@@ -77,26 +77,43 @@
     {
       "path": "GET /user/",
       "description": "Returns all users.",
-      "exampleResponse": [
-        {
-          "id": 1,
-          "username": "MATTD",
-          "email": "mattd@email.com"
-        },
-        {
-          "id": 2,
-          "username": "BOBBY",
-          "email": "bobby@email.com"
-        }
-      ]
+      "authRequired": true,
+      "requiredRole": "ADMIN",
+      "exampleResponse": {
+        "users": [
+          {
+            "id": 1,
+            "username": "MATTD",
+            "email": "matt@email.com",
+            "banned": false,
+            "verified": true,
+            "role": "USER"
+          },
+          {
+            "id": 3,
+            "username": "ADMIN",
+            "email": "admin@email.com",
+            "banned": false,
+            "verified": true,
+            "role": "ADMIN"
+          }
+        ]
+      }
     },
     {
       "path": "GET /${username}/",
       "description": "Returns the specified user.",
+      "authRequired": true,
+      "requiredRole": "USER",
       "exampleResponse": {
-        "id": 1,
-        "username": "MATTD",
-        "email": "mattd@email.com"
+        "user": {
+          "id": 1,
+          "username": "MATTD",
+          "email": "mattd@email.com",
+          "banned": false,
+          "verified": true,
+          "role": "USER"
+        }
       }
     },
     {
@@ -108,9 +125,35 @@
         "password": "password"
       },
       "exampleResponse": {
-        "id": 3,
-        "username": "BILLY",
-        "email": "billy@email.com"
+        "user": {
+          "id": 3,
+          "username": "BILLY",
+          "email": "billy@email.com",
+          "banned": false,
+          "verified": false,
+          "role": "USER"
+        }
+      }
+    },
+    {
+      "path": "PATCH /user/",
+      "description": "Updates a user's email and username",
+      "authRequired": true,
+      "requiredRole": "USER",
+      "requestBody": {
+        "id": 1,
+        "username": "NEWNAME",
+        "email": "new@email.com"
+      },
+      "exampleResponse": {
+        "user": {
+          "id": 1,
+          "username": "NEWNAME",
+          "email": "new@email.com",
+          "banned": false,
+          "verified": true,
+          "role": "USER"
+        }
       }
     }
   ]
