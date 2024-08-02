@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService {
   }
 
   public UserDTO create(MOATUser user) throws AlreadyExistsException {
-    logger.debug("In create(MOATUser) in userServiceImpl.");
+    logger.debug("In create(MOATUser) in UserServiceImpl.");
 
     // Check username doesn't already exist
     boolean userExists = true;
@@ -64,7 +64,7 @@ public class UserServiceImpl implements UserService {
   }
 
   public UserDTO create(UserDTO user) throws AlreadyExistsException {
-    logger.debug("In create(UserDTO) in userServiceImpl.");
+    logger.debug("In create(UserDTO) in UserServiceImpl.");
 
     String encodedPassword = passwordEncoder.encode(user.getPassword());
 
@@ -78,9 +78,69 @@ public class UserServiceImpl implements UserService {
     return create(moatUser);
   }
 
+  /**
+   * Updates a users email or username.
+   */
+  public UserDTO updateUserDetails(UserDTO user)
+      throws AlreadyExistsException, NoResultException {
+    logger.debug("In updateUser() in UserServiceImpl.");
+
+    MOATUser originalUser;
+
+    try {
+      originalUser = userDao.selectById(user.getId());
+    } catch (NoResultException e) {
+      throw new NoResultException(ValidationMsg.USER_DOES_NOT_EXIST);
+    }
+
+    // Check new username does not already exist
+    String newUsername = user.getUsername();
+    if (!originalUser.getUsername().equals(newUsername)) {
+      boolean usernameExists = true;
+      try {
+        userDao.selectByUsername(newUsername);
+      } catch (NoResultException e) {
+        usernameExists = false;
+      }
+
+      if (usernameExists) {
+        throw new AlreadyExistsException(ValidationMsg.USERNAME_ALREADY_EXISTS);
+      }
+    }
+
+    // Check new email does not already exist.
+    String newEmail = user.getEmail();
+    if (!originalUser.getEmail().equals(newEmail)) {
+      boolean emailExists = true;
+      try {
+        userDao.selectByEmail(newEmail);
+      } catch (NoResultException e) {
+        emailExists = false;
+      }
+
+      if (emailExists) {
+        throw new AlreadyExistsException(ValidationMsg.EMAIL_ALREADY_EXISTS);
+      }
+    }
+
+    MOATUser newUser = new MOATUser();
+    newUser.setEmail(user.getEmail());
+    newUser.setUsername(user.getUsername());
+
+    newUser.setId(originalUser.getId());
+    newUser.setPassword(originalUser.getPassword());
+    newUser.setRole(originalUser.getRole());
+    newUser.setVerified(originalUser.isVerified());
+    newUser.setBanned(originalUser.isBanned());
+
+    userDao.saveOrUpdate(newUser);
+
+    return marshallIntoDTO(newUser);
+  }
+
   @Transactional(readOnly = true)
   public List<UserDTO> selectAll() {
-    logger.debug("In selectAll() in userServiceImpl.");
+    logger.debug("In selectAll() in UserServiceImpl.");
 
     List<MOATUser> users = userDao.selectAll();
 
@@ -93,7 +153,7 @@ public class UserServiceImpl implements UserService {
 
   @Transactional(readOnly = true)
   public UserDTO selectById(Long id) throws NoResultException {
-    logger.debug("In selectById() in userServiceImpl");
+    logger.debug("In selectById() in UserServiceImpl");
 
     MOATUser user;
     try {
@@ -107,7 +167,7 @@ public class UserServiceImpl implements UserService {
 
   @Transactional(readOnly = true)
   public UserDTO selectByUsername(String username) throws NoResultException {
-    logger.debug("In selectByUsername() in userServiceImpl.");
+    logger.debug("In selectByUsername() in UserServiceImpl.");
 
     MOATUser user;
     try {

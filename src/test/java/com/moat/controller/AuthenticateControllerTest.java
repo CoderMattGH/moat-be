@@ -58,8 +58,11 @@ public class AuthenticateControllerTest {
               .content(json)
               .contentType(MediaType.APPLICATION_JSON))
           .andExpect(status().isOk())
-          .andExpect(jsonPath("$.token").isString())
-          .andExpect(jsonPath("$.token").isNotEmpty());
+          .andExpect(jsonPath("$.user.token").isString())
+          .andExpect(jsonPath("$.user.token").isNotEmpty())
+          .andExpect(jsonPath("$.user.id").isNumber())
+          .andExpect(jsonPath("$.user.id").value(greaterThan(0)))
+          .andExpect(jsonPath("$.user.username").value(username));
     }
 
     @Test
@@ -119,8 +122,11 @@ public class AuthenticateControllerTest {
               .content(json)
               .contentType(MediaType.APPLICATION_JSON))
           .andExpect(status().isOk())
-          .andExpect(jsonPath("$.token").isNotEmpty())
-          .andExpect(jsonPath("$.token").isString());
+          .andExpect(jsonPath("$.user.token").isString())
+          .andExpect(jsonPath("$.user.token").isNotEmpty())
+          .andExpect(jsonPath("$.user.id").isNumber())
+          .andExpect(jsonPath("$.user.id").value(greaterThan(0)))
+          .andExpect(jsonPath("$.user.username").value(username));
     }
 
     @Test

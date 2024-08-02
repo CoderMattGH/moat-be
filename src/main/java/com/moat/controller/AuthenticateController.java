@@ -4,6 +4,7 @@ import com.moat.constant.ValidationMsg;
 import com.moat.dto.UserDTO;
 import com.moat.jwt.JwtUtil;
 import com.moat.responsewrapper.DynamicResponseWrapperFactory;
+import com.moat.security.SecMOATUserDetails;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @CrossOrigin
 @RestController
@@ -64,7 +68,12 @@ public class AuthenticateController {
 
     String token = jwtUtil.generateToken(details.getUsername());
 
-    return resFact.build("token", token, HttpStatus.OK);
+    Map<String, Object> response = new HashMap<>();
+    response.put("id", ((SecMOATUserDetails) details).getId());
+    response.put("username", details.getUsername());
+    response.put("token", token);
+
+    return resFact.build("user", response, HttpStatus.OK);
   }
 
   private void authenticate(String username, String password)

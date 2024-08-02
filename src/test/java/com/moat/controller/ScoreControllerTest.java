@@ -55,7 +55,7 @@ public class ScoreControllerTest {
 
     String response = result.getResponse().getContentAsString();
 
-    return JsonPath.parse(response).read("$.token");
+    return JsonPath.parse(response).read("$.user.token");
   }
 
   @Nested

@@ -1,6 +1,7 @@
 package com.moat.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.moat.validator.group.PatchUserDetailsGroup;
 import com.moat.validator.misc.IdValid;
 import com.moat.validator.misc.EmailValid;
 import com.moat.validator.misc.PasswordValid;
@@ -9,16 +10,18 @@ import com.moat.validator.group.SaveUserGroup;
 
 import javax.validation.groups.Default;
 
-// TODO: Validate
+// TODO: Validate banned, verified, role.
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserDTO {
-  @IdValid
+  @IdValid(groups = {PatchUserDetailsGroup.class, Default.class})
   private Long id;
 
-  @UsernameValid(groups = {SaveUserGroup.class, Default.class})
+  @UsernameValid(groups = {SaveUserGroup.class, PatchUserDetailsGroup.class,
+      Default.class})
   private String username;
 
-  @EmailValid(groups = {SaveUserGroup.class, Default.class})
+  @EmailValid(groups = {SaveUserGroup.class, PatchUserDetailsGroup.class,
+      Default.class})
   private String email;
 
   @PasswordValid(groups = {SaveUserGroup.class, Default.class})

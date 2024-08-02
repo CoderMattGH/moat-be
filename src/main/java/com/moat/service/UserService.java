@@ -12,6 +12,9 @@ public interface UserService {
 
   UserDTO create(UserDTO user) throws AlreadyExistsException;
 
+  UserDTO updateUserDetails(UserDTO user)
+      throws AlreadyExistsException, NoResultException;
+
   List<UserDTO> selectAll() throws NoResultException;
 
   UserDTO selectById(Long id) throws NoResultException;
