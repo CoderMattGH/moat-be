@@ -321,10 +321,16 @@ public class ScoreControllerTest {
 
       int score = 100;
       Long userId = 1L;
+      Integer hits = 10;
+      Integer notHits = 20;
+      Integer misses = 2;
 
       Map<String, Object> scoreMap = new HashMap<>();
       scoreMap.put("userId", userId);
       scoreMap.put("score", score);
+      scoreMap.put("hits", hits);
+      scoreMap.put("notHits", notHits);
+      scoreMap.put("misses", misses);
 
       String json = objectMapper.writeValueAsString(scoreMap);
 
@@ -346,10 +352,16 @@ public class ScoreControllerTest {
 
       int score = 100;
       Long userId = 1L;
+      Integer hits = 10;
+      Integer notHits = 20;
+      Integer misses = 2;
 
       Map<String, Object> scoreMap = new HashMap<>();
       scoreMap.put("userId", userId);
       scoreMap.put("score", score);
+      scoreMap.put("hits", hits);
+      scoreMap.put("notHits", notHits);
+      scoreMap.put("misses", misses);
 
       String json = objectMapper.writeValueAsString(scoreMap);
 
@@ -371,10 +383,16 @@ public class ScoreControllerTest {
 
       int score = 100;
       Long userId = 2L;
+      Integer hits = 10;
+      Integer notHits = 20;
+      Integer misses = 2;
 
       Map<String, Object> scoreMap = new HashMap<>();
       scoreMap.put("userId", userId);
       scoreMap.put("score", score);
+      scoreMap.put("hits", hits);
+      scoreMap.put("notHits", notHits);
+      scoreMap.put("misses", misses);
 
       String json = objectMapper.writeValueAsString(scoreMap);
 
@@ -392,10 +410,16 @@ public class ScoreControllerTest {
     public void guest_returns_unauthorised() throws Exception {
       int score = 100;
       Long userId = 1L;
+      Integer hits = 10;
+      Integer notHits = 20;
+      Integer misses = 2;
 
       Map<String, Object> scoreMap = new HashMap<>();
       scoreMap.put("userId", userId);
       scoreMap.put("score", score);
+      scoreMap.put("hits", hits);
+      scoreMap.put("notHits", notHits);
+      scoreMap.put("misses", misses);
 
       String json = objectMapper.writeValueAsString(scoreMap);
 
@@ -414,10 +438,16 @@ public class ScoreControllerTest {
 
       Long userId = 1L;
       int score = -1;
+      Integer hits = 10;
+      Integer notHits = 20;
+      Integer misses = 2;
 
       Map<String, Object> scoreMap = new HashMap<>();
       scoreMap.put("userId", userId);
       scoreMap.put("score", score);
+      scoreMap.put("hits", hits);
+      scoreMap.put("notHits", notHits);
+      scoreMap.put("misses", misses);
 
       String json = objectMapper.writeValueAsString(scoreMap);
 
@@ -437,10 +467,16 @@ public class ScoreControllerTest {
 
       int userId = 2;
       double score = 100.3;
+      Integer hits = 10;
+      Integer notHits = 20;
+      Integer misses = 2;
 
       Map<String, Object> scoreMap = new HashMap<>();
       scoreMap.put("userId", userId);
       scoreMap.put("score", score);
+      scoreMap.put("hits", hits);
+      scoreMap.put("notHits", notHits);
+      scoreMap.put("misses", misses);
 
       String json = objectMapper.writeValueAsString(scoreMap);
 
@@ -460,10 +496,16 @@ public class ScoreControllerTest {
 
       int score = 100;
       double userId = 1.2;
+      Integer hits = 10;
+      Integer notHits = 20;
+      Integer misses = 2;
 
       Map<String, Object> scoreMap = new HashMap<>();
       scoreMap.put("score", score);
       scoreMap.put("userId", userId);
+      scoreMap.put("hits", hits);
+      scoreMap.put("notHits", notHits);
+      scoreMap.put("misses", misses);
 
       String json = objectMapper.writeValueAsString(scoreMap);
 
@@ -500,10 +542,16 @@ public class ScoreControllerTest {
 
       Long userId = 1L;
       String score = "Banana";
+      Integer hits = 10;
+      Integer notHits = 20;
+      Integer misses = 2;
 
       Map<String, Object> scoreMap = new HashMap<>();
       scoreMap.put("userId", userId);
       scoreMap.put("score", score);
+      scoreMap.put("hits", hits);
+      scoreMap.put("notHits", notHits);
+      scoreMap.put("misses", misses);
 
       String json = objectMapper.writeValueAsString(scoreMap);
 
@@ -523,10 +571,16 @@ public class ScoreControllerTest {
 
       int score = 100;
       String userId = "banana";
+      Integer hits = 10;
+      Integer notHits = 20;
+      Integer misses = 2;
 
       Map<String, Object> scoreMap = new HashMap<>();
       scoreMap.put("score", score);
       scoreMap.put("userId", userId);
+      scoreMap.put("hits", hits);
+      scoreMap.put("notHits", notHits);
+      scoreMap.put("misses", misses);
 
       String json = objectMapper.writeValueAsString(scoreMap);
 
@@ -546,10 +600,16 @@ public class ScoreControllerTest {
 
       int score = 100;
       int userId = -100;
+      Integer hits = 10;
+      Integer notHits = 20;
+      Integer misses = 2;
 
       Map<String, Object> scoreMap = new HashMap<>();
       scoreMap.put("score", score);
       scoreMap.put("userId", userId);
+      scoreMap.put("hits", hits);
+      scoreMap.put("notHits", notHits);
+      scoreMap.put("misses", misses);
 
       String json = objectMapper.writeValueAsString(scoreMap);
 
@@ -569,10 +629,16 @@ public class ScoreControllerTest {
 
       int score = 100;
       int userId = 9999;
+      Integer hits = 10;
+      Integer notHits = 20;
+      Integer misses = 2;
 
       Map<String, Object> scoreMap = new HashMap<>();
       scoreMap.put("score", score);
       scoreMap.put("userId", userId);
+      scoreMap.put("hits", hits);
+      scoreMap.put("notHits", notHits);
+      scoreMap.put("misses", misses);
 
       String json = objectMapper.writeValueAsString(scoreMap);
 
@@ -591,9 +657,15 @@ public class ScoreControllerTest {
       String token = getJwtToken("MATTD", "passw");
 
       int userId = 1;
+      Integer hits = 10;
+      Integer notHits = 20;
+      Integer misses = 2;
 
       Map<String, Object> scoreMap = new HashMap<>();
       scoreMap.put("userId", userId);
+      scoreMap.put("hits", hits);
+      scoreMap.put("notHits", notHits);
+      scoreMap.put("misses", misses);
 
       String json = objectMapper.writeValueAsString(scoreMap);
 
@@ -612,10 +684,16 @@ public class ScoreControllerTest {
 
       Long userId = 1L;
       Integer score = null;
+      Integer hits = 10;
+      Integer notHits = 20;
+      Integer misses = 2;
 
       Map<String, Object> scoreMap = new HashMap<>();
       scoreMap.put("userId", userId);
       scoreMap.put("score", score);
+      scoreMap.put("hits", hits);
+      scoreMap.put("notHits", notHits);
+      scoreMap.put("misses", misses);
 
       String json = objectMapper.writeValueAsString(scoreMap);
 
@@ -634,10 +712,16 @@ public class ScoreControllerTest {
 
       Long userId = null;
       int score = 100;
+      Integer hits = 10;
+      Integer notHits = 20;
+      Integer misses = 2;
 
       Map<String, Object> scoreMap = new HashMap<>();
       scoreMap.put("userId", userId);
       scoreMap.put("score", score);
+      scoreMap.put("hits", hits);
+      scoreMap.put("notHits", notHits);
+      scoreMap.put("misses", misses);
 
       String json = objectMapper.writeValueAsString(scoreMap);
 
@@ -656,9 +740,15 @@ public class ScoreControllerTest {
       String token = getJwtToken("MATTD", "passw");
 
       int score = 100;
+      Integer hits = 10;
+      Integer notHits = 20;
+      Integer misses = 2;
 
       Map<String, Object> scoreMap = new HashMap<>();
       scoreMap.put("score", score);
+      scoreMap.put("hits", hits);
+      scoreMap.put("notHits", notHits);
+      scoreMap.put("misses", misses);
 
       String json = objectMapper.writeValueAsString(scoreMap);
 
@@ -669,6 +759,433 @@ public class ScoreControllerTest {
           .andExpect(status().isBadRequest())
           .andExpect(
               jsonPath("$.message").value(ValidationMsg.USER_ID_NULL_MSG));
+    }
+
+    @Test
+    @DisplayName("When hits is negative return bad request")
+    public void when_hits_negative_returns_bad_request() throws Exception {
+      String token = getJwtToken("MATTD", "passw");
+
+      int score = 100;
+      Long userId = 1L;
+      Integer hits = -1;
+      Integer notHits = 20;
+      Integer misses = 2;
+
+      Map<String, Object> scoreMap = new HashMap<>();
+      scoreMap.put("score", score);
+      scoreMap.put("userId", userId);
+      scoreMap.put("hits", hits);
+      scoreMap.put("notHits", notHits);
+      scoreMap.put("misses", misses);
+
+      String json = objectMapper.writeValueAsString(scoreMap);
+
+      mvc.perform(MockMvcRequestBuilders.post("/score/")
+              .header("Authorization", "Bearer " + token)
+              .contentType(MediaType.APPLICATION_JSON)
+              .content(json))
+          .andExpect(status().isBadRequest())
+          .andExpect(jsonPath("$.message").value(ValidationMsg.HITS_VALUE_MSG));
+    }
+
+    @Test
+    @DisplayName("When hits is a decimal return bad request")
+    public void when_hits_decimal_returns_bad_request() throws Exception {
+      String token = getJwtToken("MATTD", "passw");
+
+      int score = 100;
+      Long userId = 1L;
+      double hits = 1.2;
+      Integer notHits = 20;
+      Integer misses = 2;
+
+      Map<String, Object> scoreMap = new HashMap<>();
+      scoreMap.put("score", score);
+      scoreMap.put("userId", userId);
+      scoreMap.put("hits", hits);
+      scoreMap.put("notHits", notHits);
+      scoreMap.put("misses", misses);
+
+      String json = objectMapper.writeValueAsString(scoreMap);
+
+      mvc.perform(MockMvcRequestBuilders.post("/score/")
+              .header("Authorization", "Bearer " + token)
+              .contentType(MediaType.APPLICATION_JSON)
+              .content(json))
+          .andExpect(status().isBadRequest())
+          .andExpect(
+              jsonPath("$.message").value(ValidationMsg.INCORRECT_DATA_TYPE));
+    }
+
+    @Test
+    @DisplayName("When hits is a string return bad request")
+    public void when_hits_string_returns_bad_request() throws Exception {
+      String token = getJwtToken("MATTD", "passw");
+
+      int score = 100;
+      Long userId = 1L;
+      String hits = "banana";
+      Integer notHits = 20;
+      Integer misses = 2;
+
+      Map<String, Object> scoreMap = new HashMap<>();
+      scoreMap.put("score", score);
+      scoreMap.put("userId", userId);
+      scoreMap.put("hits", hits);
+      scoreMap.put("notHits", notHits);
+      scoreMap.put("misses", misses);
+
+      String json = objectMapper.writeValueAsString(scoreMap);
+
+      mvc.perform(MockMvcRequestBuilders.post("/score/")
+              .header("Authorization", "Bearer " + token)
+              .contentType(MediaType.APPLICATION_JSON)
+              .content(json))
+          .andExpect(status().isBadRequest())
+          .andExpect(
+              jsonPath("$.message").value(ValidationMsg.INCORRECT_DATA_TYPE));
+    }
+
+    @Test
+    @DisplayName("When hits is null return bad request")
+    public void when_hits_null_returns_bad_request() throws Exception {
+      String token = getJwtToken("MATTD", "passw");
+
+      int score = 100;
+      Long userId = 1L;
+      Integer hits = null;
+      Integer notHits = 20;
+      Integer misses = 2;
+
+      Map<String, Object> scoreMap = new HashMap<>();
+      scoreMap.put("score", score);
+      scoreMap.put("userId", userId);
+      scoreMap.put("hits", hits);
+      scoreMap.put("notHits", notHits);
+      scoreMap.put("misses", misses);
+
+      String json = objectMapper.writeValueAsString(scoreMap);
+
+      mvc.perform(MockMvcRequestBuilders.post("/score/")
+              .header("Authorization", "Bearer " + token)
+              .contentType(MediaType.APPLICATION_JSON)
+              .content(json))
+          .andExpect(status().isBadRequest())
+          .andExpect(jsonPath("$.message").value(ValidationMsg.HITS_NULL_MSG));
+    }
+
+    @Test
+    @DisplayName("When hits is empty field return bad request")
+    public void when_hits_empty_field_returns_bad_request() throws Exception {
+      String token = getJwtToken("MATTD", "passw");
+
+      int score = 100;
+      Long userId = 1L;
+      Integer notHits = 20;
+      Integer misses = 2;
+
+      Map<String, Object> scoreMap = new HashMap<>();
+      scoreMap.put("score", score);
+      scoreMap.put("userId", userId);
+      scoreMap.put("notHits", notHits);
+      scoreMap.put("misses", misses);
+
+      String json = objectMapper.writeValueAsString(scoreMap);
+
+      mvc.perform(MockMvcRequestBuilders.post("/score/")
+              .header("Authorization", "Bearer " + token)
+              .contentType(MediaType.APPLICATION_JSON)
+              .content(json))
+          .andExpect(status().isBadRequest())
+          .andExpect(jsonPath("$.message").value(ValidationMsg.HITS_NULL_MSG));
+    }
+
+    @Test
+    @DisplayName("When notHits is negative return bad request")
+    public void when_nothits_negative_returns_bad_request() throws Exception {
+      String token = getJwtToken("MATTD", "passw");
+
+      int score = 100;
+      Long userId = 1L;
+      Integer hits = 30;
+      Integer notHits = -1;
+      Integer misses = 2;
+
+      Map<String, Object> scoreMap = new HashMap<>();
+      scoreMap.put("score", score);
+      scoreMap.put("userId", userId);
+      scoreMap.put("hits", hits);
+      scoreMap.put("notHits", notHits);
+      scoreMap.put("misses", misses);
+
+      String json = objectMapper.writeValueAsString(scoreMap);
+
+      mvc.perform(MockMvcRequestBuilders.post("/score/")
+              .header("Authorization", "Bearer " + token)
+              .contentType(MediaType.APPLICATION_JSON)
+              .content(json))
+          .andExpect(status().isBadRequest())
+          .andExpect(
+              jsonPath("$.message").value(ValidationMsg.NO_HITS_VALUE_MSG));
+    }
+
+    @Test
+    @DisplayName("When notHits is decimal return bad request")
+    public void when_nothits_decimal_returns_bad_request() throws Exception {
+      String token = getJwtToken("MATTD", "passw");
+
+      int score = 100;
+      Long userId = 1L;
+      Integer hits = 30;
+      double notHits = 1.1;
+      Integer misses = 2;
+
+      Map<String, Object> scoreMap = new HashMap<>();
+      scoreMap.put("score", score);
+      scoreMap.put("userId", userId);
+      scoreMap.put("hits", hits);
+      scoreMap.put("notHits", notHits);
+      scoreMap.put("misses", misses);
+
+      String json = objectMapper.writeValueAsString(scoreMap);
+
+      mvc.perform(MockMvcRequestBuilders.post("/score/")
+              .header("Authorization", "Bearer " + token)
+              .contentType(MediaType.APPLICATION_JSON)
+              .content(json))
+          .andExpect(status().isBadRequest())
+          .andExpect(
+              jsonPath("$.message").value(ValidationMsg.INCORRECT_DATA_TYPE));
+    }
+
+    @Test
+    @DisplayName("When notHits is a string return bad request")
+    public void when_nothits_string_returns_bad_request() throws Exception {
+      String token = getJwtToken("MATTD", "passw");
+
+      int score = 100;
+      Long userId = 1L;
+      Integer hits = 30;
+      String notHits = "banana";
+      Integer misses = 2;
+
+      Map<String, Object> scoreMap = new HashMap<>();
+      scoreMap.put("score", score);
+      scoreMap.put("userId", userId);
+      scoreMap.put("hits", hits);
+      scoreMap.put("notHits", notHits);
+      scoreMap.put("misses", misses);
+
+      String json = objectMapper.writeValueAsString(scoreMap);
+
+      mvc.perform(MockMvcRequestBuilders.post("/score/")
+              .header("Authorization", "Bearer " + token)
+              .contentType(MediaType.APPLICATION_JSON)
+              .content(json))
+          .andExpect(status().isBadRequest())
+          .andExpect(
+              jsonPath("$.message").value(ValidationMsg.INCORRECT_DATA_TYPE));
+    }
+
+    @Test
+    @DisplayName("When notHits is null return bad request")
+    public void when_nothits_null_returns_bad_request() throws Exception {
+      String token = getJwtToken("MATTD", "passw");
+
+      int score = 100;
+      Long userId = 1L;
+      Integer hits = 30;
+      Integer notHits = null;
+      Integer misses = 2;
+
+      Map<String, Object> scoreMap = new HashMap<>();
+      scoreMap.put("score", score);
+      scoreMap.put("userId", userId);
+      scoreMap.put("hits", hits);
+      scoreMap.put("notHits", notHits);
+      scoreMap.put("misses", misses);
+
+      String json = objectMapper.writeValueAsString(scoreMap);
+
+      mvc.perform(MockMvcRequestBuilders.post("/score/")
+              .header("Authorization", "Bearer " + token)
+              .contentType(MediaType.APPLICATION_JSON)
+              .content(json))
+          .andExpect(status().isBadRequest())
+          .andExpect(
+              jsonPath("$.message").value(ValidationMsg.NO_HITS_NULL_MSG));
+    }
+
+    @Test
+    @DisplayName("When notHits is null return bad request")
+    public void when_nothits_empty_field_returns_bad_request()
+        throws Exception {
+      String token = getJwtToken("MATTD", "passw");
+
+      int score = 100;
+      Long userId = 1L;
+      Integer hits = 30;
+      Integer misses = 2;
+
+      Map<String, Object> scoreMap = new HashMap<>();
+      scoreMap.put("score", score);
+      scoreMap.put("userId", userId);
+      scoreMap.put("hits", hits);
+      scoreMap.put("misses", misses);
+
+      String json = objectMapper.writeValueAsString(scoreMap);
+
+      mvc.perform(MockMvcRequestBuilders.post("/score/")
+              .header("Authorization", "Bearer " + token)
+              .contentType(MediaType.APPLICATION_JSON)
+              .content(json))
+          .andExpect(status().isBadRequest())
+          .andExpect(
+              jsonPath("$.message").value(ValidationMsg.NO_HITS_NULL_MSG));
+    }
+
+    @Test
+    @DisplayName("When misses is negative return bad request")
+    public void when_misses_negative_returns_bad_request() throws Exception {
+      String token = getJwtToken("MATTD", "passw");
+
+      int score = 100;
+      Long userId = 1L;
+      Integer hits = 30;
+      Integer notHits = 10;
+      Integer misses = -1;
+
+      Map<String, Object> scoreMap = new HashMap<>();
+      scoreMap.put("score", score);
+      scoreMap.put("userId", userId);
+      scoreMap.put("hits", hits);
+      scoreMap.put("notHits", notHits);
+      scoreMap.put("misses", misses);
+
+      String json = objectMapper.writeValueAsString(scoreMap);
+
+      mvc.perform(MockMvcRequestBuilders.post("/score/")
+              .header("Authorization", "Bearer " + token)
+              .contentType(MediaType.APPLICATION_JSON)
+              .content(json))
+          .andExpect(status().isBadRequest())
+          .andExpect(
+              jsonPath("$.message").value(ValidationMsg.MISSES_VALUE_MSG));
+    }
+
+    @Test
+    @DisplayName("When misses is decimal return bad request")
+    public void when_misses_decimal_returns_bad_request() throws Exception {
+      String token = getJwtToken("MATTD", "passw");
+
+      int score = 100;
+      Long userId = 1L;
+      Integer hits = 30;
+      Integer notHits = 10;
+      double misses = 2.2;
+
+      Map<String, Object> scoreMap = new HashMap<>();
+      scoreMap.put("score", score);
+      scoreMap.put("userId", userId);
+      scoreMap.put("hits", hits);
+      scoreMap.put("notHits", notHits);
+      scoreMap.put("misses", misses);
+
+      String json = objectMapper.writeValueAsString(scoreMap);
+
+      mvc.perform(MockMvcRequestBuilders.post("/score/")
+              .header("Authorization", "Bearer " + token)
+              .contentType(MediaType.APPLICATION_JSON)
+              .content(json))
+          .andExpect(status().isBadRequest())
+          .andExpect(
+              jsonPath("$.message").value(ValidationMsg.INCORRECT_DATA_TYPE));
+    }
+
+    @Test
+    @DisplayName("When misses is string return bad request")
+    public void when_misses_string_returns_bad_request() throws Exception {
+      String token = getJwtToken("MATTD", "passw");
+
+      int score = 100;
+      Long userId = 1L;
+      Integer hits = 30;
+      Integer notHits = 10;
+      String misses = "banana";
+
+      Map<String, Object> scoreMap = new HashMap<>();
+      scoreMap.put("score", score);
+      scoreMap.put("userId", userId);
+      scoreMap.put("hits", hits);
+      scoreMap.put("notHits", notHits);
+      scoreMap.put("misses", misses);
+
+      String json = objectMapper.writeValueAsString(scoreMap);
+
+      mvc.perform(MockMvcRequestBuilders.post("/score/")
+              .header("Authorization", "Bearer " + token)
+              .contentType(MediaType.APPLICATION_JSON)
+              .content(json))
+          .andExpect(status().isBadRequest())
+          .andExpect(
+              jsonPath("$.message").value(ValidationMsg.INCORRECT_DATA_TYPE));
+    }
+
+    @Test
+    @DisplayName("When misses is null return bad request")
+    public void when_misses_null_returns_bad_request() throws Exception {
+      String token = getJwtToken("MATTD", "passw");
+
+      int score = 100;
+      Long userId = 1L;
+      Integer hits = 30;
+      Integer notHits = 10;
+      Integer misses = null;
+
+      Map<String, Object> scoreMap = new HashMap<>();
+      scoreMap.put("score", score);
+      scoreMap.put("userId", userId);
+      scoreMap.put("hits", hits);
+      scoreMap.put("notHits", notHits);
+      scoreMap.put("misses", misses);
+
+      String json = objectMapper.writeValueAsString(scoreMap);
+
+      mvc.perform(MockMvcRequestBuilders.post("/score/")
+              .header("Authorization", "Bearer " + token)
+              .contentType(MediaType.APPLICATION_JSON)
+              .content(json))
+          .andExpect(status().isBadRequest())
+          .andExpect(
+              jsonPath("$.message").value(ValidationMsg.MISSES_NULL_MSG));
+    }
+
+    @Test
+    @DisplayName("When misses is null return bad request")
+    public void when_misses_not_defined_returns_bad_request() throws Exception {
+      String token = getJwtToken("MATTD", "passw");
+
+      int score = 100;
+      Long userId = 1L;
+      Integer hits = 30;
+      Integer notHits = 10;
+
+      Map<String, Object> scoreMap = new HashMap<>();
+      scoreMap.put("score", score);
+      scoreMap.put("userId", userId);
+      scoreMap.put("hits", hits);
+      scoreMap.put("notHits", notHits);
+
+      String json = objectMapper.writeValueAsString(scoreMap);
+
+      mvc.perform(MockMvcRequestBuilders.post("/score/")
+              .header("Authorization", "Bearer " + token)
+              .contentType(MediaType.APPLICATION_JSON)
+              .content(json))
+          .andExpect(status().isBadRequest())
+          .andExpect(
+              jsonPath("$.message").value(ValidationMsg.MISSES_NULL_MSG));
     }
   }
 }

@@ -96,6 +96,9 @@ public class ScoreServiceImpl implements ScoreService {
     Score score = new Score();
     score.setScore(scoreDTO.getScore());
     score.setMoatUserId(user);
+    score.setHits(scoreDTO.getHits());
+    score.setNotHits(scoreDTO.getNotHits());
+    score.setMisses(scoreDTO.getMisses());
 
     scoreDao.saveOrUpdate(score);
 
@@ -147,6 +150,9 @@ public class ScoreServiceImpl implements ScoreService {
     dto.setScore(score.getScore());
     dto.setUsername(score.getMoatUserId().getUsername());
     dto.setUserId(score.getMoatUserId().getId());
+    dto.setHits(score.getHits());
+    dto.setNotHits(score.getNotHits());
+    dto.setMisses(score.getMisses());
 
     return dto;
   }

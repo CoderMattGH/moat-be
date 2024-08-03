@@ -4,8 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.moat.validator.group.SaveScoreGroup;
 import com.moat.validator.misc.IdValid;
 import com.moat.validator.misc.UsernameValid;
-import com.moat.validator.score.ScoreValid;
-import com.moat.validator.score.UserIdValid;
+import com.moat.validator.score.*;
 
 import javax.validation.groups.Default;
 
@@ -22,6 +21,15 @@ public class ScoreDTO {
 
   @UsernameValid
   private String username;
+
+  @HitsValid(groups = {SaveScoreGroup.class, Default.class})
+  private Integer hits;
+
+  @NotHitsValid(groups = {SaveScoreGroup.class, Default.class})
+  private Integer notHits;
+
+  @MissesValid(groups = {SaveScoreGroup.class, Default.class})
+  private Integer misses;
 
   public Long getId() {
     return id;
@@ -53,5 +61,29 @@ public class ScoreDTO {
 
   public void setUsername(String username) {
     this.username = username;
+  }
+
+  public Integer getHits() {
+    return hits;
+  }
+
+  public void setHits(Integer hits) {
+    this.hits = hits;
+  }
+
+  public Integer getNotHits() {
+    return notHits;
+  }
+
+  public void setNotHits(Integer notHits) {
+    this.notHits = notHits;
+  }
+
+  public Integer getMisses() {
+    return misses;
+  }
+
+  public void setMisses(Integer misses) {
+    this.misses = misses;
   }
 }

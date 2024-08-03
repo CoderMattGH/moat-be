@@ -23,9 +23,21 @@ public class Score implements Serializable {
   private int score;
 
   @NotNull
-  @OneToOne(cascade = CascadeType.ALL)
+  @OneToOne
   @JoinColumn(name = "moat_user_id", referencedColumnName = "moat_user_id")
   private MOATUser moatUserId;
+
+  @NotNull
+  @Column(name = "hits")
+  private Integer hits;
+
+  @NotNull
+  @Column(name = "not_hits")
+  private Integer notHits;
+
+  @NotNull
+  @Column(name = "misses")
+  private Integer misses;
 
   public Long getId() {
     return this.id;
@@ -49,5 +61,29 @@ public class Score implements Serializable {
 
   public void setMoatUserId(MOATUser moatUserId) {
     this.moatUserId = moatUserId;
+  }
+
+  public Integer getHits() {
+    return hits;
+  }
+
+  public void setHits(Integer hits) {
+    this.hits = hits;
+  }
+
+  public Integer getNotHits() {
+    return notHits;
+  }
+
+  public void setNotHits(Integer notHits) {
+    this.notHits = notHits;
+  }
+
+  public Integer getMisses() {
+    return misses;
+  }
+
+  public void setMisses(Integer misses) {
+    this.misses = misses;
   }
 }
