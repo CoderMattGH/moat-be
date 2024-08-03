@@ -98,6 +98,7 @@ public class UserController {
           HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    // Remove sensitive fields
     newUser.setPassword(null);
 
     return resFact.build("user", newUser, HttpStatus.OK);

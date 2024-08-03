@@ -5,6 +5,17 @@
       "description": "Returns all of the available API endpoints."
     },
     {
+      "path": "POST /authenticate/",
+      "description": "Authenticates the user and returns a JWT token.",
+      "exampleResponse:": {
+        "user": {
+          "id": 1,
+          "username": "MATTD",
+          "token": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9"
+        }
+      }
+    },
+    {
       "path": "GET /score/",
       "description": "Returns all scores.",
       "exampleResponse": {
