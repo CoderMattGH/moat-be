@@ -129,7 +129,7 @@
     },
     {
       "path": "POST /user/",
-      "description": "Creates a new user",
+      "description": "Creates a new user.",
       "requestBody": {
         "username": "BILLY",
         "email": "billy@email.com",
@@ -155,6 +155,26 @@
         "id": 1,
         "username": "NEWNAME",
         "email": "new@email.com"
+      },
+      "exampleResponse": {
+        "user": {
+          "id": 1,
+          "username": "NEWNAME",
+          "email": "new@email.com",
+          "banned": false,
+          "verified": true,
+          "role": "USER"
+        }
+      }
+    },
+    {
+      "path": "PATCH /user/password/",
+      "description": "Updates a user's password.",
+      "authRequired": true,
+      "requiredRole": "USER",
+      "requestBody": {
+        "id": 1,
+        "password": "newpassword"
       },
       "exampleResponse": {
         "user": {

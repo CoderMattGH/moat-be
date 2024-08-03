@@ -15,6 +15,8 @@ public interface UserService {
   UserDTO updateUserDetails(UserDTO user)
       throws AlreadyExistsException, NoResultException;
 
+  UserDTO updateUserPassword(UserDTO user) throws NoResultException;
+
   List<UserDTO> selectAll() throws NoResultException;
 
   UserDTO selectById(Long id) throws NoResultException;
