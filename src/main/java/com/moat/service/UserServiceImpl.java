@@ -83,7 +83,7 @@ public class UserServiceImpl implements UserService {
    */
   public UserDTO updateUserDetails(UserDTO user)
       throws AlreadyExistsException, NoResultException {
-    logger.debug("In updateUser() in UserServiceImpl.");
+    logger.debug("In updateUserDetails() in UserServiceImpl.");
 
     MOATUser originalUser;
 
@@ -123,19 +123,31 @@ public class UserServiceImpl implements UserService {
       }
     }
 
-    MOATUser newUser = new MOATUser();
-    newUser.setEmail(user.getEmail());
-    newUser.setUsername(user.getUsername());
+    originalUser.setEmail(newEmail);
+    originalUser.setUsername(newUsername);
 
-    newUser.setId(originalUser.getId());
-    newUser.setPassword(originalUser.getPassword());
-    newUser.setRole(originalUser.getRole());
-    newUser.setVerified(originalUser.isVerified());
-    newUser.setBanned(originalUser.isBanned());
+    userDao.saveOrUpdate(originalUser);
 
-    userDao.saveOrUpdate(newUser);
+    return marshallIntoDTO(originalUser);
+  }
 
-    return marshallIntoDTO(newUser);
+  public UserDTO updateUserPassword(UserDTO user) throws NoResultException {
+    logger.debug("In updateUserPassword() in UserServiceImpl.");
+
+    MOATUser originalUser;
+
+    try {
+      originalUser = userDao.selectById(user.getId());
+    } catch (NoResultException e) {
+      throw new NoResultException(ValidationMsg.USER_DOES_NOT_EXIST);
+    }
+
+    String encodedPassword = passwordEncoder.encode(user.getPassword());
+    originalUser.setPassword(encodedPassword);
+
+    userDao.saveOrUpdate(originalUser);
+
+    return marshallIntoDTO(originalUser);
   }
 
   @Transactional(readOnly = true)

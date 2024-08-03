@@ -761,7 +761,7 @@ public class UserControllerTest {
   @Nested
   @Transactional
   @DisplayName("PATCH /user/")
-  class patchUserDetails {
+  class PatchUserDetails {
     @Test
     @DisplayName("When valid new email returns OK.")
     public void when_valid_new_email_returns_ok() throws Exception {
@@ -1333,6 +1333,422 @@ public class UserControllerTest {
           .andExpect(status().isBadRequest())
           .andExpect(
               jsonPath("$.message").value(ValidationMsg.JSON_PARSE_ERROR));
+    }
+  }
+
+  @Nested
+  @Transactional
+  @DisplayName("PATCH /user/password/")
+  class PatchUserPassword {
+    @Test
+    @DisplayName("Logged in user provides valid password returns OK.")
+    public void when_user_provides_valid_password_returns_ok()
+        throws Exception {
+      String username = "MATTD";
+      String password = "passw";
+
+      String token = getJwtToken(username, password);
+
+      int userId = 1;
+      String newPassword = "newpass";
+
+      Map<String, Object> userMap = new HashMap<>();
+      userMap.put("id", userId);
+      userMap.put("password", newPassword);
+
+      String json = objectMapper.writeValueAsString(userMap);
+
+      mvc.perform(MockMvcRequestBuilders.patch("/user/password/")
+              .contentType(MediaType.APPLICATION_JSON)
+              .content(json)
+              .header("Authorization", "Bearer " + token))
+          .andExpect(status().isOk())
+          .andExpect(jsonPath("$.user").isNotEmpty())
+          .andExpect(jsonPath("$.user.id").value(userId))
+          .andExpect(jsonPath("$.user.username").value(username))
+          .andExpect(jsonPath("$.user.email").value(not(emptyOrNullString())));
+
+      Map<String, Object> authMap = new HashMap<>();
+      authMap.put("username", username);
+      authMap.put("password", newPassword);
+
+      String authJson = objectMapper.writeValueAsString(authMap);
+
+      // Verify password has changed
+      mvc.perform(MockMvcRequestBuilders.post("/authenticate/")
+              .contentType(MediaType.APPLICATION_JSON)
+              .content(authJson))
+          .andExpect(status().isOk())
+          .andExpect(jsonPath("$.user.id").value(userId));
+    }
+
+    @Test
+    @DisplayName("Password is a number returns OK.")
+    public void password_is_number_returns_OK() throws Exception {
+      String username = "MATTD";
+      String password = "passw";
+
+      String token = getJwtToken(username, password);
+
+      int userId = 1;
+      int newPassword = 232132123;
+
+      Map<String, Object> userMap = new HashMap<>();
+      userMap.put("id", userId);
+      userMap.put("password", newPassword);
+
+      String json = objectMapper.writeValueAsString(userMap);
+
+      mvc.perform(MockMvcRequestBuilders.patch("/user/password/")
+              .contentType(MediaType.APPLICATION_JSON)
+              .content(json)
+              .header("Authorization", "Bearer " + token))
+          .andExpect(status().isOk())
+          .andExpect(jsonPath("$.user").isNotEmpty())
+          .andExpect(jsonPath("$.user.id").value(userId))
+          .andExpect(jsonPath("$.user.username").value(username))
+          .andExpect(jsonPath("$.user.email").value(not(emptyOrNullString())));
+    }
+
+    @Test
+    @DisplayName("Admin can change any user's password.")
+    public void admin_changes_user_password_returns_ok() throws Exception {
+      String username = "ADMIN";
+      String password = "password";
+
+      String token = getJwtToken(username, password);
+
+      int userId = 1;
+      String userUsername = "MATTD";
+      String newPassword = "newpass";
+
+      Map<String, Object> userMap = new HashMap<>();
+      userMap.put("id", userId);
+      userMap.put("password", newPassword);
+
+      String json = objectMapper.writeValueAsString(userMap);
+
+      mvc.perform(MockMvcRequestBuilders.patch("/user/password/")
+              .contentType(MediaType.APPLICATION_JSON)
+              .content(json)
+              .header("Authorization", "Bearer " + token))
+          .andExpect(status().isOk())
+          .andExpect(jsonPath("$.user").isNotEmpty())
+          .andExpect(jsonPath("$.user.id").value(userId))
+          .andExpect(jsonPath("$.user.username").value(userUsername))
+          .andExpect(jsonPath("$.user.email").value(not(emptyOrNullString())));
+
+      Map<String, Object> authMap = new HashMap<>();
+      authMap.put("username", userUsername);
+      authMap.put("password", newPassword);
+
+      String authJson = objectMapper.writeValueAsString(authMap);
+
+      // Verify password has changed
+      mvc.perform(MockMvcRequestBuilders.post("/authenticate/")
+              .contentType(MediaType.APPLICATION_JSON)
+              .content(authJson))
+          .andExpect(status().isOk())
+          .andExpect(jsonPath("$.user.id").value(userId));
+    }
+
+    @Test
+    @DisplayName(
+        "User cannot change other user's password and returns forbidden.")
+    public void user_cannot_change_other_users_password_returns_forbidden()
+        throws Exception {
+      String username = "MATTD";
+      String password = "passw";
+
+      String token = getJwtToken(username, password);
+
+      int userId = 2;
+      String newPassword = "newpass";
+
+      Map<String, Object> userMap = new HashMap<>();
+      userMap.put("id", userId);
+      userMap.put("password", newPassword);
+
+      String json = objectMapper.writeValueAsString(userMap);
+
+      mvc.perform(MockMvcRequestBuilders.patch("/user/password/")
+              .contentType(MediaType.APPLICATION_JSON)
+              .content(json)
+              .header("Authorization", "Bearer " + token))
+          .andExpect(status().isForbidden())
+          .andExpect(
+              jsonPath("$.message").value(ValidationMsg.ERROR_UNAUTHORISED));
+    }
+
+    @Test
+    @DisplayName("Password too short returns bad request.")
+    public void password_too_short_returns_bad_request() throws Exception {
+      String username = "MATTD";
+      String password = "passw";
+
+      String token = getJwtToken(username, password);
+
+      int userId = 1;
+      String newPassword = "pa";
+
+      Map<String, Object> userMap = new HashMap<>();
+      userMap.put("id", userId);
+      userMap.put("password", newPassword);
+
+      String json = objectMapper.writeValueAsString(userMap);
+
+      mvc.perform(MockMvcRequestBuilders.patch("/user/password/")
+              .contentType(MediaType.APPLICATION_JSON)
+              .content(json)
+              .header("Authorization", "Bearer " + token))
+          .andExpect(status().isBadRequest())
+          .andExpect(
+              jsonPath("$.message").value(ValidationMsg.PASSWORD_LENGTH_MSG));
+    }
+
+    @Test
+    @DisplayName("Password too long returns bad request.")
+    public void password_too_long_returns_bad_request() throws Exception {
+      String username = "MATTD";
+      String password = "passw";
+
+      String token = getJwtToken(username, password);
+
+      int userId = 1;
+      String newPassword = "tooooollllllllllllllllllooooooooooooooooooooooooog";
+
+      Map<String, Object> userMap = new HashMap<>();
+      userMap.put("id", userId);
+      userMap.put("password", newPassword);
+
+      String json = objectMapper.writeValueAsString(userMap);
+
+      mvc.perform(MockMvcRequestBuilders.patch("/user/password/")
+              .contentType(MediaType.APPLICATION_JSON)
+              .content(json)
+              .header("Authorization", "Bearer " + token))
+          .andExpect(status().isBadRequest())
+          .andExpect(
+              jsonPath("$.message").value(ValidationMsg.PASSWORD_LENGTH_MSG));
+    }
+
+    @Test
+    @DisplayName("Password contains invalid characters returns bad request.")
+    public void password_has_invalid_chars_returns_bad_request()
+        throws Exception {
+      String username = "MATTD";
+      String password = "passw";
+
+      String token = getJwtToken(username, password);
+
+      int userId = 1;
+      String newPassword = "too og";
+
+      Map<String, Object> userMap = new HashMap<>();
+      userMap.put("id", userId);
+      userMap.put("password", newPassword);
+
+      String json = objectMapper.writeValueAsString(userMap);
+
+      mvc.perform(MockMvcRequestBuilders.patch("/user/password/")
+              .contentType(MediaType.APPLICATION_JSON)
+              .content(json)
+              .header("Authorization", "Bearer " + token))
+          .andExpect(status().isBadRequest())
+          .andExpect(
+              jsonPath("$.message").value(ValidationMsg.PASSWORD_PATTERN_MSG));
+    }
+
+    @Test
+    @DisplayName("Password is null returns bad request.")
+    public void password_is_null_returns_bad_request() throws Exception {
+      String username = "MATTD";
+      String password = "passw";
+
+      String token = getJwtToken(username, password);
+
+      int userId = 1;
+      String newPassword = null;
+
+      Map<String, Object> userMap = new HashMap<>();
+      userMap.put("id", userId);
+      userMap.put("password", newPassword);
+
+      String json = objectMapper.writeValueAsString(userMap);
+
+      mvc.perform(MockMvcRequestBuilders.patch("/user/password/")
+              .contentType(MediaType.APPLICATION_JSON)
+              .content(json)
+              .header("Authorization", "Bearer " + token))
+          .andExpect(status().isBadRequest())
+          .andExpect(
+              jsonPath("$.message").value(ValidationMsg.PASSWORD_NULL_MSG));
+    }
+
+    @Test
+    @DisplayName("Password is empty field returns bad request.")
+    public void password_is_empty_field_returns_bad_request() throws Exception {
+      String username = "MATTD";
+      String password = "passw";
+
+      String token = getJwtToken(username, password);
+
+      int userId = 1;
+
+      Map<String, Object> userMap = new HashMap<>();
+      userMap.put("id", userId);
+
+      String json = objectMapper.writeValueAsString(userMap);
+
+      mvc.perform(MockMvcRequestBuilders.patch("/user/password/")
+              .contentType(MediaType.APPLICATION_JSON)
+              .content(json)
+              .header("Authorization", "Bearer " + token))
+          .andExpect(status().isBadRequest())
+          .andExpect(
+              jsonPath("$.message").value(ValidationMsg.PASSWORD_NULL_MSG));
+    }
+
+    @Test
+    @DisplayName("Id is non extant returns not found.")
+    public void id_non_extant_returns_not_found() throws Exception {
+      String username = "ADMIN";
+      String password = "password";
+
+      String token = getJwtToken(username, password);
+
+      int userId = 99999;
+
+      Map<String, Object> userMap = new HashMap<>();
+      userMap.put("id", userId);
+      userMap.put("password", "newpass");
+
+      String json = objectMapper.writeValueAsString(userMap);
+
+      mvc.perform(MockMvcRequestBuilders.patch("/user/password/")
+              .contentType(MediaType.APPLICATION_JSON)
+              .content(json)
+              .header("Authorization", "Bearer " + token))
+          .andExpect(status().isNotFound())
+          .andExpect(
+              jsonPath("$.message").value(ValidationMsg.USER_DOES_NOT_EXIST));
+    }
+
+    @Test
+    @DisplayName("Id is a string returns bad request.")
+    public void id_is_a_string_returns_bad_request() throws Exception {
+      String username = "ADMIN";
+      String password = "password";
+
+      String token = getJwtToken(username, password);
+
+      String userId = "banana";
+
+      Map<String, Object> userMap = new HashMap<>();
+      userMap.put("id", userId);
+      userMap.put("password", "newpass");
+
+      String json = objectMapper.writeValueAsString(userMap);
+
+      mvc.perform(MockMvcRequestBuilders.patch("/user/password/")
+              .contentType(MediaType.APPLICATION_JSON)
+              .content(json)
+              .header("Authorization", "Bearer " + token))
+          .andExpect(status().isBadRequest())
+          .andExpect(
+              jsonPath("$.message").value(ValidationMsg.INCORRECT_DATA_TYPE));
+    }
+
+    @Test
+    @DisplayName("Id is decimal returns bad request.")
+    public void id_is_a_decimal_returns_bad_request() throws Exception {
+      String username = "ADMIN";
+      String password = "password";
+
+      String token = getJwtToken(username, password);
+
+      double userId = 2.2;
+
+      Map<String, Object> userMap = new HashMap<>();
+      userMap.put("id", userId);
+      userMap.put("password", "newpass");
+
+      String json = objectMapper.writeValueAsString(userMap);
+
+      mvc.perform(MockMvcRequestBuilders.patch("/user/password/")
+              .contentType(MediaType.APPLICATION_JSON)
+              .content(json)
+              .header("Authorization", "Bearer " + token))
+          .andExpect(status().isBadRequest())
+          .andExpect(
+              jsonPath("$.message").value(ValidationMsg.INCORRECT_DATA_TYPE));
+    }
+
+    @Test
+    @DisplayName("Id is decimal returns bad request.")
+    public void id_is_negative_returns_bad_request() throws Exception {
+      String username = "ADMIN";
+      String password = "password";
+
+      String token = getJwtToken(username, password);
+
+      int userId = -2;
+
+      Map<String, Object> userMap = new HashMap<>();
+      userMap.put("id", userId);
+      userMap.put("password", "newpass");
+
+      String json = objectMapper.writeValueAsString(userMap);
+
+      mvc.perform(MockMvcRequestBuilders.patch("/user/password/")
+              .contentType(MediaType.APPLICATION_JSON)
+              .content(json)
+              .header("Authorization", "Bearer " + token))
+          .andExpect(status().isBadRequest())
+          .andExpect(jsonPath("$.message").value(ValidationMsg.ID_VALUE_MSG));
+    }
+
+    @Test
+    @DisplayName("Id is null returns bad request.")
+    public void id_is_null_returns_bad_request() throws Exception {
+      String username = "ADMIN";
+      String password = "password";
+
+      String token = getJwtToken(username, password);
+
+      Map<String, Object> userMap = new HashMap<>();
+      userMap.put("id", null);
+      userMap.put("password", "newpass");
+
+      String json = objectMapper.writeValueAsString(userMap);
+
+      mvc.perform(MockMvcRequestBuilders.patch("/user/password/")
+              .contentType(MediaType.APPLICATION_JSON)
+              .content(json)
+              .header("Authorization", "Bearer " + token))
+          .andExpect(status().isBadRequest())
+          .andExpect(jsonPath("$.message").value(ValidationMsg.ID_NULL_MSG));
+    }
+
+    @Test
+    @DisplayName("Id is empty field returns bad request.")
+    public void id_is_empty_field_returns_bad_request() throws Exception {
+      String username = "ADMIN";
+      String password = "password";
+
+      String token = getJwtToken(username, password);
+
+      Map<String, Object> userMap = new HashMap<>();
+      userMap.put("password", "newpass");
+
+      String json = objectMapper.writeValueAsString(userMap);
+
+      mvc.perform(MockMvcRequestBuilders.patch("/user/password/")
+              .contentType(MediaType.APPLICATION_JSON)
+              .content(json)
+              .header("Authorization", "Bearer " + token))
+          .andExpect(status().isBadRequest())
+          .andExpect(jsonPath("$.message").value(ValidationMsg.ID_NULL_MSG));
     }
   }
 }
