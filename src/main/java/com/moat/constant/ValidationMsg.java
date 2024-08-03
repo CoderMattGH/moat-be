@@ -83,5 +83,14 @@ public class ValidationMsg {
   public final static String ID_NULL_MSG = "'id' cannot be null!";
   public final static String ID_VALUE_MSG = "'id' must be bigger than 0!";
 
+  public final static String HITS_NULL_MSG = "'hits' cannot be null!";
+  public final static String HITS_VALUE_MSG = "'hits' cannot be negative!";
+
+  public final static String NO_HITS_NULL_MSG = "'nohits' cannot be null!";
+  public final static String NO_HITS_VALUE_MSG = "'nohits' cannot be negative!";
+
+  public final static String MISSES_NULL_MSG = "'misses' cannot be null!";
+  public final static String MISSES_VALUE_MSG = "'misses' cannot be negative!";
+
   private ValidationMsg() {}
 }
