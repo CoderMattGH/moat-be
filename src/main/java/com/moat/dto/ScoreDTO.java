@@ -31,6 +31,8 @@ public class ScoreDTO {
   @MissesValid(groups = {SaveScoreGroup.class, Default.class})
   private Integer misses;
 
+  private Double average;
+
   public Long getId() {
     return id;
   }
@@ -85,5 +87,13 @@ public class ScoreDTO {
 
   public void setMisses(Integer misses) {
     this.misses = misses;
+  }
+
+  public Double getAverage() {
+    return average;
+  }
+
+  public void setAverage(Double average) {
+    this.average = average;
   }
 }

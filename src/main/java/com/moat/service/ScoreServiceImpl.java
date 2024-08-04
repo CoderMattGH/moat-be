@@ -3,6 +3,7 @@ package com.moat.service;
 import com.moat.constant.ValidationMsg;
 import com.moat.dao.ScoreDao;
 import com.moat.dao.UserDao;
+import com.moat.dto.AvgScoreDTO;
 import com.moat.dto.ScoreDTO;
 import com.moat.entity.MOATUser;
 import com.moat.entity.Score;
@@ -79,6 +80,48 @@ public class ScoreServiceImpl implements ScoreService {
     return marshallIntoDTO(scores);
   }
 
+  @Transactional(readOnly = true)
+  public AvgScoreDTO getAverageScore(Long userId) throws NoResultException {
+    logger.debug("In getAverageScore() in ScoreServiceImpl.");
+
+    // Check user exists
+    try {
+      userDao.selectById(userId);
+    } catch (NoResultException e) {
+      throw new NoResultException(ValidationMsg.USER_DOES_NOT_EXIST);
+    }
+
+    AvgScoreDTO avgScoreDTO;
+    try {
+      avgScoreDTO = scoreDao.selectAvgScoreByUserId(userId);
+    } catch (NoResultException e) {
+      throw new NoResultException((ValidationMsg.SCORES_NOT_FOUND));
+    }
+
+    return avgScoreDTO;
+  }
+
+  @Transactional(readOnly = true)
+  public ScoreDTO getLastScore(Long userId) throws NoResultException {
+    logger.debug("In getLastScore() in ScoreServiceImpl.");
+
+    // Check user exists
+    try {
+      userDao.selectById(userId);
+    } catch (NoResultException e) {
+      throw new NoResultException(ValidationMsg.USER_DOES_NOT_EXIST);
+    }
+
+    Score score;
+    try {
+      score = scoreDao.selectLatestScoreByUserId(userId);
+    } catch (NoResultException e) {
+      throw new NoResultException(ValidationMsg.SCORES_NOT_FOUND);
+    }
+
+    return marshallIntoDTO(score);
+  }
+
   public void saveOrUpdate(Score score) {
     logger.debug("In saveOrUpdate() in ScoreServiceImpl.");
 
@@ -153,6 +196,7 @@ public class ScoreServiceImpl implements ScoreService {
     dto.setHits(score.getHits());
     dto.setNotHits(score.getNotHits());
     dto.setMisses(score.getMisses());
+    dto.setAverage(score.getAverage());
 
     return dto;
   }

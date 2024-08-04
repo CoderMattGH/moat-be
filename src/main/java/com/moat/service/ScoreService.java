@@ -1,5 +1,6 @@
 package com.moat.service;
 
+import com.moat.dto.AvgScoreDTO;
 import com.moat.dto.ScoreDTO;
 import com.moat.entity.Score;
 
@@ -20,6 +21,10 @@ public interface ScoreService {
   List<ScoreDTO> selectAll() throws NoResultException;
 
   List<ScoreDTO> selectAllByUserId(Long userId) throws NoResultException;
+
+  AvgScoreDTO getAverageScore(Long userId) throws NoResultException;
+
+  ScoreDTO getLastScore(Long userId) throws NoResultException;
 
   List<ScoreDTO> selectTopTenScores() throws NoResultException;
 
