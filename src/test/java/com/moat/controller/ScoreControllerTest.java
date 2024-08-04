@@ -228,11 +228,28 @@ public class ScoreControllerTest {
           .andExpect(jsonPath("$.scores[*].userId").isNotEmpty())
           .andExpect(jsonPath("$.scores[*].userId",
               everyItem(allOf(instanceOf(Number.class), greaterThan(0)))))
+          .andExpect(jsonPath("$.scores[*].hits").isNotEmpty())
+          .andExpect(jsonPath("$.scores[*].hits").value(
+              everyItem(instanceOf(Number.class))))
+          .andExpect(jsonPath("$.scores[*].hits").value(
+              everyItem(greaterThanOrEqualTo(0))))
+          .andExpect(jsonPath("$.scores[*].notHits").isNotEmpty())
+          .andExpect(jsonPath("$.scores[*].notHits").value(
+              everyItem(instanceOf(Number.class))))
+          .andExpect(jsonPath("$.scores[*].notHits").value(
+              everyItem(greaterThanOrEqualTo(0))))
+          .andExpect(jsonPath("$.scores[*].misses").isNotEmpty())
+          .andExpect(jsonPath("$.scores[*].misses").value(
+              everyItem(instanceOf(Number.class))))
+          .andExpect(jsonPath("$.scores[*].misses").value(
+              everyItem(greaterThanOrEqualTo(0))))
           .andExpect(jsonPath("$.scores[*].average").isNotEmpty())
-          .andExpect(
-              jsonPath("$.scores[*].average", everyItem(greaterThan(0.0))))
-          .andExpect(jsonPath("$.scores[*].average",
-              everyItem(instanceOf(Number.class))));
+          .andExpect(jsonPath("$.scores[*].average").value(
+              everyItem(instanceOf(Double.class))))
+          .andExpect(jsonPath("$.scores[*].average").value(
+              everyItem(greaterThanOrEqualTo(0.0))))
+          .andExpect(jsonPath("$.scores[*].average").value(
+              everyItem(lessThanOrEqualTo(100.0))));
     }
   }
 
@@ -264,11 +281,28 @@ public class ScoreControllerTest {
           .andExpect(jsonPath("$.scores[*].userId",
               everyItem(instanceOf(Number.class))))
           .andExpect(jsonPath("$.scores[*].userId", everyItem(is(userId))))
+          .andExpect(jsonPath("$.scores[*].hits").isNotEmpty())
+          .andExpect(jsonPath("$.scores[*].hits").value(
+              everyItem(instanceOf(Number.class))))
+          .andExpect(jsonPath("$.scores[*].hits").value(
+              everyItem(greaterThanOrEqualTo(0))))
+          .andExpect(jsonPath("$.scores[*].notHits").isNotEmpty())
+          .andExpect(jsonPath("$.scores[*].notHits").value(
+              everyItem(instanceOf(Number.class))))
+          .andExpect(jsonPath("$.scores[*].notHits").value(
+              everyItem(greaterThanOrEqualTo(0))))
+          .andExpect(jsonPath("$.scores[*].misses").isNotEmpty())
+          .andExpect(jsonPath("$.scores[*].misses").value(
+              everyItem(instanceOf(Number.class))))
+          .andExpect(jsonPath("$.scores[*].misses").value(
+              everyItem(greaterThanOrEqualTo(0))))
           .andExpect(jsonPath("$.scores[*].average").isNotEmpty())
-          .andExpect(
-              jsonPath("$.scores[*].average", everyItem(greaterThan(0.0))))
-          .andExpect(jsonPath("$.scores[*].average",
-              everyItem(instanceOf(Number.class))));
+          .andExpect(jsonPath("$.scores[*].average").value(
+              everyItem(instanceOf(Double.class))))
+          .andExpect(jsonPath("$.scores[*].average").value(
+              everyItem(greaterThanOrEqualTo(0.0))))
+          .andExpect(jsonPath("$.scores[*].average").value(
+              everyItem(lessThanOrEqualTo(100.0))));
     }
 
     @Test
@@ -353,9 +387,21 @@ public class ScoreControllerTest {
           .andExpect(jsonPath("$.score.score").value(greaterThanOrEqualTo(0)))
           .andExpect(jsonPath("$.score.userId").value(userId))
           .andExpect(jsonPath("$.score.username").value(not(emptyString())))
+          .andExpect(jsonPath("$.score.hits").value(instanceOf(Number.class)))
+          .andExpect(jsonPath("$.score.hits").value(greaterThanOrEqualTo(0)))
           .andExpect(
-              jsonPath("$.score.average").value(instanceOf(Number.class)))
-          .andExpect(jsonPath("$.score.average").value(greaterThan(0.0)));
+              jsonPath("$.score.notHits").value(instanceOf(Number.class)))
+          .andExpect(jsonPath("$.score.notHits").value(greaterThanOrEqualTo(0)))
+          .andExpect(jsonPath("$.score.misses").value(instanceOf(Number.class)))
+          .andExpect(jsonPath("$.score.misses").value(greaterThanOrEqualTo(0)))
+          .andExpect(jsonPath("$.score.score").value(instanceOf(Number.class)))
+          .andExpect(jsonPath("$.score.score").value(greaterThanOrEqualTo(0)))
+          .andExpect(
+              jsonPath("$.score.average").value(instanceOf(Double.class)))
+          .andExpect(
+              jsonPath("$.score.average").value(greaterThanOrEqualTo(0.0)))
+          .andExpect(
+              jsonPath("$.score.average").value(lessThanOrEqualTo(100.0)));
     }
 
     @Test
@@ -387,9 +433,21 @@ public class ScoreControllerTest {
           .andExpect(jsonPath("$.score.score").value(greaterThanOrEqualTo(0)))
           .andExpect(jsonPath("$.score.userId").value(userId))
           .andExpect(jsonPath("$.score.username").value(not(emptyString())))
+          .andExpect(jsonPath("$.score.hits").value(instanceOf(Number.class)))
+          .andExpect(jsonPath("$.score.hits").value(greaterThanOrEqualTo(0)))
           .andExpect(
-              jsonPath("$.score.average").value(instanceOf(Number.class)))
-          .andExpect(jsonPath("$.score.average").value(greaterThan(0.0)));
+              jsonPath("$.score.notHits").value(instanceOf(Number.class)))
+          .andExpect(jsonPath("$.score.notHits").value(greaterThanOrEqualTo(0)))
+          .andExpect(jsonPath("$.score.misses").value(instanceOf(Number.class)))
+          .andExpect(jsonPath("$.score.misses").value(greaterThanOrEqualTo(0)))
+          .andExpect(jsonPath("$.score.score").value(instanceOf(Number.class)))
+          .andExpect(jsonPath("$.score.score").value(greaterThanOrEqualTo(0)))
+          .andExpect(
+              jsonPath("$.score.average").value(instanceOf(Double.class)))
+          .andExpect(
+              jsonPath("$.score.average").value(greaterThanOrEqualTo(0.0)))
+          .andExpect(
+              jsonPath("$.score.average").value(lessThanOrEqualTo(100.0)));
     }
 
     @Test
@@ -1202,6 +1260,195 @@ public class ScoreControllerTest {
           .andExpect(status().isBadRequest())
           .andExpect(
               jsonPath("$.message").value(ValidationMsg.MISSES_NULL_MSG));
+    }
+  }
+
+  @Nested
+  @Transactional
+  @DisplayName("GET /score/top-ten/")
+  class GetTopTenScores {
+    @Test
+    @DisplayName("When valid request returns top ten scores sorted.")
+    public void valid_request_returns_top_ten_scores_sorted() throws Exception {
+      mvc.perform(MockMvcRequestBuilders.get("/score/top-ten/"))
+          .andExpect(status().isOk())
+          .andExpect(jsonPath("$.scores").isNotEmpty())
+          .andExpect(jsonPath("$.scores[*].id").isNotEmpty())
+          .andExpect(
+              jsonPath("$.scores[*].id").value(everyItem(greaterThan(0))))
+          .andExpect(jsonPath("$.scores[*].score").isNotEmpty())
+          .andExpect(jsonPath("$.scores[*].score").value(
+              everyItem(instanceOf(Number.class))))
+          .andExpect(jsonPath("$.scores[*].score").value(
+              everyItem(greaterThanOrEqualTo(0))))
+          .andExpect(jsonPath("$.scores[*].username").isNotEmpty())
+          .andExpect(jsonPath("$.scores[*].username").value(
+              everyItem(instanceOf(String.class))))
+          .andExpect(jsonPath("$.scores[*].username").value(
+              everyItem(not(emptyOrNullString()))))
+          .andExpect(jsonPath("$.scores[*].hits").isNotEmpty())
+          .andExpect(jsonPath("$.scores[*].hits").value(
+              everyItem(instanceOf(Number.class))))
+          .andExpect(jsonPath("$.scores[*].hits").value(
+              everyItem(greaterThanOrEqualTo(0))))
+          .andExpect(jsonPath("$.scores[*].notHits").isNotEmpty())
+          .andExpect(jsonPath("$.scores[*].notHits").value(
+              everyItem(instanceOf(Number.class))))
+          .andExpect(jsonPath("$.scores[*].notHits").value(
+              everyItem(greaterThanOrEqualTo(0))))
+          .andExpect(jsonPath("$.scores[*].misses").isNotEmpty())
+          .andExpect(jsonPath("$.scores[*].misses").value(
+              everyItem(instanceOf(Number.class))))
+          .andExpect(jsonPath("$.scores[*].misses").value(
+              everyItem(greaterThanOrEqualTo(0))))
+          .andExpect(jsonPath("$.scores[*].average").isNotEmpty())
+          .andExpect(jsonPath("$.scores[*].average").value(
+              everyItem(instanceOf(Double.class))))
+          .andExpect(jsonPath("$.scores[*].average").value(
+              everyItem(greaterThanOrEqualTo(0.0))))
+          .andExpect(jsonPath("$.scores[*].average").value(
+              everyItem(lessThanOrEqualTo(100.0))));
+    }
+  }
+
+  @Nested
+  @Transactional
+  @DisplayName("GET /score/avg/{userId}/")
+  class GetAvgScoreByUserId {
+    @Test
+    @DisplayName("When valid request returns user's average score")
+    public void valid_request_returns_users_avg_score() throws Exception {
+      int userId = 1;
+
+      mvc.perform(MockMvcRequestBuilders.get("/score/avg/" + userId + "/"))
+          .andExpect(status().isOk())
+          .andExpect(jsonPath("$.score.userId").value(userId))
+          .andExpect(
+              jsonPath("$.score.username").value(instanceOf(String.class)))
+          .andExpect(
+              jsonPath("$.score.username").value(not(emptyOrNullString())))
+          .andExpect(
+              jsonPath("$.score.totalHits").value(instanceOf(Number.class)))
+          .andExpect(
+              jsonPath("$.score.totalHits").value(greaterThanOrEqualTo(0)))
+          .andExpect(
+              jsonPath("$.score.totalNotHits").value(instanceOf(Number.class)))
+          .andExpect(
+              jsonPath("$.score.totalNotHits").value(greaterThanOrEqualTo(0)))
+          .andExpect(
+              jsonPath("$.score.totalMisses").value(instanceOf(Number.class)))
+          .andExpect(
+              jsonPath("$.score.totalMisses").value(greaterThanOrEqualTo(0)))
+          .andExpect(
+              jsonPath("$.score.avgScore").value(instanceOf(Double.class)))
+          .andExpect(
+              jsonPath("$.score.avgScore").value(greaterThanOrEqualTo(0.0)))
+          .andExpect(
+              jsonPath("$.score.avgAccuracy").value(instanceOf(Double.class)))
+          .andExpect(
+              jsonPath("$.score.avgAccuracy").value(greaterThanOrEqualTo(0.0)))
+          .andExpect(
+              jsonPath("$.score.avgAccuracy").value(lessThanOrEqualTo(100.0)));
+    }
+
+    @Test
+    @DisplayName("When userId is a string return bad request")
+    public void when_user_id_is_string_return_bad_request() throws Exception {
+      String userId = "banana";
+
+      mvc.perform(MockMvcRequestBuilders.get("/score/avg/" + userId + "/"))
+          .andExpect(status().isBadRequest())
+          .andExpect(jsonPath("$.message").value(
+              ValidationMsg.INCORRECT_PATH_VAR_DATA_TYPE));
+    }
+
+    @Test
+    @DisplayName("When userId is decimal return bad request")
+    public void when_user_id_is_decimal_return_bad_request() throws Exception {
+      double userId = 1.1;
+
+      mvc.perform(MockMvcRequestBuilders.get("/score/avg/" + userId + "/"))
+          .andExpect(status().isBadRequest())
+          .andExpect(jsonPath("$.message").value(
+              ValidationMsg.INCORRECT_PATH_VAR_DATA_TYPE));
+    }
+
+    @Test
+    @DisplayName("When userId is negative return bad request")
+    public void when_user_id_is_negative_return_bad_request() throws Exception {
+      int userId = -1;
+
+      mvc.perform(MockMvcRequestBuilders.get("/score/avg/" + userId + "/"))
+          .andExpect(status().isBadRequest())
+          .andExpect(
+              jsonPath("$.message").value(ValidationMsg.USER_ID_VALUE_MSG));
+    }
+  }
+
+  @Nested
+  @Transactional
+  @DisplayName("GET /score/last/{userId}")
+  class GetLastScoreByUserId {
+    @Test
+    @DisplayName("When valid request return user's last score")
+    public void valid_request_return_users_last_score() throws Exception {
+      int userId = 1;
+
+      mvc.perform(MockMvcRequestBuilders.get("/score/last/" + userId + "/"))
+          .andExpect(status().isOk())
+          .andExpect(jsonPath("$.score.userId").value(userId))
+          .andExpect(
+              jsonPath("$.score.username").value(instanceOf(String.class)))
+          .andExpect(
+              jsonPath("$.score.username").value(not(emptyOrNullString())))
+          .andExpect(jsonPath("$.score.hits").value(instanceOf(Number.class)))
+          .andExpect(jsonPath("$.score.hits").value(greaterThanOrEqualTo(0)))
+          .andExpect(
+              jsonPath("$.score.notHits").value(instanceOf(Number.class)))
+          .andExpect(jsonPath("$.score.notHits").value(greaterThanOrEqualTo(0)))
+          .andExpect(jsonPath("$.score.misses").value(instanceOf(Number.class)))
+          .andExpect(jsonPath("$.score.misses").value(greaterThanOrEqualTo(0)))
+          .andExpect(jsonPath("$.score.score").value(instanceOf(Number.class)))
+          .andExpect(jsonPath("$.score.score").value(greaterThanOrEqualTo(0)))
+          .andExpect(
+              jsonPath("$.score.average").value(instanceOf(Double.class)))
+          .andExpect(
+              jsonPath("$.score.average").value(greaterThanOrEqualTo(0.0)))
+          .andExpect(
+              jsonPath("$.score.average").value(lessThanOrEqualTo(100.0)));
+    }
+
+    @Test
+    @DisplayName("When userId is a string return bad request")
+    public void when_user_id_is_string_return_bad_request() throws Exception {
+      String userId = "banana";
+
+      mvc.perform(MockMvcRequestBuilders.get("/score/last/" + userId + "/"))
+          .andExpect(status().isBadRequest())
+          .andExpect(jsonPath("$.message").value(
+              ValidationMsg.INCORRECT_PATH_VAR_DATA_TYPE));
+    }
+
+    @Test
+    @DisplayName("When userId is decimal return bad request")
+    public void when_user_id_is_decimal_return_bad_request() throws Exception {
+      double userId = 1.1;
+
+      mvc.perform(MockMvcRequestBuilders.get("/score/last/" + userId + "/"))
+          .andExpect(status().isBadRequest())
+          .andExpect(jsonPath("$.message").value(
+              ValidationMsg.INCORRECT_PATH_VAR_DATA_TYPE));
+    }
+
+    @Test
+    @DisplayName("When userId is negative return bad request")
+    public void when_user_id_is_negative_return_bad_request() throws Exception {
+      int userId = -1;
+
+      mvc.perform(MockMvcRequestBuilders.get("/score/last/" + userId + "/"))
+          .andExpect(status().isBadRequest())
+          .andExpect(
+              jsonPath("$.message").value(ValidationMsg.USER_ID_VALUE_MSG));
     }
   }
 }
