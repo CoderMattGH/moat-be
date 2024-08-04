@@ -7,6 +7,7 @@ import com.moat.dto.AvgScoreDTO;
 import com.moat.dto.ScoreDTO;
 import com.moat.entity.MOATUser;
 import com.moat.entity.Score;
+import com.moat.exception.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -34,26 +35,26 @@ public class ScoreServiceImpl implements ScoreService {
   }
 
   @Transactional(readOnly = true)
-  public List<ScoreDTO> selectAll() throws NoResultException {
+  public List<ScoreDTO> selectAll() throws NotFoundException {
     logger.debug("In selectAll() in ScoreServiceImpl.");
 
     List<Score> scores = scoreDao.selectAll();
 
     if (scores.isEmpty()) {
-      throw new NoResultException(ValidationMsg.SCORES_NOT_FOUND);
+      throw new NotFoundException(ValidationMsg.SCORES_NOT_FOUND);
     }
 
     return marshallIntoDTO(scores);
   }
 
   @Transactional(readOnly = true)
-  public List<ScoreDTO> selectTopTenScores() throws NoResultException {
+  public List<ScoreDTO> selectTopTenScores() throws NotFoundException {
     logger.debug("In selectTopTenScores() in ScoreServiceImpl.");
 
     List<Score> scores = scoreDao.selectTopTenScoresSorted();
 
     if (scores.isEmpty()) {
-      throw new NoResultException(ValidationMsg.SCORES_NOT_FOUND);
+      throw new NotFoundException(ValidationMsg.SCORES_NOT_FOUND);
     }
 
     return marshallIntoDTO(scores);
@@ -61,41 +62,41 @@ public class ScoreServiceImpl implements ScoreService {
 
   @Transactional(readOnly = true)
   public List<ScoreDTO> selectAllByUserId(Long userId)
-      throws NoResultException {
+      throws NotFoundException {
     logger.debug("In selectAllByUserId() in ScoreServiceImpl.");
 
     // Check user exists
     try {
       userDao.selectById(userId);
     } catch (NoResultException e) {
-      throw new NoResultException(ValidationMsg.USER_DOES_NOT_EXIST);
+      throw new NotFoundException(ValidationMsg.USER_DOES_NOT_EXIST);
     }
 
     List<Score> scores = scoreDao.selectAllByUserId(userId);
 
     if (scores.isEmpty()) {
-      throw new NoResultException(ValidationMsg.SCORES_NOT_FOUND);
+      throw new NotFoundException(ValidationMsg.SCORES_NOT_FOUND);
     }
 
     return marshallIntoDTO(scores);
   }
 
   @Transactional(readOnly = true)
-  public AvgScoreDTO getAverageScore(Long userId) throws NoResultException {
+  public AvgScoreDTO getAverageScore(Long userId) throws NotFoundException {
     logger.debug("In getAverageScore() in ScoreServiceImpl.");
 
     // Check user exists
     try {
       userDao.selectById(userId);
     } catch (NoResultException e) {
-      throw new NoResultException(ValidationMsg.USER_DOES_NOT_EXIST);
+      throw new NotFoundException(ValidationMsg.USER_DOES_NOT_EXIST);
     }
 
     AvgScoreDTO avgScoreDTO;
     try {
       avgScoreDTO = scoreDao.selectAvgScoreByUserId(userId);
     } catch (NoResultException e) {
-      throw new NoResultException((ValidationMsg.SCORES_NOT_FOUND));
+      throw new NotFoundException(ValidationMsg.SCORES_NOT_FOUND);
     }
 
     return avgScoreDTO;
@@ -109,7 +110,7 @@ public class ScoreServiceImpl implements ScoreService {
     try {
       userDao.selectById(userId);
     } catch (NoResultException e) {
-      throw new NoResultException(ValidationMsg.USER_DOES_NOT_EXIST);
+      throw new NotFoundException(ValidationMsg.USER_DOES_NOT_EXIST);
     }
 
     Score score;
@@ -128,12 +129,12 @@ public class ScoreServiceImpl implements ScoreService {
     scoreDao.saveOrUpdate(score);
   }
 
-  public ScoreDTO save(ScoreDTO scoreDTO) throws NoResultException {
+  public ScoreDTO saveOrUpdate(ScoreDTO scoreDTO) throws NotFoundException {
     MOATUser user;
     try {
       user = userDao.selectById(scoreDTO.getUserId());
     } catch (NoResultException e) {
-      throw new NoResultException(ValidationMsg.USER_DOES_NOT_EXIST);
+      throw new NotFoundException(ValidationMsg.USER_DOES_NOT_EXIST);
     }
 
     Score score = new Score();
@@ -148,40 +149,40 @@ public class ScoreServiceImpl implements ScoreService {
     return marshallIntoDTO(score);
   }
 
-  public void deleteAll() throws NoResultException {
+  public void deleteAll() throws NotFoundException {
     logger.debug("In deleteAll() in ScoreServiceImpl.");
 
     int result = scoreDao.deleteAll();
 
     if (result == 0) {
-      throw new NoResultException(ValidationMsg.SCORES_NOT_FOUND);
+      throw new NotFoundException(ValidationMsg.SCORES_NOT_FOUND);
     }
   }
 
-  public void deleteById(Long id) throws NoResultException {
+  public void deleteById(Long id) throws NotFoundException {
     logger.debug("In deleteById() in ScoreServiceImpl.");
 
     int result = scoreDao.deleteById(id);
 
     if (result == 0) {
-      throw new NoResultException(ValidationMsg.SCORE_DOES_NOT_EXIST);
+      throw new NotFoundException(ValidationMsg.SCORE_DOES_NOT_EXIST);
     }
   }
 
-  public void deleteByUserId(Long userId) throws NoResultException {
+  public void deleteByUserId(Long userId) throws NotFoundException {
     logger.debug("In deleteByUserId() in ScoreServiceImpl.");
 
     try {
       // Check user exists
       userDao.selectById(userId);
     } catch (NoResultException e) {
-      throw new NoResultException(ValidationMsg.USER_DOES_NOT_EXIST);
+      throw new NotFoundException(ValidationMsg.USER_DOES_NOT_EXIST);
     }
 
     int result = scoreDao.deleteByUserId(userId);
 
     if (result == 0) {
-      throw new NoResultException(ValidationMsg.SCORES_NOT_FOUND);
+      throw new NotFoundException(ValidationMsg.SCORES_NOT_FOUND);
     }
   }
 

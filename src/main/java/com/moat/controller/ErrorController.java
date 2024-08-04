@@ -5,6 +5,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import com.moat.constant.ValidationMsg;
+import com.moat.exception.AlreadyExistsException;
+import com.moat.exception.EndpointParseException;
+import com.moat.exception.NotFoundException;
 import com.moat.responsewrapper.DynamicResponseWrapperFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +34,30 @@ public class ErrorController {
     logger.debug("Constructing ErrorController!");
 
     this.resFact = resFact;
+  }
+
+  @ExceptionHandler(NotFoundException.class)
+  public ResponseEntity<?> handleNotFoundException(NotFoundException e) {
+    logger.debug("In handleNotFoundException() in ErrorController.");
+
+    return resFact.build("message", e.getMessage(), HttpStatus.NOT_FOUND);
+  }
+
+  @ExceptionHandler(AlreadyExistsException.class)
+  public ResponseEntity<?> handleAlreadyExistsException(
+      AlreadyExistsException e) {
+    logger.debug("In handleAlreadyExistsException() in ErrorController.");
+
+    return resFact.build("message", e.getMessage(), HttpStatus.BAD_REQUEST);
+  }
+
+  @ExceptionHandler(EndpointParseException.class)
+  public ResponseEntity<?> handleEndpointParseException(
+      EndpointParseException e) {
+    logger.debug("In handleEndpointParseException() in ErrorController.");
+
+    return resFact.build("message", e.getMessage(),
+        HttpStatus.INTERNAL_SERVER_ERROR);
   }
 
   @ExceptionHandler(MethodArgumentNotValidException.class)

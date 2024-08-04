@@ -1,8 +1,6 @@
 package com.moat.controller;
 
-import com.moat.constant.ValidationMsg;
 import com.moat.dto.UserDTO;
-import com.moat.exception.AlreadyExistsException;
 import com.moat.responsewrapper.DynamicResponseWrapperFactory;
 import com.moat.service.UserService;
 import com.moat.validator.group.PatchUserDetailsGroup;
@@ -17,7 +15,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.NoResultException;
 import java.util.List;
 
 @CrossOrigin
@@ -46,16 +43,7 @@ public class UserController {
       @PathVariable @UsernameValid String username) {
     logger.debug("In getUserByUsername() in UserController.");
 
-    UserDTO user;
-    try {
-      user = userService.selectByUsername(username);
-    } catch (NoResultException e) {
-      return resFact.build("message", ValidationMsg.USER_DOES_NOT_EXIST,
-          HttpStatus.NOT_FOUND);
-    } catch (Exception e) {
-      return resFact.build("message", ValidationMsg.ERROR_GETTING_USER,
-          HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+    UserDTO user = userService.selectByUsername(username);
 
     // Remove sensitive fields
     user.setPassword(null);
@@ -67,15 +55,7 @@ public class UserController {
   public ResponseEntity<?> getUsers() {
     logger.debug("In getUsers() in UserController");
 
-    List<UserDTO> users;
-    try {
-      users = userService.selectAll();
-    } catch (NoResultException e) {
-      return resFact.build("message", e.getMessage(), HttpStatus.NOT_FOUND);
-    } catch (Exception e) {
-      return resFact.build("message", ValidationMsg.ERROR_GETTING_USERS,
-          HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+    List<UserDTO> users = userService.selectAll();
 
     // Remove sensitive fields
     users.forEach(user -> user.setPassword(null));
@@ -88,16 +68,7 @@ public class UserController {
       @RequestBody @Validated(SaveUserGroup.class) UserDTO user) {
     logger.debug("In postUser() in UserController.");
 
-    UserDTO newUser;
-
-    try {
-      newUser = userService.create(user);
-    } catch (AlreadyExistsException e) {
-      return resFact.build("message", e.getMessage(), HttpStatus.BAD_REQUEST);
-    } catch (Exception e) {
-      return resFact.build("message", ValidationMsg.ERROR_POSTING_USER,
-          HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+    UserDTO newUser = userService.create(user);
 
     // Remove sensitive fields
     newUser.setPassword(null);
@@ -111,17 +82,7 @@ public class UserController {
       @RequestBody @Validated(PatchUserDetailsGroup.class) UserDTO user) {
     logger.debug("In patchUserDetails() in UserController.");
 
-    UserDTO updatedUser;
-    try {
-      updatedUser = userService.updateUserDetails(user);
-    } catch (NoResultException e) {
-      return resFact.build("message", e.getMessage(), HttpStatus.NOT_FOUND);
-    } catch (AlreadyExistsException e) {
-      return resFact.build("message", e.getMessage(), HttpStatus.BAD_REQUEST);
-    } catch (Exception e) {
-      return resFact.build("message", ValidationMsg.ERROR_UPDATING_USER,
-          HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+    UserDTO updatedUser = userService.updateUserDetails(user);
 
     // Remove sensitive fields
     updatedUser.setPassword(null);
@@ -135,15 +96,7 @@ public class UserController {
       @RequestBody @Validated(PatchUserPasswordGroup.class) UserDTO user) {
     logger.debug("In patchUserPassword() in UserController.");
 
-    UserDTO updatedUser;
-    try {
-      updatedUser = userService.updateUserPassword(user);
-    } catch (NoResultException e) {
-      return resFact.build("message", e.getMessage(), HttpStatus.NOT_FOUND);
-    } catch (Exception e) {
-      return resFact.build("message", ValidationMsg.ERROR_UPDATING_USER,
-          HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+    UserDTO updatedUser = userService.updateUserPassword(user);
 
     // Remove sensitive fields
     updatedUser.setPassword(null);

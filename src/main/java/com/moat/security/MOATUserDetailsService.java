@@ -3,6 +3,7 @@ package com.moat.security;
 import com.moat.constant.ValidationMsg;
 import com.moat.dto.UserDTO;
 import com.moat.entity.MOATUser;
+import com.moat.exception.NotFoundException;
 import com.moat.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,8 +11,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
-import javax.persistence.NoResultException;
 
 @Service("moatUserDetailsService")
 public class MOATUserDetailsService implements UserDetailsService {
@@ -35,7 +34,7 @@ public class MOATUserDetailsService implements UserDetailsService {
 
     try {
       user = userService.selectByUsername(username);
-    } catch (NoResultException e) {
+    } catch (NotFoundException e) {
       throw new UsernameNotFoundException(ValidationMsg.USER_DOES_NOT_EXIST);
     }
 

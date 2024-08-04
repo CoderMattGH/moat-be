@@ -3,8 +3,8 @@ package com.moat.service;
 import com.moat.dto.UserDTO;
 import com.moat.entity.MOATUser;
 import com.moat.exception.AlreadyExistsException;
+import com.moat.exception.NotFoundException;
 
-import javax.persistence.NoResultException;
 import java.util.List;
 
 public interface UserService {
@@ -13,15 +13,15 @@ public interface UserService {
   UserDTO create(UserDTO user) throws AlreadyExistsException;
 
   UserDTO updateUserDetails(UserDTO user)
-      throws AlreadyExistsException, NoResultException;
+      throws AlreadyExistsException, NotFoundException;
 
-  UserDTO updateUserPassword(UserDTO user) throws NoResultException;
+  UserDTO updateUserPassword(UserDTO user) throws NotFoundException;
 
-  List<UserDTO> selectAll() throws NoResultException;
+  List<UserDTO> selectAll() throws NotFoundException;
 
-  UserDTO selectById(Long id) throws NoResultException;
+  UserDTO selectById(Long id) throws NotFoundException;
 
-  UserDTO selectByUsername(String username) throws NoResultException;
+  UserDTO selectByUsername(String username) throws NotFoundException;
 
   UserDTO marshallIntoDTO(MOATUser user);
 
