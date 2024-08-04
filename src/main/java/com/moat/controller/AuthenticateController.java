@@ -23,7 +23,6 @@ import java.util.Map;
 
 @CrossOrigin
 @RestController
-@Validated
 @RequestMapping(value = "/authenticate")
 public class AuthenticateController {
   private final static Logger logger =

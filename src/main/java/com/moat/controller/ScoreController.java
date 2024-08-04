@@ -68,6 +68,15 @@ public class ScoreController {
     return resFact.build("scores", scores, HttpStatus.OK);
   }
 
+  @GetMapping("/top-ten/")
+  public ResponseEntity<?> getTopTenScores() {
+    logger.debug("In getTopTenScores() in ScoreController.");
+
+    List<ScoreDTO> scores = this.scoreService.selectTopTenScores();
+
+    return resFact.build("scores", scores, HttpStatus.OK);
+  }
+
   @GetMapping("/{userId}/")
   public ResponseEntity<?> getScoresByUserId(
       @PathVariable @UserIdValid Long userId) {

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class AvgScoreDTO {
   private Long userId;
+  private String username;
   private Long totalHits;
   private Long totalNotHits;
   private Long totalMisses;
@@ -59,5 +60,13 @@ public class AvgScoreDTO {
 
   public void setTotalMisses(Long totalMisses) {
     this.totalMisses = totalMisses;
+  }
+
+  public String getUsername() {
+    return username;
+  }
+
+  public void setUsername(String username) {
+    this.username = username;
   }
 }
