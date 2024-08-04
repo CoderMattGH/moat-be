@@ -1,7 +1,9 @@
 package com.moat.dao;
 
+import com.moat.dto.AvgScoreDTO;
 import com.moat.entity.Score;
 
+import javax.persistence.NoResultException;
 import java.util.List;
 
 public interface ScoreDao {
@@ -16,6 +18,10 @@ public interface ScoreDao {
   List<Score> selectAll();
 
   List<Score> selectAllByUserId(Long userId);
+
+  AvgScoreDTO selectAvgScoreByUserId(Long userId) throws NoResultException;
+
+  Score selectLatestScoreByUserId(Long userId) throws NoResultException;
 
   List<Score> selectTopTenScoresSorted();
 }

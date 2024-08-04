@@ -1,6 +1,7 @@
 package com.moat.controller;
 
 import com.moat.constant.ValidationMsg;
+import com.moat.dto.AvgScoreDTO;
 import com.moat.dto.ScoreDTO;
 import com.moat.responsewrapper.DynamicResponseWrapperFactory;
 import com.moat.service.ScoreService;
@@ -105,6 +106,26 @@ public class ScoreController {
     }
 
     return resFact.build("scores", scores, HttpStatus.OK);
+  }
+
+  @GetMapping("/avg/{userId}/")
+  public ResponseEntity<?> getAvgScoreByUserId(
+      @PathVariable @UserIdValid Long userId) {
+    logger.debug("In getAvgScoreByUserId() in ScoreController.");
+
+    AvgScoreDTO avgScore = scoreService.getAverageScore(userId);
+
+    return resFact.build("score", avgScore, HttpStatus.OK);
+  }
+
+  @GetMapping("/last/{userId}/")
+  public ResponseEntity<?> getLastScoreByUserId(
+      @PathVariable @UserIdValid Long userId) {
+    logger.debug("In getLastScoreByUserId in ScoreController.");
+
+    ScoreDTO lastScore = scoreService.getLastScore(userId);
+
+    return resFact.build("score", lastScore, HttpStatus.OK);
   }
 
   @PostMapping("/")

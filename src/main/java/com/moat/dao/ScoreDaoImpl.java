@@ -1,10 +1,13 @@
 package com.moat.dao;
 
+import com.moat.dto.AvgScoreDTO;
 import com.moat.entity.Score;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 
+import com.moat.util.UtilFunctions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
@@ -69,5 +72,48 @@ public class ScoreDaoImpl implements ScoreDao {
 
     return em.createQuery("SELECT s FROM Score s ORDER BY s.score DESC",
         Score.class).setMaxResults(10).getResultList();
+  }
+
+  public AvgScoreDTO selectAvgScoreByUserId(Long userId)
+      throws NoResultException {
+    logger.debug("In selectAvgScoreByUserId() in scoreDaoImpl.");
+
+    String query =
+        "SELECT AVG(s.score), SUM(s.hits), SUM(s.hits + s.misses), SUM(s.misses) " +
+            "FROM Score s WHERE s.moatUserId.id = :userId";
+
+    Object[] result = em.createQuery(query, Object[].class)
+        .setParameter("userId", userId)
+        .getSingleResult();
+
+    Double avgScore = (Double) result[0];
+    Long totalHits = (Long) result[1];
+    Long totalNotHits = (Long) result[2];
+    Long totalMisses = (Long) result[3];
+
+    double avgAccuracy =
+        UtilFunctions.getAveragePercentage(totalHits, totalNotHits, true);
+
+    AvgScoreDTO avgScoreDTO = new AvgScoreDTO();
+    avgScoreDTO.setUserId(userId);
+    avgScoreDTO.setTotalHits(totalHits);
+    avgScoreDTO.setTotalNotHits(totalNotHits);
+    avgScoreDTO.setTotalMisses(totalMisses);
+    avgScoreDTO.setAvgScore(UtilFunctions.roundToTwoDecimalPlaces(avgScore));
+    avgScoreDTO.setAvgAccuracy(avgAccuracy);
+
+    return avgScoreDTO;
+  }
+
+  public Score selectLatestScoreByUserId(Long userId) throws NoResultException {
+    logger.debug("In selectLatestScoreByUserId() in scoreDaoImpl.");
+
+    String query =
+        "SELECT s FROM Score s WHERE s.id = (SELECT MAX(s2.id) FROM Score s2 " +
+            "WHERE s2.moatUserId.id = :userId)";
+
+    return em.createQuery(query, Score.class)
+        .setParameter("userId", userId)
+        .getSingleResult();
   }
 }

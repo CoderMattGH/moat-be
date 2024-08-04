@@ -3,10 +3,12 @@ package com.moat.entity;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
+import com.moat.util.UtilFunctions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
+import java.util.Date;
 
 @Entity
 @Table(name = "score")
@@ -38,6 +40,10 @@ public class Score implements Serializable {
   @NotNull
   @Column(name = "misses")
   private Integer misses;
+
+  public Double getAverage() {
+    return UtilFunctions.getAveragePercentage(hits, hits + misses, true);
+  }
 
   public Long getId() {
     return this.id;

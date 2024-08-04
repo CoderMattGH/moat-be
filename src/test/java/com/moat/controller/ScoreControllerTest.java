@@ -227,7 +227,12 @@ public class ScoreControllerTest {
               allOf(instanceOf(String.class), not(emptyOrNullString())))))
           .andExpect(jsonPath("$.scores[*].userId").isNotEmpty())
           .andExpect(jsonPath("$.scores[*].userId",
-              everyItem(allOf(instanceOf(Number.class), greaterThan(0)))));
+              everyItem(allOf(instanceOf(Number.class), greaterThan(0)))))
+          .andExpect(jsonPath("$.scores[*].average").isNotEmpty())
+          .andExpect(
+              jsonPath("$.scores[*].average", everyItem(greaterThan(0.0))))
+          .andExpect(jsonPath("$.scores[*].average",
+              everyItem(instanceOf(Number.class))));
     }
   }
 
@@ -258,7 +263,12 @@ public class ScoreControllerTest {
           .andExpect(jsonPath("$.scores[*].userId").isNotEmpty())
           .andExpect(jsonPath("$.scores[*].userId",
               everyItem(instanceOf(Number.class))))
-          .andExpect(jsonPath("$.scores[*].userId", everyItem(is(userId))));
+          .andExpect(jsonPath("$.scores[*].userId", everyItem(is(userId))))
+          .andExpect(jsonPath("$.scores[*].average").isNotEmpty())
+          .andExpect(
+              jsonPath("$.scores[*].average", everyItem(greaterThan(0.0))))
+          .andExpect(jsonPath("$.scores[*].average",
+              everyItem(instanceOf(Number.class))));
     }
 
     @Test
@@ -342,7 +352,10 @@ public class ScoreControllerTest {
           .andExpect(jsonPath("$.score.id").value(greaterThan(0)))
           .andExpect(jsonPath("$.score.score").value(greaterThanOrEqualTo(0)))
           .andExpect(jsonPath("$.score.userId").value(userId))
-          .andExpect(jsonPath("$.score.username").value(not(emptyString())));
+          .andExpect(jsonPath("$.score.username").value(not(emptyString())))
+          .andExpect(
+              jsonPath("$.score.average").value(instanceOf(Number.class)))
+          .andExpect(jsonPath("$.score.average").value(greaterThan(0.0)));
     }
 
     @Test
@@ -373,7 +386,10 @@ public class ScoreControllerTest {
           .andExpect(jsonPath("$.score.id").value(greaterThan(0)))
           .andExpect(jsonPath("$.score.score").value(greaterThanOrEqualTo(0)))
           .andExpect(jsonPath("$.score.userId").value(userId))
-          .andExpect(jsonPath("$.score.username").value(not(emptyString())));
+          .andExpect(jsonPath("$.score.username").value(not(emptyString())))
+          .andExpect(
+              jsonPath("$.score.average").value(instanceOf(Number.class)))
+          .andExpect(jsonPath("$.score.average").value(greaterThan(0.0)));
     }
 
     @Test
