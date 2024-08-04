@@ -79,7 +79,13 @@ public class UserControllerTest {
           .andExpect(jsonPath("$.user.username").isNotEmpty())
           .andExpect(jsonPath("$.user.username").value(username))
           .andExpect(jsonPath("$.user.email").isNotEmpty())
-          .andExpect(jsonPath("$.user.email").isString());
+          .andExpect(jsonPath("$.user.email").isString())
+          .andExpect(jsonPath("$.user.banned").isNotEmpty())
+          .andExpect(jsonPath("$.user.banned").isBoolean())
+          .andExpect(jsonPath("$.user.verified").isNotEmpty())
+          .andExpect(jsonPath("$.user.verified").isBoolean())
+          .andExpect(jsonPath("$.user.role").isNotEmpty())
+          .andExpect(jsonPath("$.user.role", is("USER")));
     }
 
     @Test
@@ -100,7 +106,13 @@ public class UserControllerTest {
           .andExpect(jsonPath("$.user.username").isNotEmpty())
           .andExpect(jsonPath("$.user.username").value(username))
           .andExpect(jsonPath("$.user.email").isNotEmpty())
-          .andExpect(jsonPath("$.user.email").isString());
+          .andExpect(jsonPath("$.user.email").isString())
+          .andExpect(jsonPath("$.user.banned").isNotEmpty())
+          .andExpect(jsonPath("$.user.banned").isBoolean())
+          .andExpect(jsonPath("$.user.verified").isNotEmpty())
+          .andExpect(jsonPath("$.user.verified").isBoolean())
+          .andExpect(jsonPath("$.user.role").isNotEmpty())
+          .andExpect(jsonPath("$.user.role", is("USER")));
     }
 
     @Test
@@ -234,7 +246,20 @@ public class UserControllerTest {
           .andExpect(
               jsonPath("$.users[*].email").value(everyItem(isA(String.class))))
           .andExpect(jsonPath("$.users[*].email").value(
-              everyItem(is(not(emptyOrNullString())))));
+              everyItem(is(not(emptyOrNullString())))))
+          .andExpect(jsonPath("$.users[*].banned").isNotEmpty())
+          .andExpect(jsonPath("$.users[*].banned").value(
+              everyItem(instanceOf(Boolean.class))))
+          .andExpect(
+              jsonPath("$.users[*].banned").value(everyItem(notNullValue())))
+          .andExpect(jsonPath("$.users[*].verified").isNotEmpty())
+          .andExpect(jsonPath("$.users[*].verified").value(
+              everyItem(instanceOf(Boolean.class))))
+          .andExpect(
+              jsonPath("$.users[*].verified").value(everyItem(notNullValue())))
+          .andExpect(jsonPath("$.users[*].role").isNotEmpty())
+          .andExpect(jsonPath("$.users[*].role",
+              everyItem(anyOf(is("USER"), is("ADMIN")))));
     }
 
     @Test
@@ -286,7 +311,13 @@ public class UserControllerTest {
           .andExpect(jsonPath("$.user.id").isNumber())
           .andExpect(jsonPath("$.user.id").value(greaterThan(0)))
           .andExpect(jsonPath("$.user.username").value(username))
-          .andExpect(jsonPath("$.user.email").value(email));
+          .andExpect(jsonPath("$.user.email").value(email))
+          .andExpect(jsonPath("$.user.banned").isNotEmpty())
+          .andExpect(jsonPath("$.user.banned").isBoolean())
+          .andExpect(jsonPath("$.user.verified").isNotEmpty())
+          .andExpect(jsonPath("$.user.verified").isBoolean())
+          .andExpect(jsonPath("$.user.role").isNotEmpty())
+          .andExpect(jsonPath("$.user.role", is("USER")));
     }
 
     @Test
@@ -787,7 +818,13 @@ public class UserControllerTest {
           .andExpect(jsonPath("$.user").isNotEmpty())
           .andExpect(jsonPath("$.user.id").value(userId))
           .andExpect(jsonPath("$.user.username").value(username))
-          .andExpect(jsonPath("$.user.email").value(newEmail));
+          .andExpect(jsonPath("$.user.email").value(newEmail))
+          .andExpect(jsonPath("$.user.banned").isNotEmpty())
+          .andExpect(jsonPath("$.user.banned").isBoolean())
+          .andExpect(jsonPath("$.user.verified").isNotEmpty())
+          .andExpect(jsonPath("$.user.verified").isBoolean())
+          .andExpect(jsonPath("$.user.role").isNotEmpty())
+          .andExpect(jsonPath("$.user.role", is("USER")));
     }
 
     @Test
@@ -816,7 +853,13 @@ public class UserControllerTest {
           .andExpect(jsonPath("$.user").isNotEmpty())
           .andExpect(jsonPath("$.user.id").value(userId))
           .andExpect(jsonPath("$.user.username").value(newUsername))
-          .andExpect(jsonPath("$.user.email").value(email));
+          .andExpect(jsonPath("$.user.email").value(email))
+          .andExpect(jsonPath("$.user.banned").isNotEmpty())
+          .andExpect(jsonPath("$.user.banned").isBoolean())
+          .andExpect(jsonPath("$.user.verified").isNotEmpty())
+          .andExpect(jsonPath("$.user.verified").isBoolean())
+          .andExpect(jsonPath("$.user.role").isNotEmpty())
+          .andExpect(jsonPath("$.user.role", is("USER")));
     }
 
     @Test
@@ -872,7 +915,13 @@ public class UserControllerTest {
           .andExpect(jsonPath("$.user").isNotEmpty())
           .andExpect(jsonPath("$.user.id").value(userId))
           .andExpect(jsonPath("$.user.username").value(newUsername))
-          .andExpect(jsonPath("$.user.email").value(newEmail));
+          .andExpect(jsonPath("$.user.email").value(newEmail))
+          .andExpect(jsonPath("$.user.banned").isNotEmpty())
+          .andExpect(jsonPath("$.user.banned").isBoolean())
+          .andExpect(jsonPath("$.user.verified").isNotEmpty())
+          .andExpect(jsonPath("$.user.verified").isBoolean())
+          .andExpect(jsonPath("$.user.role").isNotEmpty())
+          .andExpect(jsonPath("$.user.role", is("USER")));
     }
 
     @Test
@@ -1366,7 +1415,13 @@ public class UserControllerTest {
           .andExpect(jsonPath("$.user").isNotEmpty())
           .andExpect(jsonPath("$.user.id").value(userId))
           .andExpect(jsonPath("$.user.username").value(username))
-          .andExpect(jsonPath("$.user.email").value(not(emptyOrNullString())));
+          .andExpect(jsonPath("$.user.email").value(not(emptyOrNullString())))
+          .andExpect(jsonPath("$.user.banned").isNotEmpty())
+          .andExpect(jsonPath("$.user.banned").isBoolean())
+          .andExpect(jsonPath("$.user.verified").isNotEmpty())
+          .andExpect(jsonPath("$.user.verified").isBoolean())
+          .andExpect(jsonPath("$.user.role").isNotEmpty())
+          .andExpect(jsonPath("$.user.role", is("USER")));
 
       Map<String, Object> authMap = new HashMap<>();
       authMap.put("username", username);
@@ -1407,7 +1462,13 @@ public class UserControllerTest {
           .andExpect(jsonPath("$.user").isNotEmpty())
           .andExpect(jsonPath("$.user.id").value(userId))
           .andExpect(jsonPath("$.user.username").value(username))
-          .andExpect(jsonPath("$.user.email").value(not(emptyOrNullString())));
+          .andExpect(jsonPath("$.user.email").value(not(emptyOrNullString())))
+          .andExpect(jsonPath("$.user.banned").isNotEmpty())
+          .andExpect(jsonPath("$.user.banned").isBoolean())
+          .andExpect(jsonPath("$.user.verified").isNotEmpty())
+          .andExpect(jsonPath("$.user.verified").isBoolean())
+          .andExpect(jsonPath("$.user.role").isNotEmpty())
+          .andExpect(jsonPath("$.user.role", is("USER")));
     }
 
     @Test
@@ -1436,7 +1497,13 @@ public class UserControllerTest {
           .andExpect(jsonPath("$.user").isNotEmpty())
           .andExpect(jsonPath("$.user.id").value(userId))
           .andExpect(jsonPath("$.user.username").value(userUsername))
-          .andExpect(jsonPath("$.user.email").value(not(emptyOrNullString())));
+          .andExpect(jsonPath("$.user.email").value(not(emptyOrNullString())))
+          .andExpect(jsonPath("$.user.banned").isNotEmpty())
+          .andExpect(jsonPath("$.user.banned").isBoolean())
+          .andExpect(jsonPath("$.user.verified").isNotEmpty())
+          .andExpect(jsonPath("$.user.verified").isBoolean())
+          .andExpect(jsonPath("$.user.role").isNotEmpty())
+          .andExpect(jsonPath("$.user.role", is("USER")));
 
       Map<String, Object> authMap = new HashMap<>();
       authMap.put("username", userUsername);

@@ -27,7 +27,8 @@
             "username": "MATTD",
             "hits": 40,
             "notHits": 10,
-            "misses": 4
+            "misses": 4,
+            "accuracy": 80.22
           },
           {
             "id": 2,
@@ -36,7 +37,8 @@
             "username": "BILLY",
             "hits": 40,
             "notHits": 10,
-            "misses": 4
+            "misses": 4,
+            "accuracy": 80.22
           }
         ]
       }
@@ -53,7 +55,8 @@
             "username": "MATTD",
             "hits": 40,
             "notHits": 10,
-            "misses": 4
+            "misses": 4,
+            "accuracy": 80.22
           },
           {
             "id": 2,
@@ -62,9 +65,41 @@
             "username": "MATTD",
             "hits": 40,
             "notHits": 10,
-            "misses": 4
+            "misses": 4,
+            "accuracy": 80.22
           }
         ]
+      }
+    },
+    {
+      "path": "GET /score/avg/{userId}/",
+      "description": "Return the user's average score.",
+      "exampleResponse": {
+        "score": {
+          "userId": 1,
+          "username": "MATTD",
+          "totalHits": 200,
+          "totalNotHits": 30,
+          "totalMisses": 20,
+          "avgScore": 100.34,
+          "avgAccuracy": 80.23
+        }
+      }
+    },
+    {
+      "path": "GET /score/last/{userId}/",
+      "description": "Returns the user's last score.",
+      "exampleResponse": {
+        "score": {
+          "id": 2,
+          "score": 200,
+          "userId": 1,
+          "username": "MATTD",
+          "hits": 40,
+          "notHits": 10,
+          "misses": 4,
+          "accuracy": 80.22
+        }
       }
     },
     {
