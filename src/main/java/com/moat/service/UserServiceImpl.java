@@ -5,6 +5,7 @@ import com.moat.dao.UserDao;
 import com.moat.dto.UserDTO;
 import com.moat.entity.MOATUser;
 import com.moat.exception.AlreadyExistsException;
+import com.moat.exception.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -82,7 +83,7 @@ public class UserServiceImpl implements UserService {
    * Updates a users email or username.
    */
   public UserDTO updateUserDetails(UserDTO user)
-      throws AlreadyExistsException, NoResultException {
+      throws AlreadyExistsException, NotFoundException {
     logger.debug("In updateUserDetails() in UserServiceImpl.");
 
     MOATUser originalUser;
@@ -90,7 +91,7 @@ public class UserServiceImpl implements UserService {
     try {
       originalUser = userDao.selectById(user.getId());
     } catch (NoResultException e) {
-      throw new NoResultException(ValidationMsg.USER_DOES_NOT_EXIST);
+      throw new NotFoundException(ValidationMsg.USER_DOES_NOT_EXIST);
     }
 
     // Check new username does not already exist
@@ -131,7 +132,7 @@ public class UserServiceImpl implements UserService {
     return marshallIntoDTO(originalUser);
   }
 
-  public UserDTO updateUserPassword(UserDTO user) throws NoResultException {
+  public UserDTO updateUserPassword(UserDTO user) throws NotFoundException {
     logger.debug("In updateUserPassword() in UserServiceImpl.");
 
     MOATUser originalUser;
@@ -139,7 +140,7 @@ public class UserServiceImpl implements UserService {
     try {
       originalUser = userDao.selectById(user.getId());
     } catch (NoResultException e) {
-      throw new NoResultException(ValidationMsg.USER_DOES_NOT_EXIST);
+      throw new NotFoundException(ValidationMsg.USER_DOES_NOT_EXIST);
     }
 
     String encodedPassword = passwordEncoder.encode(user.getPassword());
@@ -151,41 +152,41 @@ public class UserServiceImpl implements UserService {
   }
 
   @Transactional(readOnly = true)
-  public List<UserDTO> selectAll() {
+  public List<UserDTO> selectAll() throws NotFoundException {
     logger.debug("In selectAll() in UserServiceImpl.");
 
     List<MOATUser> users = userDao.selectAll();
 
     if (users.isEmpty()) {
-      throw new NoResultException(ValidationMsg.USERS_NOT_FOUND);
+      throw new NotFoundException(ValidationMsg.USERS_NOT_FOUND);
     }
 
     return marshallIntoDTO(users);
   }
 
   @Transactional(readOnly = true)
-  public UserDTO selectById(Long id) throws NoResultException {
+  public UserDTO selectById(Long id) throws NotFoundException {
     logger.debug("In selectById() in UserServiceImpl");
 
     MOATUser user;
     try {
       user = userDao.selectById(id);
     } catch (NoResultException e) {
-      throw new NoResultException(ValidationMsg.USER_DOES_NOT_EXIST);
+      throw new NotFoundException(ValidationMsg.USER_DOES_NOT_EXIST);
     }
 
     return marshallIntoDTO(user);
   }
 
   @Transactional(readOnly = true)
-  public UserDTO selectByUsername(String username) throws NoResultException {
+  public UserDTO selectByUsername(String username) throws NotFoundException {
     logger.debug("In selectByUsername() in UserServiceImpl.");
 
     MOATUser user;
     try {
       user = userDao.selectByUsername(username);
     } catch (NoResultException e) {
-      throw new NoResultException(ValidationMsg.USER_DOES_NOT_EXIST);
+      throw new NotFoundException(ValidationMsg.USER_DOES_NOT_EXIST);
     }
 
     return marshallIntoDTO(user);

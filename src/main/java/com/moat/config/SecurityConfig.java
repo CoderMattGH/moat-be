@@ -1,7 +1,7 @@
 package com.moat.config;
 
 import com.moat.security.handler.JwtAuthenticationEntryPoint;
-import com.moat.jwt.JwtRequestFilter;
+import com.moat.security.filter.JwtRequestFilter;
 import com.moat.security.MOATUserDetailsService;
 import com.moat.security.handler.CustomAccessDeniedHandler;
 import org.slf4j.Logger;

@@ -43,12 +43,7 @@ public class ScoreController {
   public ResponseEntity<?> deleteAllScores() {
     logger.debug("In deleteAllScores() in ScoreController.");
 
-    try {
-      scoreService.deleteAll();
-    } catch (Exception e) {
-      return resFact.build("message", ValidationMsg.ERROR_DELETING_SCORES,
-          HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+    scoreService.deleteAll();
 
     return ResponseEntity.status(HttpStatus.OK).build();
   }
@@ -59,14 +54,7 @@ public class ScoreController {
     logger.debug("In deleteScoresByNickname() in ScoreController.");
     logger.info(format("Removing high scores where userId: %d.", userId));
 
-    try {
-      scoreService.deleteByUserId(userId);
-    } catch (NoResultException e) {
-      return resFact.build("message", e.getMessage(), HttpStatus.NOT_FOUND);
-    } catch (Exception e) {
-      return resFact.build("message", ValidationMsg.ERROR_DELETING_SCORES,
-          HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+    scoreService.deleteByUserId(userId);
 
     return ResponseEntity.status(HttpStatus.OK).build();
   }
@@ -75,16 +63,7 @@ public class ScoreController {
   public ResponseEntity<?> getScores() {
     logger.debug("In getScores() in ScoreController.");
 
-    List<ScoreDTO> scores;
-
-    try {
-      scores = this.scoreService.selectAll();
-    } catch (NoResultException e) {
-      return resFact.build("message", e.getMessage(), HttpStatus.NOT_FOUND);
-    } catch (Exception e) {
-      return resFact.build("message", ValidationMsg.ERROR_GETTING_SCORES,
-          HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+    List<ScoreDTO> scores = this.scoreService.selectAll();
 
     return resFact.build("scores", scores, HttpStatus.OK);
   }
@@ -95,15 +74,7 @@ public class ScoreController {
     logger.debug("In getScoresByUserId() in ScoreController.");
     logger.info(format("Getting all scores where userId: %d.", userId));
 
-    List<ScoreDTO> scores;
-    try {
-      scores = scoreService.selectAllByUserId(userId);
-    } catch (NoResultException e) {
-      return resFact.build("message", e.getMessage(), HttpStatus.NOT_FOUND);
-    } catch (Exception e) {
-      return resFact.build("message", ValidationMsg.ERROR_GETTING_SCORES,
-          HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+    List<ScoreDTO> scores = scoreService.selectAllByUserId(userId);
 
     return resFact.build("scores", scores, HttpStatus.OK);
   }
@@ -134,15 +105,7 @@ public class ScoreController {
       @RequestBody @Validated(SaveScoreGroup.class) ScoreDTO scoreDTO) {
     logger.debug("In postScore() in ScoreController.");
 
-    ScoreDTO savedScore;
-    try {
-      savedScore = scoreService.save(scoreDTO);
-    } catch (NoResultException e) {
-      return resFact.build("message", e.getMessage(), HttpStatus.NOT_FOUND);
-    } catch (Exception e) {
-      return resFact.build("message", ValidationMsg.ERROR_POSTING_SCORE,
-          HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+    ScoreDTO savedScore = scoreService.saveOrUpdate(scoreDTO);
 
     return resFact.build("score", savedScore, HttpStatus.CREATED);
   }

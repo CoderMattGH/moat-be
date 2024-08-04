@@ -1,7 +1,5 @@
 package com.moat.controller;
 
-import com.moat.constant.ValidationMsg;
-import com.moat.exception.EndpointParseException;
 import com.moat.responsewrapper.DynamicResponseWrapperFactory;
 import com.moat.service.EndpointService;
 import org.slf4j.Logger;
@@ -31,16 +29,7 @@ public class MainController {
   public ResponseEntity<?> getEndpoints() {
     logger.debug("In getEndpoints() in MainController.");
 
-    String endpoints;
-    try {
-      endpoints = endpointService.getEndpoints();
-    } catch (EndpointParseException e) {
-      return resFact.build("message", e.getMessage(),
-          HttpStatus.INTERNAL_SERVER_ERROR);
-    } catch (Exception e) {
-      return resFact.build("message", ValidationMsg.ERROR_GETTING_ENDPOINTS,
-          HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+    String endpoints = endpointService.getEndpoints();
 
     return ResponseEntity.status(HttpStatus.OK).body(endpoints);
   }
