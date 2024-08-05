@@ -66,7 +66,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   protected void configure(HttpSecurity http) throws Exception {
     logger.debug("In configure(HttpSecurity) in MOATSecurityConfig.");
 
-    http.csrf()
+    http.cors()
+        .and()
+        .csrf()
         .disable()
         .authorizeRequests()
         .antMatchers("/", "/authenticate/")
@@ -92,8 +94,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .hasRole("USER")
         .anyRequest()
         .fullyAuthenticated()
-        .and()
-        .cors()
         .and()
         .exceptionHandling()
         .authenticationEntryPoint(jwtAuthenticationEntryPoint)

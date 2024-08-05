@@ -37,7 +37,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
   @Override
   protected void doFilterInternal(HttpServletRequest request,
-      HttpServletResponse response, FilterChain chain) throws IOException {
+      HttpServletResponse response, FilterChain chain)
+      throws IOException, ServletException {
     logger.debug("In doFilterInternal() in JwtRequestFilter.");
 
     final String authorizationHeader = request.getHeader("Authorization");
@@ -69,11 +70,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
       }
     }
 
-    try {
-      chain.doFilter(request, response);
-    } catch (ServletException e) {
-      // Send back response?
-      logger.error("Servlet exception!");
-    }
+    chain.doFilter(request, response);
   }
 }
