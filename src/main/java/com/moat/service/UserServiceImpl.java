@@ -73,6 +73,7 @@ public class UserServiceImpl implements UserService {
     moatUser.setPassword(encodedPassword);
     moatUser.setUsername(user.getUsername());
     moatUser.setEmail(user.getEmail());
+    moatUser.setVerified(true);
 
     moatUser.setRole("USER");
 

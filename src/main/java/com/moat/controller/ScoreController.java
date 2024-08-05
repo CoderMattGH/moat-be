@@ -1,6 +1,5 @@
 package com.moat.controller;
 
-import com.moat.constant.ValidationMsg;
 import com.moat.dto.AvgScoreDTO;
 import com.moat.dto.ScoreDTO;
 import com.moat.responsewrapper.DynamicResponseWrapperFactory;
