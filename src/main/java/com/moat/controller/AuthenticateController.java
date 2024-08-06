@@ -72,6 +72,16 @@ public class AuthenticateController {
     response.put("username", details.getUsername());
     response.put("token", token);
 
+    boolean isAdmin = details.getAuthorities()
+        .stream()
+        .anyMatch(r -> r.getAuthority().equals("ROLE_ADMIN"));
+
+    if (isAdmin) {
+      response.put("role", "ADMIN");
+    } else {
+      response.put("role", "USER");
+    }
+
     return resFact.build("user", response, HttpStatus.OK);
   }
 
