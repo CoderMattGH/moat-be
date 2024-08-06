@@ -11,7 +11,8 @@
         "user": {
           "id": 1,
           "username": "MATTD",
-          "token": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9"
+          "token": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9",
+          "role": "USER"
         }
       }
     },
