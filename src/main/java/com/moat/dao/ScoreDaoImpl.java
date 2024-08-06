@@ -80,7 +80,7 @@ public class ScoreDaoImpl implements ScoreDao {
 
     String query =
         "SELECT AVG(s.score), SUM(s.hits), SUM(s.hits + s.misses), SUM(s.misses), " +
-            "u.username FROM Score s JOIN s.moatUserId u " +
+            "u.username, MAX(s.score) FROM Score s JOIN s.moatUserId u " +
             "WHERE u.id = :userId GROUP BY u.username";
 
     Object[] result = em.createQuery(query, Object[].class)
@@ -92,6 +92,7 @@ public class ScoreDaoImpl implements ScoreDao {
     Long totalNotHits = (Long) result[2];
     Long totalMisses = (Long) result[3];
     String username = (String) result[4];
+    Integer highScore = (Integer) result[5];
 
     double avgAccuracy =
         UtilFunctions.getAveragePercentage(totalHits, totalNotHits, true);
@@ -104,6 +105,7 @@ public class ScoreDaoImpl implements ScoreDao {
     avgScoreDTO.setTotalMisses(totalMisses);
     avgScoreDTO.setAvgScore(UtilFunctions.roundToTwoDecimalPlaces(avgScore));
     avgScoreDTO.setAvgAccuracy(avgAccuracy);
+    avgScoreDTO.setHighScore(highScore);
 
     return avgScoreDTO;
   }

@@ -10,6 +10,7 @@ public class AvgScoreDTO {
   private Long totalNotHits;
   private Long totalMisses;
   private Double avgScore;
+  private Integer highScore;
   private Double avgAccuracy;
 
   public AvgScoreDTO() {}
@@ -68,5 +69,13 @@ public class AvgScoreDTO {
 
   public void setUsername(String username) {
     this.username = username;
+  }
+
+  public Integer getHighScore() {
+    return highScore;
+  }
+
+  public void setHighScore(Integer highScore) {
+    this.highScore = highScore;
   }
 }
