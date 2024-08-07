@@ -3,6 +3,7 @@ package com.moat.jwt;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -13,8 +14,14 @@ import java.util.function.Function;
 
 @Component
 public class JwtUtil {
-  // TODO: Hide secret key
-  private final String JWT_SECRET_KEY = "keyboard-cat";
+
+  private final String JWT_SECRET_KEY;
+
+  public JwtUtil(@Value("${moat.jwt.secret-key}") String JWT_SECRET_KEY) {
+    this.JWT_SECRET_KEY = JWT_SECRET_KEY;
+
+    System.out.println(JWT_SECRET_KEY);
+  }
 
   public String extractUsername(String token) {
     return extractClaim(token, Claims::getSubject);

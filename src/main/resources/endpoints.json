@@ -45,6 +45,32 @@
       }
     },
     {
+      "path": "GET /score/top-ten/",
+      "description": "Returns the top ten scores in descending order.",
+      "scores": [
+        {
+          "id": 1,
+          "score": 200,
+          "userId": 1,
+          "username": "MATTD",
+          "hits": 40,
+          "notHits": 10,
+          "misses": 4,
+          "accuracy": 80.22
+        },
+        {
+          "id": 2,
+          "score": 150,
+          "userId": 2,
+          "username": "BILLY",
+          "hits": 40,
+          "notHits": 10,
+          "misses": 4,
+          "accuracy": 80.22
+        }
+      ]
+    },
+    {
       "path": "GET /score/{userId}/",
       "description": "Return all the user's scores.",
       "exampleResponse": {
@@ -83,7 +109,8 @@
           "totalNotHits": 30,
           "totalMisses": 20,
           "avgScore": 100.34,
-          "avgAccuracy": 80.23
+          "avgAccuracy": 80.23,
+          "highScore": 500
         }
       }
     },

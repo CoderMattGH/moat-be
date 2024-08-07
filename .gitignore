@@ -3,3 +3,4 @@ secrets/
 /filters/
 moat.iml
 /.idea/
+/scripts/run-moat-prod.sh

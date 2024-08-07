@@ -7,11 +7,9 @@ This is the server software written in Java using Spring Boot. This software is
 used to interact with the MOAT client by providing functionality such as
 leaderboards, score updating and administrative access.
 
-© 2023 All rights reserved Matthew Dixon.
+© 2024 All rights reserved Matthew Dixon.
 
-## Notes
-
-### Requirements
+## Requirements
 
 `Java` _Minimum version 17_
 
@@ -19,51 +17,157 @@ leaderboards, score updating and administrative access.
 
 `PostgreSQL` _Minimum version 16.3_
 
-### Build
+## Build
 
-1. Clone the repository by
-   running `git clone https://github.com/CoderMattGH/moat-be.git`.
+1. Clone the repository by running:
+
+```
+git clone https://github.com/CoderMattGH/moat-be.git
+```
+
 2. Change to the `moat-be` repository directory.
-3. Run `mvn clean package`. This will build the project after running any tests.
+
+
+3. To build the project and perform any tests run:
+
+```
+ mvn clean package
+``` 
+
 4. Change to the `target` directory, where you will find the `*.jar`
    file.
 
-### Setup the database
+## Setup the database
 
 1. Run the script `./db_setup/setup.sh` from the repository root directory.
 
 ___DATA LOSS WARNING:__ This will drop all the MOAT database tables if they
 exist!_
 
-### Running in the development environment
+___NOTE:__ You should add a `.pgpass` file in your home directory to enable the
+application to automatically log in to your database. If not, you will have
+to provide additional arguments to run the application._
+
+___NOTE:__ You can also set up a database manually with the name `moat_db` for
+the
+production environment or `moat_db_dev` for development. The program will
+automatically create
+the required tables._
+
+## Running in the development environment
 
 1. After building the `*.jar` file, run the
-   command `java -jar -Dspring.profiles.active=dev <JAR_FILENAME>`
-   where `JAR_FILENAME` is the name of the `*.jar` file.
+   command:
 
-### Running in the production environment
+```
+java -jar -Dspring.profiles.active=dev <JAR_FILENAME>
+```
 
-1. Not yet implemented.
+_Where:_
 
-### Testing
+_`JAR_FILENAME` is the name of the `*.jar` file._
 
-1. Run the command `mvn test` from the repository root directory.
+_For example:_
 
-### Filters
+```
+java -jar -Dspring.profiles.active=dev moat-1.1.0.jar
+```
 
-This software uses optional profanity filters. Filters can be enabled by
-specifying the property `moat.filters.load-profanity-filter=true`
-in `application.properties`. The profanity filter is enabled by default. Setting
-this value to false will disable the profanity filter.
+### Database authentication
 
-If the profanity filter is enabled, then the software will look for a profanity
-filter file. The software will look for a file named `./filters/prof_filter.txt`
-in the root directory. The root directory, remember, is normally where
-the `MOATserver.jar` artifact is being run from.
+If you have not set up a `.pgpass` file, then you will need to add the following
+arguments to the run command:
 
-The `./filters/prof_filter.txt` file should contain a list of banned words with
-a carriage return between each entry.
+```
+-Dspring.datasource.username=<DB_USERNAME> -Dspring.datasource.password=<DB_PASSWORD>
+```
 
-Currently, the profanity filter simply filters out any vulgar nicknames from
-appearing on the leaderboard.
+_Where:_
+
+_`DB_USERNAME` is the database username_.
+
+_`DB_PASSWORD` is the database password_.
+
+_For example:_
+
+```
+java -jar -Dspring.datasource.username=admin -Dspring.datasource.password=password moat-1.1.0.jar
+```
+
+### Administrator account
+
+In development mode, an Administrator account has been set up automatically with
+the username `ADMIN` and a password of `password`.
+
+## Running in the production environment
+
+1. After building the `*.jar` file, run the command:
+
+```
+java -jar -DJWT_SECRET_KEY=<MY_SECRET_KEY> <JAR_FILENAME>
+```
+
+_Where:_
+
+_`JAR_FILENAME` is the name of the `*.jar` file._
+
+_`MY_SECRET_KEY` should be secret string._
+
+_For example:_
+
+```
+java -jar -DJWT_SECRET_KEY=keyboard-cat moat-1.1.0.jar
+```
+
+### Database information
+
+By default, MOAT will attempt to connect to a PostgreSQL database running
+at `localhost`
+on port `5432`.
+
+If you wish to specify a different database location please add the following
+argument to the run command:
+
+```
+-Dspring.datasource.url=jdbc:postgresql://<HOST>:<PORT>/moat_db
+```
+
+_For example:_
+
+```
+java -jar -DJWT_SECRET_KEY=keyboard-cat -Dspring.datasource.url=jdbc:postgresql://myhost.com:1234/moat_db moat-1.1.0.jar
+```
+
+### Database authentication
+
+If you have not set up a `.pgpass` file, then you will need to add the following
+arguments to the run command:
+
+```
+-Dspring.datasource.username=<DB_USERNAME> -Dspring.datasource.password=<DB_PASSWORD>
+```
+
+_Where:_
+
+_`DB_USERNAME` is the database username_.
+
+_`DB_PASSWORD` is the database password_.
+
+_For example:_
+
+```
+java -jar -DJWT_SECRET_KEY=keyboard-cat -Dspring.datasource.username=admin -Dspring.datasource.password=password moat-1.1.0.jar
+```
+
+### Administrator account
+
+To implement.
+
+## Testing
+
+1. From the repository root directory, run the command:
+
+```
+ mvn test
+``` 
 

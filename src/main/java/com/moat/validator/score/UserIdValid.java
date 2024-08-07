@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = UserIdValidator.class)
 public @interface UserIdValid {
-  String message() default "Userid is not valid!";
+  String message() default "'userId' is not valid!";
 
   Class<?>[] groups() default {};
 

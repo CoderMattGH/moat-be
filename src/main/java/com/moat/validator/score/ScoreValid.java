@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = ScoreValidator.class)
 public @interface ScoreValid {
-  String message() default "Score is not valid!";
+  String message() default "'score' is not valid!";
 
   Class<?>[] groups() default {};
 

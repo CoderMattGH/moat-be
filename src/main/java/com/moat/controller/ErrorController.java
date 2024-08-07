@@ -93,7 +93,6 @@ public class ErrorController {
 
     Throwable cause = e.getCause();
 
-    // TODO: Change from JSON_PARSE_ERROR?
     if (cause == null) {
       logger.debug("Unknown error parsing JSON.");
 
@@ -124,7 +123,6 @@ public class ErrorController {
           HttpStatus.BAD_REQUEST);
     }
 
-    // TODO: Check subtypes in docs
     if (cause instanceof JsonProcessingException) {
       logger.debug("Handling instanceof JsonProcessingException.");
 
