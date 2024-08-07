@@ -1265,7 +1265,7 @@ public class UserControllerTest {
 
       int userId = -1;
       String newEmail = "valid@valid.com";
-      String newUsername = "VALIDNICK";
+      String newUsername = "VALIDN";
 
       Map<String, Object> userMap = new HashMap<>();
       userMap.put("id", userId);
