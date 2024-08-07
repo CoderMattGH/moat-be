@@ -19,8 +19,6 @@ public class JwtUtil {
 
   public JwtUtil(@Value("${moat.jwt.secret-key}") String JWT_SECRET_KEY) {
     this.JWT_SECRET_KEY = JWT_SECRET_KEY;
-
-    System.out.println(JWT_SECRET_KEY);
   }
 
   public String extractUsername(String token) {
