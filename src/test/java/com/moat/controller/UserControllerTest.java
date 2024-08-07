@@ -899,7 +899,7 @@ public class UserControllerTest {
 
       int userId = 2;
       String newEmail = "randomemail@email.com";
-      String newUsername = "NEWUSERNAME";
+      String newUsername = "NEWNAME";
       Map<String, Object> userMap = new HashMap<>();
       userMap.put("id", userId);
       userMap.put("username", newUsername);
@@ -1208,7 +1208,7 @@ public class UserControllerTest {
 
       int userId = 1;
       String newEmail = "valid@valid.com";
-      String newUsername = "lowercasename";
+      String newUsername = "lower";
 
       Map<String, Object> userMap = new HashMap<>();
       userMap.put("id", userId);
@@ -1350,7 +1350,7 @@ public class UserControllerTest {
 
       int userId = 9999;
       String newEmail = "valid@valid.com";
-      String newUsername = "VALIDNICK";
+      String newUsername = "VALNICK";
 
       Map<String, Object> userMap = new HashMap<>();
       userMap.put("id", userId);

@@ -15,8 +15,8 @@ public class Constants {
   public final static String EMAIL_PATTERN =
       "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
 
-  public final static int USERNAME_MIN_LENGTH = 5;
-  public final static int USERNAME_MAX_LENGTH = 15;
+  public final static int USERNAME_MIN_LENGTH = 4;
+  public final static int USERNAME_MAX_LENGTH = 8;
   public final static String USERNAME_PATTERN = "^[A-Z0-9]+$";
 
   private Constants() {}
