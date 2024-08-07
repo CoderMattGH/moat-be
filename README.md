@@ -7,6 +7,8 @@ This is the server software written in Java using Spring Boot.
 
 You can play MOAT here: https://aim.codermatt.com
 
+You can view the client front-end repository here: https://github.com/CoderMattGH/moat-fe/
+
 You can view the API endpoints here: https://aim-api.codermatt.com
 
 © 2024 All rights reserved Matthew Dixon.
