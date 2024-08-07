@@ -7,6 +7,10 @@ This is the server software written in Java using Spring Boot. This software is
 used to interact with the MOAT client by providing functionality such as
 leaderboards, score updating and administrative access.
 
+You can play MOAT here: https://aim.codermatt.com
+
+You can view the API endpoints here: https://aim-api.codermatt.com
+
 © 2024 All rights reserved Matthew Dixon.
 
 ## Requirements
@@ -39,7 +43,11 @@ git clone https://github.com/CoderMattGH/moat-be.git
 
 ## Setup the database
 
-1. Run the script `./db_setup/setup.sh` from the repository root directory.
+1. Run the script from the repository root directory:
+
+```
+./db_setup/setup.sh 
+```
 
 ___DATA LOSS WARNING:__ This will drop all the MOAT database tables if they
 exist!_
@@ -158,10 +166,6 @@ _For example:_
 ```
 java -jar -DJWT_SECRET_KEY=keyboard-cat -Dspring.datasource.username=admin -Dspring.datasource.password=password moat-1.1.0.jar
 ```
-
-### Administrator account
-
-To implement.
 
 ## Testing
 
