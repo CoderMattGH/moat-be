@@ -3,9 +3,7 @@
 MOAT is an aim trainer game where the user has to click targets on the screen
 and accrue points to beat the online leaderboards.
 
-This is the server software written in Java using Spring Boot. This software is
-used to interact with the MOAT client by providing functionality such as
-leaderboards, score updating and administrative access.
+This is the server software written in Java using Spring Boot.
 
 You can play MOAT here: https://aim.codermatt.com
 
