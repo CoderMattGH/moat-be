@@ -17,8 +17,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static java.lang.String.format;
-
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
   private final static Logger logger =

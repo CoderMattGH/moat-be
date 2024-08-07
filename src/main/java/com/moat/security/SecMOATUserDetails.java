@@ -1,6 +1,7 @@
 package com.moat.security;
 
 import com.moat.entity.MOATUser;
+import com.moat.exception.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
@@ -37,8 +38,7 @@ public class SecMOATUserDetails implements UserDetails {
       roles.add(new SimpleGrantedAuthority("ROLE_USER"));
       roles.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
     } else {
-      // TODO: Throw runtime exception?
-      logger.error("Couldn't find user role!");
+      throw new NotFoundException("Couldn't find user role!");
     }
 
     return roles;

@@ -15,7 +15,6 @@ import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -52,6 +51,8 @@ public class AuthenticateController {
     try {
       authenticate(userDTO.getUsername(), userDTO.getPassword());
     } catch (BadCredentialsException e) {
+      sleep();
+
       return resFact.build("message", ValidationMsg.INVALID_CREDENTIALS,
           HttpStatus.UNAUTHORIZED);
     } catch (DisabledException e) {
@@ -89,5 +90,13 @@ public class AuthenticateController {
       throws DisabledException, BadCredentialsException {
     authenticationManager.authenticate(
         (new UsernamePasswordAuthenticationToken(username, password)));
+  }
+
+  private void sleep() {
+    try {
+      Thread.sleep(2000L);
+    } catch (InterruptedException e) {
+      logger.debug("Unable to sleep!");
+    }
   }
 }

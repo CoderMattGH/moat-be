@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = NotHitsValidator.class)
 public @interface NotHitsValid {
-  String message() default "'nohits' is not valid!";
+  String message() default "'nothits' is not valid!";
 
   Class<?>[] groups() default {};
 

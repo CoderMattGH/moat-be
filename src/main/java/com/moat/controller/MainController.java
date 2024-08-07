@@ -1,6 +1,5 @@
 package com.moat.controller;
 
-import com.moat.responsewrapper.DynamicResponseWrapperFactory;
 import com.moat.service.EndpointService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,14 +14,11 @@ public class MainController {
       LoggerFactory.getLogger(MainController.class);
 
   private final EndpointService endpointService;
-  private final DynamicResponseWrapperFactory resFact;
 
-  public MainController(EndpointService endpointService,
-      DynamicResponseWrapperFactory resFact) {
+  public MainController(EndpointService endpointService) {
     logger.debug("Constructing MainController.");
 
     this.endpointService = endpointService;
-    this.resFact = resFact;
   }
 
   @GetMapping(value = "/", produces = "application/json")

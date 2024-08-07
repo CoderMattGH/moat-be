@@ -11,7 +11,6 @@ import com.moat.validator.group.SaveUserGroup;
 
 import javax.validation.groups.Default;
 
-// TODO: Validate banned, verified, role.
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserDTO {
   @IdValid(groups = {PatchUserDetailsGroup.class, PatchUserPasswordGroup.class,
